@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Personvern — Fjelltoppene</title>
+<meta name="description" content="Personvernerklæring for Fjelltoppene-appen. Vi samler ikke inn personopplysninger, og turene dine lagres lokalt på enheten din.">
+
+<link rel="icon" type="image/svg+xml" href="assets/logo-mark.svg">
+<link rel="apple-touch-icon" href="assets/logo.svg">
+<meta name="theme-color" content="#1c3f2a">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --green-900: #102a1c;
+    --green-800: #1c3f2a;
+    --green-700: #25553a;
+    --green-100: #d9e9dc;
+    --mint:      #b8d4be;
+    --yellow:    #f4b740;
+    --paper:     #f6f5f1;
+    --paper-2:   #ecebe5;
+    --ink:       #141414;
+    --ink-2:     #3a3a3a;
+    --muted:     #6a6e69;
+    --line:      #dad8d1;
+    --card:      #ffffff;
+    --radius:    14px;
+    --radius-lg: 22px;
+    --radius-xl: 32px;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: "Manrope", system-ui, -apple-system, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+    font-size: 17px;
+  }
+  .mono {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+  }
+  a { color: var(--green-700); }
+  a:hover { color: var(--green-800); }
+
+  .wrap {
+    width: 100%;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  /* NAV */
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(246,245,241,0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid transparent;
+    transition: border-color .2s ease;
+  }
+  .nav.scrolled { border-bottom-color: var(--line); }
+  .nav-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    height: 68px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 12px;
+    text-decoration: none; color: var(--ink);
+    font-weight: 700; font-size: 19px; letter-spacing: -0.01em;
+  }
+  .brand-mark {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--green-700);
+    display: grid; place-items: center;
+  }
+  .nav-back {
+    text-decoration: none;
+    color: var(--ink-2);
+    font-size: 14px;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    transition: background .15s ease;
+  }
+  .nav-back:hover { background: var(--paper-2); color: var(--green-800); }
+
+  /* HEADER */
+  header.page-head {
+    padding: 80px 0 50px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 60px;
+  }
+  .eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--green-700);
+    margin-bottom: 22px;
+    display: inline-flex; align-items: center; gap: 12px;
+  }
+  .eyebrow::before {
+    content: ""; width: 28px; height: 1px; background: var(--green-700);
+  }
+  h1 {
+    font-size: clamp(36px, 5.5vw, 56px);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    font-weight: 700;
+    margin: 0 0 22px;
+    text-wrap: balance;
+  }
+  .lead {
+    font-size: 19px;
+    color: var(--ink-2);
+    max-width: 600px;
+    text-wrap: pretty;
+    margin: 0 0 18px;
+  }
+  .meta-line {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* TL;DR card */
+  .tldr {
+    background: var(--green-800);
+    color: #fff;
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    margin-bottom: 56px;
+    position: relative;
+    overflow: hidden;
+  }
+  .tldr::before {
+    content: "";
+    position: absolute; inset: 0;
+    background: radial-gradient(500px 200px at 90% 0%, rgba(255,255,255,0.06), transparent 60%);
+    pointer-events: none;
+  }
+  .tldr h2 {
+    color: #fff;
+    font-size: 22px;
+    margin: 0 0 18px;
+    letter-spacing: -0.01em;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .tldr h2 svg { color: var(--mint); }
+  .tldr ul {
+    margin: 0; padding: 0;
+    list-style: none;
+    display: grid; gap: 14px;
+    position: relative;
+  }
+  .tldr li {
+    display: flex; gap: 14px; align-items: flex-start;
+    color: #d3decf;
+    font-size: 16px;
+  }
+  .tldr li .check {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--mint); color: var(--green-900);
+    flex-shrink: 0;
+    display: grid; place-items: center;
+    margin-top: 1px;
+  }
+
+  /* SECTIONS */
+  section.policy { margin-bottom: 56px; }
+  h2.section-title {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    margin: 0 0 18px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  h2.section-title .num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    color: var(--green-700);
+    background: var(--green-100);
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: grid; place-items: center;
+    letter-spacing: 0;
+  }
+  h3 {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    margin: 28px 0 10px;
+  }
+  p { margin: 0 0 14px; color: var(--ink-2); }
+  ul.bullets {
+    margin: 14px 0;
+    padding-left: 0;
+    list-style: none;
+  }
+  ul.bullets li {
+    position: relative;
+    padding-left: 22px;
+    margin-bottom: 8px;
+    color: var(--ink-2);
+  }
+  ul.bullets li::before {
+    content: "";
+    position: absolute;
+    left: 4px; top: 12px;
+    width: 6px; height: 6px;
+    background: var(--green-700);
+    border-radius: 50%;
+  }
+
+  /* Info box */
+  .infobox {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    margin: 20px 0;
+    display: flex; gap: 14px; align-items: flex-start;
+  }
+  .infobox svg { color: var(--green-700); flex-shrink: 0; margin-top: 2px; }
+  .infobox p:last-child { margin-bottom: 0; }
+
+  /* Contact */
+  .contact {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    margin: 60px 0 40px;
+  }
+  .contact h2 {
+    margin: 0 0 10px;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .contact p { font-size: 16px; }
+  .contact .email {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--green-800); color: #fff;
+    padding: 10px 18px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    margin-top: 8px;
+    transition: background .15s ease;
+  }
+  .contact .email:hover { background: var(--green-900); color: #fff; }
+
+  /* FOOTER */
+  footer {
+    padding: 40px 0;
+    color: var(--muted);
+    font-size: 14px;
+    border-top: 1px solid var(--line);
+  }
+  .foot-inner {
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+  .foot-links { display: flex; gap: 24px; }
+  .foot-links a { text-decoration: none; color: var(--muted); }
+  .foot-links a:hover { color: var(--green-700); }
+
+  @media (max-width: 600px) {
+    header.page-head { padding: 50px 0 40px; }
+    .tldr, .contact { padding: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M3 19 L9 9 L13 14 L17 7 L21 19 Z" fill="#fff"/>
+          <circle cx="17.5" cy="6" r="1.6" fill="#f4b740"/>
+        </svg>
+      </span>
+      Fjelltoppene
+    </a>
+    <a href="index.html" class="nav-back">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Tilbake til forsiden
+    </a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <!-- HEADER -->
+  <header class="page-head">
+    <div class="eyebrow">Personvern</div>
+    <h1>Det vi <em style="font-style:italic;color:var(--green-700)">ikke</em> samler inn.</h1>
+    <p class="lead">
+      Fjelltoppene er bygget med personvern som utgangspunkt. Du trenger ikke konto for å bruke appen,
+      og turene dine lagres lokalt på enheten din — ikke hos oss.
+    </p>
+    <p class="meta-line">Sist oppdatert: 24. mai 2026 · Versjon 1.0</p>
+  </header>
+
+  <!-- TL;DR -->
+  <div class="tldr">
+    <h2>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
+      Kort fortalt
+    </h2>
+    <ul>
+      <li>
+        <span class="check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+        Vi krever ingen konto, e-postadresse eller innlogging.
+      </li>
+      <li>
+        <span class="check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+        Turdata, bilder og posisjon lagres lokalt på enheten din.
+      </li>
+      <li>
+        <span class="check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+        Vi sporer deg ikke, og vi selger ingen data.
+      </li>
+      <li>
+        <span class="check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+        Du kan eksportere og slette alt med ett trykk når som helst.
+      </li>
+    </ul>
+  </div>
+
+  <!-- 1 -->
+  <section class="policy">
+    <h2 class="section-title"><span class="num">01</span> Hvilke data lagres lokalt</h2>
+    <p>Når du bruker Fjelltoppene, lagres følgende på din egen enhet:</p>
+    <ul class="bullets">
+      <li>Topper du har registrert — navn, dato, høyde og koordinater.</li>
+      <li>Topper du har lagt til i ønskelisten.</li>
+      <li>Bilder du knytter til en tur (kopieres ikke ut av appen).</li>
+      <li>Egne mål, statistikk og innstillinger.</li>
+    </ul>
+    <p>
+      Disse dataene forlater <strong>aldri</strong> enheten din uten din uttrykkelige handling
+      (eksempelvis manuell eksport eller deling).
+    </p>
+  </section>
+
+  <!-- 2 -->
+  <section class="policy">
+    <h2 class="section-title"><span class="num">02</span> Tillatelser appen ber om</h2>
+    <p>Fjelltoppene ber om noen få tillatelser for å fungere. Hver er kun aktiv når du bruker den tilhørende funksjonen:</p>
+
+    <h3>Posisjon</h3>
+    <p>Brukes for å vise hvor du er på kartet og fylle inn koordinater når du registrerer en tur. Posisjon sendes <strong>ikke</strong> til noen server.</p>
+
+    <h3>Kamera</h3>
+    <p>Brukes hvis du velger å ta bilde direkte fra appen for å knytte det til en tur.</p>
+
+    <h3>Bilder / kamerarull</h3>
+    <p>Brukes når du benytter «Skann bilder»-funksjonen for å lese GPS-koordinater fra bildene dine. Selve bildene blir på enheten din.</p>
+
+    <h3>Lagring</h3>
+    <p>For å lagre eksporterte filer (CSV, GPX, ZIP) på enheten din.</p>
+  </section>
+
+  <!-- 3 -->
+  <section class="policy">
+    <h2 class="section-title"><span class="num">03</span> Tjenester vi kobler oss til</h2>
+    <p>Noen funksjoner krever data fra eksterne kilder. Vi kobler kun til disse når funksjonen brukes:</p>
+    <ul class="bullets">
+      <li><strong>Kartdata:</strong> Kartfliser hentes fra offentlige norske kartverk og åpne kilder (f.eks. Kartverket, OpenStreetMap).</li>
+      <li><strong>Værdata:</strong> Værprognoser hentes fra Meteorologisk institutts åpne API (Yr).</li>
+      <li><strong>Toppdatabase:</strong> Listen over norske fjelltopper bygger på åpne datasett og lastes med appen.</li>
+    </ul>
+    <div class="infobox">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/>
+      </svg>
+      <p>Når appen kontakter disse tjenestene, ser disse din IP-adresse — det er hvordan internett fungerer. Vi sender ingen identifikatorer videre med forespørslene.</p>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section class="policy">
+    <h2 class="section-title"><span class="num">04</span> Analyse og sporing</h2>
+    <p>
+      <strong>Vi bruker ingen analyse-verktøy, ingen sporing og ingen reklame-SDKer.</strong>
+      Appen rapporterer ikke bruksmønstre, ikke hvor du har vært, og ikke når du har åpnet den.
+    </p>
+    <p>
+      Under den åpne betaen på Google Play kan Google Play Console motta tekniske krasjrapporter
+      (anonymiserte enhetsdetaljer og stack traces) som vi bruker for å fikse feil. Du kan slå dette av
+      i innstillinger på enheten din.
+    </p>
+  </section>
+
+  <!-- 5 -->
+  <section class="policy">
+    <h2 class="section-title"><span class="num">05</span> Eksport og sletting</h2>
+    <p>Du har full kontroll over dataene dine:</p>
+    <ul class="bullets">
+      <li><strong>Eksporter:</strong> Last ned alle turene dine som CSV, GPX eller ZIP fra profilskjermen.</li>
+      <li><strong>Slett alt:</strong> «Fjern alle registrerte topper» i profilen sletter all data umiddelbart.</li>
+      <li><strong>Avinstaller:</strong> Når du fjerner appen, slettes all lokal data sammen med den.</li>
+    </ul>
+  </section>
+
+  <!-- 6 -->
+  <section class="policy">
+    <h2 class="section-title"><span class="num">06</span> Barn</h2>
+    <p>Fjelltoppene har ingen aldersgrense og samler ikke inn personopplysninger fra noen — heller ikke barn. Appen er trygg å bruke uavhengig av alder.</p>
+  </section>
+
+  <!-- 7 -->
+  <section class="policy">
+    <h2 class="section-title"><span class="num">07</span> Endringer i denne erklæringen</h2>
+    <p>
+      Hvis vi endrer hvordan appen håndterer data, oppdaterer vi denne siden og endrer datoen øverst.
+      Vesentlige endringer blir varslet i appen før de trer i kraft.
+    </p>
+  </section>
+
+  <!-- CONTACT -->
+  <div class="contact">
+    <h2>Spørsmål om personvern?</h2>
+    <p>Ta gjerne kontakt, så svarer vi så raskt vi kan.</p>
+    <a href="mailto:hei@fjelltoppene.no?subject=Personvern" class="email">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="m4 7 8 6 8-6"/></svg>
+      hei@fjelltoppene.no
+    </a>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-inner">
+    <div>© 2026 Fjelltoppene · Laget i Norge</div>
+    <div class="foot-links">
+      <a href="index.html">Forsiden</a>
+      <a href="privacy.html">Personvern</a>
+      <a href="mailto:hei@fjelltoppene.no">Kontakt</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const nav = document.getElementById('nav');
+  const onScroll = () => { nav.classList.toggle('scrolled', window.scrollY > 8); };
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+</script>
+
+</body>
+</html>

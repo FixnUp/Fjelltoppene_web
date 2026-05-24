@@ -13,7 +13,7 @@
 <!-- Open Graph / Social -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="Fjelltoppene — Din turbok for norske topper">
-<meta property="og:description" content="Oppdag, registrer og hold oversikt over fjellturene dine. Kommer senvåren 2026.">
+<meta property="og:description" content="Oppdag, registrer og hold oversikt over fjellturene dine. Åpen beta på Google Play nå.">
 <meta property="og:image" content="assets/og-image.png">
 <meta property="og:locale" content="nb_NO">
 <meta name="twitter:card" content="summary_large_image">
@@ -836,6 +836,62 @@
   .toast-actions .btn-ghost-dark:hover {
     border-color: var(--green-700);
   }
+
+  .toast-options {
+    display: flex; flex-direction: column; gap: 10px;
+    margin-bottom: 22px;
+  }
+  .toast-option {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 16px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    text-decoration: none;
+    color: var(--ink);
+    transition: border-color .15s ease, transform .15s ease;
+  }
+  .toast-option:hover {
+    border-color: var(--green-700);
+    transform: translateY(-1px);
+  }
+  .toast-option-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    background: var(--green-100);
+    color: var(--green-800);
+    display: grid; place-items: center;
+    flex-shrink: 0;
+  }
+  .toast-option-body { flex: 1; min-width: 0; }
+  .toast-option-title {
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: -0.005em;
+  }
+  .toast-option-sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  .toast-option-arrow {
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+  .toast-option:hover .toast-option-arrow { color: var(--green-700); }
+
+  .toast-note {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 14px;
+    background: var(--paper-2);
+    border-radius: 10px;
+    font-size: 13px;
+    color: var(--ink-2);
+  }
+  .toast-note svg {
+    color: var(--muted);
+    flex-shrink: 0;
+  }
 </style>
 </head>
 <body>
@@ -866,7 +922,7 @@
 <header class="hero">
   <div class="wrap hero-grid">
     <div class="hero-copy">
-      <span class="eyebrow"><span class="dot"></span> Turbok 2026 · For norske fjell</span>
+      <span class="eyebrow"><span class="dot"></span> Turbok 2026 · Beta tilgjengelig nå</span>
       <h1 class="hero-title">
         Hver topp <span class="accent">du har stått på</span>, på ett sted.
       </h1>
@@ -900,13 +956,13 @@
     <div class="phone-stage">
       <div class="phone behind" aria-hidden="true">
         <div class="screen">
-          <img src="assets/screen-profile.jpg" alt="">
+          <img src="assets/screen-map-light.jpg" alt="">
         </div>
       </div>
       <div class="phone">
         <span class="notch"></span>
         <div class="screen">
-          <img src="assets/screen-map.jpg" alt="Skjermbilde av kartet i Fjelltoppene-appen">
+          <img src="assets/screen-profile.jpg" alt="Skjermbilde av Fjelltoppene-appen">
         </div>
       </div>
     </div>
@@ -1129,11 +1185,11 @@
   <div class="wrap">
     <div class="sec-eyebrow">Skjermbilder</div>
     <h2>Ren design, laget for å være ute.</h2>
-    <p class="sec-lead">Stort skriftsnitt, lyse flater og tydelige knapper — også med våte hender og solbriller på toppen.</p>
+    <p class="sec-lead">Stort skriftsnitt og tydelige knapper — også med våte hender og solbriller på toppen. Følger systemets lyse eller mørke tema.</p>
 
     <div class="screens">
       <div class="screen-card reveal">
-        <img src="assets/screen-map.jpg" alt="Kart med topper">
+        <img src="assets/screen-map.jpg" alt="Kart med topper i mørkt tema">
         <div class="cap">01 · UTFORSK</div>
         <div class="ttl">Kart med klynger</div>
       </div>
@@ -1143,9 +1199,9 @@
         <div class="ttl">Besøkte topper</div>
       </div>
       <div class="screen-card reveal">
-        <img src="assets/screen-wishlist.jpg" alt="Ønskeliste over topper">
-        <div class="cap">03 · LISTER</div>
-        <div class="ttl">Ønskeliste</div>
+        <img src="assets/screen-detail.jpg" alt="Detaljside for en fjelltopp">
+        <div class="cap">03 · DETALJER</div>
+        <div class="ttl">Hver topp</div>
       </div>
       <div class="screen-card reveal">
         <img src="assets/screen-activity.jpg" alt="Statistikk over aktivitet">
@@ -1153,7 +1209,7 @@
         <div class="ttl">Statistikk</div>
       </div>
       <div class="screen-card reveal">
-        <img src="assets/screen-profile.jpg" alt="Profil og innstillinger">
+        <img src="assets/screen-profile-light.jpg" alt="Profil og innstillinger">
         <div class="cap">05 · PROFIL</div>
         <div class="ttl">Mål &amp; eksport</div>
       </div>
@@ -1201,7 +1257,7 @@
       <details class="faq">
         <summary>Hvilke plattformer støttes?</summary>
         <div class="answer">
-          Fjelltoppene finnes for iOS og Android. Begge versjoner får samme funksjoner og oppdateres jevnlig.
+          Android-versjonen er i åpen beta på Google Play nå — alle kan bli med som testere. iOS-versjonen kommer i løpet av 2026.
         </div>
       </details>
     </div>
@@ -1213,10 +1269,10 @@
   <div class="download">
     <div class="sec-eyebrow" style="color: var(--mint); justify-content: center; display: flex;">Last ned</div>
     <h2>Klar for neste topp?</h2>
-    <p>Fjelltoppene blir tilgjengelig gratis for iOS og Android — sett deg på varslingslisten så får du beskjed når appen lanseres.</p>
+    <p>Fjelltoppene er i beta på Google Play — bli med som tester og hjelp oss forme appen. iOS-versjon kommer i løpet av 2026.</p>
     <div style="display:inline-flex; align-items:center; gap:10px; padding:10px 18px; border-radius:999px; background:rgba(244,183,64,0.14); border:1px solid rgba(244,183,64,0.4); color:#f4b740; font-family:'JetBrains Mono', monospace; font-size:12px; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:32px;">
       <span style="width:8px; height:8px; border-radius:50%; background:#f4b740; box-shadow:0 0 0 4px rgba(244,183,64,0.18);"></span>
-      Lanseres senvåren 2026
+      Beta tilgjengelig nå · Android
     </div>
     <div class="store-row">
       <a class="store-btn" href="#">
@@ -1247,19 +1303,52 @@
     </button>
     <div class="toast-icon">
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="9"/>
-        <path d="M12 7v5l3 2"/>
+        <path d="M3 19 L9 9 L13 14 L17 7 L21 19 Z"/>
+        <circle cx="17" cy="6" r="1.6" fill="#f4b740" stroke="none"/>
       </svg>
     </div>
-    <div class="eyebrow-line">Snart klar</div>
-    <h3 id="toast-title">Appen kommer senvåren 2026</h3>
-    <p>Vi legger siste hånd på Fjelltoppene før lansering i App Store og Google Play. Vil du få beskjed når den er ute?</p>
-    <div class="toast-actions">
-      <a href="mailto:hei@fjelltoppene.no?subject=Gi%20meg%20beskjed%20ved%20lansering" class="btn btn-primary">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="m4 7 8 6 8-6"/></svg>
-        Varsle meg
+    <div class="eyebrow-line">Beta tilgjengelig nå</div>
+    <h3 id="toast-title">Bli tester på Android</h3>
+    <p>Fjelltoppene er i beta på Google Play. Bli med som tester og få tilgang før alle andre — din tilbakemelding former appen.</p>
+
+    <div class="toast-options">
+      <a href="https://play.google.com/apps/testing/no.fjelltoppene.app" target="_blank" rel="noopener" class="toast-option">
+        <div class="toast-option-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24">
+            <path fill="#34a853" d="m13.05 11.95-9.6 9.6c.32.18.69.28 1.07.28.4 0 .77-.1 1.1-.3l10.78-6.21z"/>
+            <path fill="#fbbc04" d="m20.16 10.62-3.31-1.91-3.8 3.24 3.8 3.24 3.31-1.91c.7-.4 1.04-1.07 1.04-1.83s-.34-1.43-1.04-1.83z"/>
+            <path fill="#ea4335" d="M3.45 2.45A2 2 0 0 0 3 3.74v16.52c0 .47.17.91.45 1.29l9.65-9.55z"/>
+            <path fill="#4285f4" d="m13.05 12 3.5-3.45L5.62 2.32a2.18 2.18 0 0 0-1.1-.3c-.4 0-.75.1-1.07.28z"/>
+          </svg>
+        </div>
+        <div class="toast-option-body">
+          <div class="toast-option-title">Bli tester via nettside</div>
+          <div class="toast-option-sub">Meld deg på testprogrammet</div>
+        </div>
+        <svg class="toast-option-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
       </a>
-      <button type="button" class="btn btn-ghost-dark" data-toast-close>Greit, takk</button>
+
+      <a href="https://play.google.com/store/apps/details?id=no.fjelltoppene.app" target="_blank" rel="noopener" class="toast-option">
+        <div class="toast-option-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="5" y="2" width="14" height="20" rx="3"/>
+            <line x1="12" y1="18" x2="12.01" y2="18"/>
+          </svg>
+        </div>
+        <div class="toast-option-body">
+          <div class="toast-option-title">Åpne i Play Store-appen</div>
+          <div class="toast-option-sub">På mobilen din</div>
+        </div>
+        <svg class="toast-option-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+
+    <div class="toast-note">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17.05 12.04c-.03-3.16 2.58-4.68 2.7-4.75-1.47-2.15-3.77-2.45-4.59-2.48-1.96-.2-3.81 1.15-4.81 1.15-1 0-2.52-1.12-4.14-1.09"/>
+        <path d="M13.84 3.5c.86-1.04 1.45-2.49 1.29-3.94"/>
+      </svg>
+      <span>iOS-versjon kommer i løpet av 2026.</span>
     </div>
   </div>
 </div>
@@ -1270,10 +1359,9 @@
       © 2026 Fjelltoppene · Laget i Norge
     </div>
     <div class="foot-links">
-      <a href="#">Personvern</a>
-      <a href="#">Vilkår</a>
-      <a href="#">Kontakt</a>
-      <a href="#">Endringslogg</a>
+      <a href="privacy.html">Personvern</a>
+      <a href="https://github.com/FixnUp/Fjelltoppene_web" target="_blank" rel="noopener">Kildekode</a>
+      <a href="mailto:hei@fjelltoppene.no">Kontakt</a>
     </div>
   </div>
 </footer>
