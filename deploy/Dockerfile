@@ -4,7 +4,7 @@
 FROM nginx:1.27-alpine
 
 # Replace default nginx config with our tuned one (gzip + caching)
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY deploy/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy the site into the web root
 COPY index.html /usr/share/nginx/html/index.html
