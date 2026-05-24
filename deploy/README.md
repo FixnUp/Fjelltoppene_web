@@ -134,5 +134,5 @@ Da slipper du å bygge på nytt — bare `docker restart fjelltoppene-web`.
 - [ ] Portforwarding 80/443 → TrueNAS
 - [ ] SSL-sertifikat aktivt (Let's Encrypt)
 - [ ] Test fra utsiden av nettverket
-- [ ] Sett opp e-postadresse `hei@fjelltoppene.no` (eller endre i `index.html` → toast → mailto-lenken)
+- [ ] Sett opp e-postadresse `post@fixn.no` (eller endre i `index.html` → toast → mailto-lenken)
 - [ ] Legg til Google Analytics / Plausible om ønskelig
