@@ -10,6 +10,7 @@ COPY deploy/nginx.conf /etc/nginx/conf.d/default.conf
 COPY index.html /usr/share/nginx/html/index.html
 COPY logo.html  /usr/share/nginx/html/logo.html
 COPY privacy.html /usr/share/nginx/html/privacy.html
+COPY feedback.html /usr/share/nginx/html/feedback.html
 COPY assets/    /usr/share/nginx/html/assets/
 
 EXPOSE 80
