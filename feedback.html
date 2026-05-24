@@ -1,0 +1,1068 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Send en tilbakemelding — Fjelltoppene</title>
+<meta name="description" content="Send oss en tilbakemelding, bug-rapport, funksjonsønske eller en hilsen fra fjellet. Hver melding leses av en ekte person.">
+
+<link rel="icon" type="image/svg+xml" href="assets/logo-mark.svg">
+<link rel="apple-touch-icon" href="assets/logo.svg">
+<meta name="theme-color" content="#1c3f2a">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --green-900: #102a1c;
+    --green-800: #1c3f2a;
+    --green-700: #25553a;
+    --green-600: #2d6a47;
+    --green-500: #3a8056;
+    --green-100: #d9e9dc;
+    --green-50:  #eaf3ec;
+    --mint:      #b8d4be;
+    --yellow:    #f4b740;
+    --paper:     #f6f5f1;
+    --paper-2:   #ecebe5;
+    --ink:       #141414;
+    --ink-2:     #3a3a3a;
+    --muted:     #6a6e69;
+    --line:      #dad8d1;
+    --card:      #ffffff;
+    --danger:    #c54a2c;
+    --radius-sm: 8px;
+    --radius:    14px;
+    --radius-lg: 22px;
+    --radius-xl: 32px;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: "Manrope", system-ui, -apple-system, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+    font-size: 17px;
+  }
+  .mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
+  a { color: var(--green-700); }
+  a:hover { color: var(--green-800); }
+  img { display: block; max-width: 100%; }
+
+  .wrap {
+    width: 100%;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  /* NAV */
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(246,245,241,0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid transparent;
+    transition: border-color .2s ease;
+  }
+  .nav.scrolled { border-bottom-color: var(--line); }
+  .nav-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    height: 68px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 12px;
+    text-decoration: none; color: var(--ink);
+    font-weight: 700; font-size: 19px; letter-spacing: -0.01em;
+  }
+  .brand-mark {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--green-700);
+    display: grid; place-items: center;
+  }
+  .nav-back {
+    text-decoration: none;
+    color: var(--ink-2);
+    font-size: 14px;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    transition: background .15s ease;
+  }
+  .nav-back:hover { background: var(--paper-2); color: var(--green-800); }
+
+  /* HEADER */
+  header.page-head {
+    padding: 80px 0 50px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 48px;
+    position: relative;
+  }
+  .eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--green-700);
+    margin-bottom: 22px;
+    display: inline-flex; align-items: center; gap: 12px;
+  }
+  .eyebrow::before {
+    content: ""; width: 28px; height: 1px; background: var(--green-700);
+  }
+  h1 {
+    font-size: clamp(36px, 5.5vw, 58px);
+    line-height: 1.04;
+    letter-spacing: -0.025em;
+    font-weight: 700;
+    margin: 0 0 22px;
+    text-wrap: balance;
+  }
+  h1 em {
+    font-style: italic;
+    color: var(--green-700);
+    font-weight: 700;
+  }
+  .lead {
+    font-size: 19px;
+    color: var(--ink-2);
+    max-width: 620px;
+    text-wrap: pretty;
+    margin: 0 0 18px;
+  }
+
+  /* Smoke-signal / "what happens" card */
+  .promise {
+    background: var(--green-800);
+    color: #fff;
+    border-radius: var(--radius-lg);
+    padding: 30px 32px;
+    margin-bottom: 56px;
+    position: relative;
+    overflow: hidden;
+  }
+  .promise::before {
+    content: "";
+    position: absolute; inset: 0;
+    background: radial-gradient(500px 200px at 90% 0%, rgba(255,255,255,0.06), transparent 60%);
+    pointer-events: none;
+  }
+  .promise h2 {
+    color: #fff;
+    font-size: 20px;
+    margin: 0 0 6px;
+    letter-spacing: -0.01em;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .promise h2 svg { color: var(--mint); }
+  .promise p {
+    margin: 0;
+    color: #d3decf;
+    font-size: 15.5px;
+    line-height: 1.55;
+    max-width: 540px;
+  }
+  .promise .signature {
+    margin-top: 18px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--mint);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .promise .signature::before {
+    content: ""; width: 22px; height: 1px; background: var(--mint);
+  }
+
+  /* FORM CARD */
+  .form-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 36px;
+    margin-bottom: 40px;
+  }
+
+  /* Form blocks */
+  .field-group { margin-bottom: 28px; }
+  .field-group:last-of-type { margin-bottom: 0; }
+
+  .field-label {
+    display: block;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--ink);
+    margin-bottom: 8px;
+    letter-spacing: -0.005em;
+  }
+  .field-label .optional {
+    font-weight: 400;
+    color: var(--muted);
+    font-size: 13px;
+    margin-left: 6px;
+    letter-spacing: 0;
+  }
+  .field-help {
+    font-size: 13.5px;
+    color: var(--muted);
+    margin-bottom: 10px;
+    margin-top: -2px;
+  }
+
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  @media (max-width: 540px) {
+    .field-row { grid-template-columns: 1fr; }
+  }
+
+  input[type="text"],
+  input[type="email"],
+  textarea,
+  select {
+    width: 100%;
+    font-family: inherit;
+    font-size: 16px;
+    color: var(--ink);
+    background: var(--paper);
+    border: 1.5px solid var(--line);
+    border-radius: var(--radius);
+    padding: 13px 16px;
+    transition: border-color .15s ease, background .15s ease, box-shadow .15s ease;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  input[type="text"]:hover,
+  input[type="email"]:hover,
+  textarea:hover,
+  select:hover {
+    border-color: #c4c2bb;
+  }
+  input[type="text"]:focus,
+  input[type="email"]:focus,
+  textarea:focus,
+  select:focus {
+    outline: none;
+    border-color: var(--green-700);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(37, 85, 58, 0.10);
+  }
+  textarea {
+    resize: vertical;
+    min-height: 150px;
+    line-height: 1.55;
+  }
+  input::placeholder, textarea::placeholder { color: #a3a098; }
+
+  /* Category pills */
+  .category-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  @media (max-width: 480px) {
+    .category-grid { grid-template-columns: 1fr; }
+  }
+  .category-option {
+    position: relative;
+    cursor: pointer;
+  }
+  .category-option input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .category-option .pill {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 16px;
+    border: 1.5px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--paper);
+    font-weight: 500;
+    font-size: 15px;
+    color: var(--ink-2);
+    transition: all .15s ease;
+    user-select: none;
+  }
+  .category-option:hover .pill {
+    border-color: #c4c2bb;
+    background: #fff;
+  }
+  .category-option input:focus-visible + .pill {
+    box-shadow: 0 0 0 4px rgba(37, 85, 58, 0.18);
+  }
+  .category-option input:checked + .pill {
+    border-color: var(--green-700);
+    background: var(--green-50);
+    color: var(--green-800);
+  }
+  .category-option input:checked + .pill .cat-icon {
+    background: var(--green-700);
+    color: #fff;
+  }
+  .cat-icon {
+    width: 30px; height: 30px;
+    border-radius: 8px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    display: grid; place-items: center;
+    color: var(--green-700);
+    flex-shrink: 0;
+    transition: all .15s ease;
+  }
+  .category-option input:checked + .pill .cat-icon {
+    border-color: var(--green-700);
+  }
+
+  /* Collapsible technical section */
+  .tech-toggle {
+    background: none;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    font-family: inherit;
+    font-size: 14.5px;
+    font-weight: 500;
+    color: var(--ink-2);
+    cursor: pointer;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    transition: background .15s ease, border-color .15s ease;
+  }
+  .tech-toggle:hover {
+    background: var(--paper-2);
+    border-color: #c4c2bb;
+  }
+  .tech-toggle .chev {
+    transition: transform .2s ease;
+    color: var(--muted);
+  }
+  .tech-toggle[aria-expanded="true"] .chev { transform: rotate(180deg); }
+  .tech-toggle .badge {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    background: var(--green-100);
+    color: var(--green-800);
+    padding: 3px 8px;
+    border-radius: 999px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-left: auto;
+    margin-right: 8px;
+  }
+  .tech-panel {
+    margin-top: 14px;
+    padding: 22px;
+    background: var(--paper);
+    border: 1px dashed var(--line);
+    border-radius: var(--radius);
+    display: none;
+  }
+  .tech-panel.open { display: block; }
+  .tech-panel .field-group { margin-bottom: 18px; }
+  .tech-panel .field-group:last-child { margin-bottom: 0; }
+
+  /* File upload */
+  .file-drop {
+    border: 1.5px dashed var(--line);
+    border-radius: var(--radius);
+    background: var(--paper);
+    padding: 22px;
+    text-align: center;
+    cursor: pointer;
+    transition: all .15s ease;
+    position: relative;
+  }
+  .file-drop:hover {
+    border-color: var(--green-700);
+    background: var(--green-50);
+  }
+  .file-drop.dragover {
+    border-color: var(--green-700);
+    background: var(--green-50);
+  }
+  .file-drop input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .file-drop .file-icon {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--card);
+    border: 1px solid var(--line);
+    display: grid; place-items: center;
+    margin: 0 auto 10px;
+    color: var(--green-700);
+  }
+  .file-drop .file-main {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink-2);
+    margin-bottom: 4px;
+  }
+  .file-drop .file-sub {
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .file-drop .file-chosen {
+    display: none;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    color: var(--green-800);
+    background: var(--green-100);
+    padding: 6px 12px;
+    border-radius: 999px;
+    margin-top: 10px;
+    word-break: break-all;
+  }
+  .file-drop.has-file .file-chosen { display: inline-block; }
+
+  /* Submit row */
+  .submit-row {
+    margin-top: 36px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .btn-submit {
+    background: var(--green-800);
+    color: #fff;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    border-radius: 999px;
+    padding: 14px 26px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: background .15s ease, transform .15s ease;
+  }
+  .btn-submit:hover {
+    background: var(--green-900);
+    transform: translateY(-1px);
+  }
+  .btn-submit:active { transform: translateY(0); }
+  .btn-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+  .btn-submit .spinner {
+    display: none;
+    width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+  .btn-submit.loading .spinner { display: inline-block; }
+  .btn-submit.loading .arrow { display: none; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .submit-note {
+    font-size: 13px;
+    color: var(--muted);
+    max-width: 280px;
+    line-height: 1.4;
+  }
+
+  /* Success state */
+  .success-card {
+    display: none;
+    background: var(--green-800);
+    color: #fff;
+    border-radius: var(--radius-lg);
+    padding: 48px 36px;
+    text-align: center;
+    margin-bottom: 40px;
+    animation: fadeUp .4s ease;
+  }
+  .success-card.visible { display: block; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .success-card .check-big {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    background: var(--mint);
+    color: var(--green-900);
+    display: grid; place-items: center;
+    margin: 0 auto 22px;
+  }
+  .success-card h2 {
+    color: #fff;
+    margin: 0 0 12px;
+    font-size: 26px;
+    letter-spacing: -0.015em;
+  }
+  .success-card p {
+    color: #d3decf;
+    margin: 0 auto 24px;
+    max-width: 420px;
+    font-size: 16px;
+  }
+  .success-card .reset-btn {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 10px 20px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background .15s ease;
+  }
+  .success-card .reset-btn:hover { background: rgba(255,255,255,0.18); }
+
+  /* Error message */
+  .error-msg {
+    display: none;
+    background: #fdecea;
+    border: 1px solid #f5c2b8;
+    color: #8c2a14;
+    padding: 14px 18px;
+    border-radius: var(--radius);
+    margin-top: 18px;
+    font-size: 14.5px;
+    line-height: 1.5;
+  }
+  .error-msg.visible { display: block; }
+
+  /* OTHER WAYS card */
+  .other-ways {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    margin: 40px 0 60px;
+  }
+  .other-ways h2 {
+    margin: 0 0 6px;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .other-ways > p {
+    color: var(--muted);
+    font-size: 15px;
+    margin: 0 0 22px;
+  }
+  .ways-grid {
+    display: grid;
+    gap: 12px;
+  }
+  .way {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 18px;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    text-decoration: none;
+    color: var(--ink);
+    transition: all .15s ease;
+  }
+  .way:hover {
+    background: var(--green-50);
+    border-color: var(--green-100);
+    transform: translateX(2px);
+  }
+  .way-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    display: grid; place-items: center;
+    color: var(--green-700);
+    flex-shrink: 0;
+  }
+  .way-text { flex: 1; min-width: 0; }
+  .way-title {
+    font-weight: 600;
+    font-size: 15.5px;
+    color: var(--ink);
+    margin: 0 0 2px;
+    letter-spacing: -0.005em;
+  }
+  .way-sub {
+    font-size: 13.5px;
+    color: var(--muted);
+    margin: 0;
+  }
+  .way-arrow {
+    color: var(--muted);
+    flex-shrink: 0;
+    transition: transform .15s ease, color .15s ease;
+  }
+  .way:hover .way-arrow {
+    color: var(--green-700);
+    transform: translateX(3px);
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 40px 0;
+    color: var(--muted);
+    font-size: 14px;
+    border-top: 1px solid var(--line);
+  }
+  .foot-inner {
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+  .foot-links { display: flex; gap: 24px; flex-wrap: wrap; }
+  .foot-links a { text-decoration: none; color: var(--muted); }
+  .foot-links a:hover { color: var(--green-700); }
+
+  @media (max-width: 600px) {
+    header.page-head { padding: 50px 0 40px; }
+    .promise, .other-ways { padding: 24px; }
+    .form-card { padding: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M3 19 L9 9 L13 14 L17 7 L21 19 Z" fill="#fff"/>
+          <circle cx="17.5" cy="6" r="1.6" fill="#f4b740"/>
+        </svg>
+      </span>
+      Fjelltoppene
+    </a>
+    <a href="index.html" class="nav-back">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Tilbake til forsiden
+    </a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <!-- HEADER -->
+  <header class="page-head">
+    <div class="eyebrow">Tilbakemelding</div>
+    <h1>Send oss et <em>røyksignal</em> fra fjellet.</h1>
+    <p class="lead">
+      Har du funnet en feil, savnet en topp i lista, eller bare lyst til å si hei? Vi vil høre det.
+      Fjelltoppene lages av én person på fritida — hver melding leses av et ekte menneske, og du får
+      som regel svar samme uke.
+    </p>
+  </header>
+
+  <!-- PROMISE -->
+  <div class="promise">
+    <h2>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2a4 4 0 0 0-4 4c0 1.5.8 2.8 2 3.5V11"/>
+        <path d="M14 11V9.5c1.2-.7 2-2 2-3.5"/>
+        <path d="M9 14h6"/>
+        <path d="M8 18h8"/>
+        <path d="M10 22h4"/>
+      </svg>
+      Det vi gjør med tilbakemeldingen din
+    </h2>
+    <p>
+      Den havner rett i innboksen til utvikleren. Bugs blir lagt inn i issue-trackeren,
+      gode forslag samles i en backlog, og manglende fjell legges til i databasen ved neste oppdatering.
+      Ingenting forsvinner i en algoritme.
+    </p>
+    <div class="signature">Frode · Fjelltoppene</div>
+  </div>
+
+  <!-- SUCCESS STATE -->
+  <div class="success-card" id="success-card">
+    <div class="check-big">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+    </div>
+    <h2>Takk! Meldingen er på vei.</h2>
+    <p>Røyksignalet er sett. Du hører fra oss snart — gjerne i løpet av få dager.</p>
+    <button type="button" class="reset-btn" id="send-another">Send en til</button>
+  </div>
+
+  <!-- FORM -->
+  <form class="form-card" id="feedback-form" action="https://api.web3forms.com/submit" method="POST" enctype="multipart/form-data" novalidate>
+
+    <!--
+      ┌──────────────────────────────────────────────────────────────────┐
+      │  OPPSETT — gjøres én gang:                                        │
+      │                                                                   │
+      │  1. Gå til https://web3forms.com/ og lim inn frode@fixn.no        │
+      │     Du får tilsendt en "access key" på e-post.                    │
+      │  2. Lim inn nøkkelen i value="..." på linjen under.               │
+      │  3. Test ved å sende skjemaet til deg selv.                       │
+      │                                                                   │
+      │  Web3Forms er gratis, krever ingen konto, og støtter vedlegg.     │
+      │  Bytt action-URL ved bytte til Formspree:                         │
+      │     https://formspree.io/f/DIN-FORM-ID                            │
+      │  (Formspree krever betalt plan for vedlegg.)                      │
+      └──────────────────────────────────────────────────────────────────┘
+    -->
+    <input type="hidden" name="access_key" value="418a7086-213d-4cc8-a9fa-12de20477e8e">
+    <input type="hidden" name="subject" value="[Fjelltoppene] Ny tilbakemelding">
+    <input type="hidden" name="from_name" value="Fjelltoppene-skjema">
+    <input type="hidden" name="redirect" value="false">
+    <!-- Honeypot mot spam -->
+    <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
+
+    <!-- CATEGORY -->
+    <div class="field-group">
+      <span class="field-label">Hva slags melding er det?</span>
+      <div class="field-help">Velg det som passer best — det hjelper å sortere innboksen.</div>
+      <div class="category-grid">
+        <label class="category-option">
+          <input type="radio" name="kategori" value="Bug / feilrapport" required>
+          <span class="pill">
+            <span class="cat-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="8" y="6" width="8" height="14" rx="4"/>
+                <path d="M8 12H4M16 12h4M8 8l-3-3M16 8l3-3M8 16l-3 3M16 16l3 3M12 6V2"/>
+              </svg>
+            </span>
+            Bug / feilrapport
+          </span>
+        </label>
+        <label class="category-option">
+          <input type="radio" name="kategori" value="Forslag til ny funksjon">
+          <span class="pill">
+            <span class="cat-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2a7 7 0 0 0-4 12.74V17a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-2.26A7 7 0 0 0 12 2z"/>
+                <path d="M10 22h4"/>
+              </svg>
+            </span>
+            Funksjonsønske
+          </span>
+        </label>
+        <label class="category-option">
+          <input type="radio" name="kategori" value="Manglende fjelltopp">
+          <span class="pill">
+            <span class="cat-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M3 19 L9 9 L13 14 L17 7 L21 19 Z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            Manglende topp
+          </span>
+        </label>
+        <label class="category-option">
+          <input type="radio" name="kategori" value="Spørsmål / hjelp">
+          <span class="pill">
+            <span class="cat-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M9.5 9a2.5 2.5 0 1 1 4.5 1.5c-.8 1-2 1.2-2 2.5M12 17h.01"/>
+              </svg>
+            </span>
+            Spørsmål / hjelp
+          </span>
+        </label>
+        <label class="category-option">
+          <input type="radio" name="kategori" value="Generell tilbakemelding">
+          <span class="pill">
+            <span class="cat-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+            </span>
+            Generell tilbakemelding
+          </span>
+        </label>
+        <label class="category-option">
+          <input type="radio" name="kategori" value="Ros / hilsen">
+          <span class="pill">
+            <span class="cat-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+              </svg>
+            </span>
+            Ros / hilsen
+          </span>
+        </label>
+      </div>
+    </div>
+
+    <!-- TITLE -->
+    <div class="field-group">
+      <label class="field-label" for="tittel">Kort overskrift</label>
+      <input type="text" id="tittel" name="tittel" required maxlength="120"
+        placeholder="F.eks. «Appen kræsjer når jeg åpner kartet»">
+    </div>
+
+    <!-- MESSAGE -->
+    <div class="field-group">
+      <label class="field-label" for="melding">Fortell mer<span class="optional">— gjerne så mye du vil</span></label>
+      <textarea id="melding" name="melding" required minlength="10"
+        placeholder="Hva skjedde? Hva forventet du? Hvis det er et forslag — hvorfor ville det gjort appen bedre?"></textarea>
+    </div>
+
+    <!-- NAME + EMAIL -->
+    <div class="field-group">
+      <div class="field-row">
+        <div>
+          <label class="field-label" for="navn">Navn <span class="optional">— valgfritt</span></label>
+          <input type="text" id="navn" name="navn" placeholder="Hva skal vi kalle deg?" autocomplete="name">
+        </div>
+        <div>
+          <label class="field-label" for="email">E-post <span class="optional">— for svar</span></label>
+          <input type="email" id="email" name="email" placeholder="navn@example.no" autocomplete="email">
+        </div>
+      </div>
+      <div class="field-help" style="margin-top: 10px;">Vi bruker e-posten kun for å svare deg, og lagrer den ikke.</div>
+    </div>
+
+    <!-- SCREENSHOT -->
+    <div class="field-group">
+      <span class="field-label">Skjermbilde <span class="optional">— valgfritt</span></span>
+      <div class="field-help">Et bilde sier mer enn tusen feilmeldinger. Maks 10 MB.</div>
+      <label class="file-drop" id="file-drop">
+        <input type="file" name="skjermbilde" id="skjermbilde" accept="image/*">
+        <div class="file-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <circle cx="9" cy="9" r="2"/>
+            <path d="m21 15-3.1-3.1a2 2 0 0 0-2.81.01L6 21"/>
+          </svg>
+        </div>
+        <div class="file-main">Slipp et bilde her eller klikk for å velge</div>
+        <div class="file-sub">PNG, JPG eller HEIC</div>
+        <div class="file-chosen" id="file-chosen"></div>
+      </label>
+    </div>
+
+    <!-- TECHNICAL (collapsible) -->
+    <div class="field-group">
+      <button type="button" class="tech-toggle" id="tech-toggle" aria-expanded="false" aria-controls="tech-panel">
+        <span>Teknisk informasjon</span>
+        <span class="badge">For bugs</span>
+        <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="tech-panel" id="tech-panel">
+        <div class="field-group">
+          <label class="field-label" for="enhet">Enhet og Android-versjon <span class="optional">— valgfritt</span></label>
+          <input type="text" id="enhet" name="enhet" placeholder="F.eks. «Samsung Galaxy S24 · Android 15»">
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="appversjon">App-versjon <span class="optional">— valgfritt</span></label>
+          <input type="text" id="appversjon" name="appversjon" placeholder="F.eks. «1.0.3 (beta)» — finnes på profilskjermen">
+        </div>
+      </div>
+    </div>
+
+    <!-- SUBMIT -->
+    <div class="submit-row">
+      <div class="submit-note">Ved å sende godtar du at vi bruker innholdet til å forbedre appen.</div>
+      <button type="submit" class="btn-submit" id="submit-btn">
+        <span class="spinner"></span>
+        <span class="label">Send melding</span>
+        <svg class="arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+
+    <div class="error-msg" id="error-msg">
+      Noe gikk galt under sending. Prøv igjen om litt, eller send oss en e-post på
+      <a href="mailto:hei@fjelltoppene.no">hei@fjelltoppene.no</a>.
+    </div>
+  </form>
+
+  <!-- OTHER WAYS -->
+  <div class="other-ways">
+    <h2>Andre veier til oss</h2>
+    <p>Foretrekker du en annen kanal? Her er de:</p>
+    <div class="ways-grid">
+      <a href="mailto:hei@fjelltoppene.no" class="way">
+        <span class="way-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="5" width="18" height="14" rx="2"/>
+            <path d="m3 7 9 6 9-6"/>
+          </svg>
+        </span>
+        <span class="way-text">
+          <p class="way-title">E-post direkte</p>
+          <p class="way-sub">hei@fjelltoppene.no</p>
+        </span>
+        <svg class="way-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+
+      <a href="https://github.com/FixnUp/Fjelltoppene_web/issues" target="_blank" rel="noopener" class="way">
+        <span class="way-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2c-3.2.7-3.87-1.36-3.87-1.36-.52-1.32-1.27-1.68-1.27-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.76 2.69 1.25 3.35.96.1-.74.4-1.25.72-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.18-3.09-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.15 1.18a10.91 10.91 0 0 1 5.74 0c2.18-1.49 3.15-1.18 3.15-1.18.63 1.58.23 2.75.11 3.04.73.8 1.18 1.83 1.18 3.09 0 4.42-2.69 5.4-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56C20.21 21.38 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5z"/>
+          </svg>
+        </span>
+        <span class="way-text">
+          <p class="way-title">GitHub Issues</p>
+          <p class="way-sub">For tekniske rapporter og forslag</p>
+        </span>
+        <svg class="way-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg>
+      </a>
+
+      <a href="https://play.google.com/store/apps/details?id=no.fjelltoppene.app" target="_blank" rel="noopener" class="way">
+        <span class="way-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+        </span>
+        <span class="way-text">
+          <p class="way-title">Vurder på Google Play</p>
+          <p class="way-sub">Anmeldelser hjelper andre å oppdage appen</p>
+        </span>
+        <svg class="way-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg>
+      </a>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-inner">
+    <div>© 2026 Fjelltoppene · Laget i Norge</div>
+    <div class="foot-links">
+      <a href="index.html">Forsiden</a>
+      <a href="privacy.html">Personvern</a>
+      <a href="feedback.html">Tilbakemelding</a>
+      <a href="mailto:hei@fjelltoppene.no">Kontakt</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Sticky nav border on scroll
+  const nav = document.getElementById('nav');
+  const onScroll = () => { nav.classList.toggle('scrolled', window.scrollY > 8); };
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // Category: auto-open tech panel when "Bug" is selected
+  const techToggle = document.getElementById('tech-toggle');
+  const techPanel = document.getElementById('tech-panel');
+  function setTechOpen(open) {
+    techToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    techPanel.classList.toggle('open', open);
+  }
+  techToggle.addEventListener('click', () => {
+    const open = techToggle.getAttribute('aria-expanded') === 'true';
+    setTechOpen(!open);
+  });
+  document.querySelectorAll('input[name="kategori"]').forEach(r => {
+    r.addEventListener('change', () => {
+      if (r.checked && r.value === 'Bug / feilrapport') setTechOpen(true);
+    });
+  });
+
+  // File upload UX
+  const fileDrop = document.getElementById('file-drop');
+  const fileInput = document.getElementById('skjermbilde');
+  const fileChosen = document.getElementById('file-chosen');
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files && fileInput.files[0]) {
+      const f = fileInput.files[0];
+      const sizeKB = (f.size / 1024).toFixed(0);
+      fileChosen.textContent = `${f.name} · ${sizeKB} KB`;
+      fileDrop.classList.add('has-file');
+    } else {
+      fileDrop.classList.remove('has-file');
+    }
+  });
+  ['dragenter', 'dragover'].forEach(ev => {
+    fileDrop.addEventListener(ev, e => { e.preventDefault(); fileDrop.classList.add('dragover'); });
+  });
+  ['dragleave', 'drop'].forEach(ev => {
+    fileDrop.addEventListener(ev, e => { e.preventDefault(); fileDrop.classList.remove('dragover'); });
+  });
+
+  // Form submit
+  const form = document.getElementById('feedback-form');
+  const submitBtn = document.getElementById('submit-btn');
+  const successCard = document.getElementById('success-card');
+  const errorMsg = document.getElementById('error-msg');
+  const sendAnother = document.getElementById('send-another');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorMsg.classList.remove('visible');
+
+    // Honeypot
+    if (form.botcheck.checked) return;
+
+    // Verify a category is selected
+    if (!form.querySelector('input[name="kategori"]:checked')) {
+      const firstCategory = form.querySelector('input[name="kategori"]');
+      if (firstCategory) firstCategory.focus();
+      return;
+    }
+
+    submitBtn.classList.add('loading');
+    submitBtn.disabled = true;
+    submitBtn.querySelector('.label').textContent = 'Sender...';
+
+    try {
+      const formData = new FormData(form);
+      const res = await fetch(form.action, { method: 'POST', body: formData });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.success !== false) {
+        form.style.display = 'none';
+        successCard.classList.add('visible');
+        window.scrollTo({ top: successCard.offsetTop - 80, behavior: 'smooth' });
+      } else {
+        throw new Error(data.message || 'Innsending feilet');
+      }
+    } catch (err) {
+      errorMsg.classList.add('visible');
+    } finally {
+      submitBtn.classList.remove('loading');
+      submitBtn.disabled = false;
+      submitBtn.querySelector('.label').textContent = 'Send melding';
+    }
+  });
+
+  sendAnother.addEventListener('click', () => {
+    successCard.classList.remove('visible');
+    form.reset();
+    fileDrop.classList.remove('has-file');
+    fileChosen.textContent = '';
+    setTechOpen(false);
+    form.style.display = '';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+
+</body>
+</html>
