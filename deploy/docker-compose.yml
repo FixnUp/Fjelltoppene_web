@@ -1,0 +1,24 @@
+# Fjelltoppene.no — TrueNAS Scale Custom App
+#
+# Bruk: TrueNAS Scale -> Apps -> Discover Apps -> Custom App
+# Lim inn innholdet under, eller bruk "Install via YAML".
+#
+# Forutsetning: bygg image først (eller bytt til en pre-built fra registry):
+#   docker build -t fjelltoppene-web:latest /mnt/<pool>/apps/fjelltoppene/deploy
+
+services:
+  fjelltoppene-web:
+    image: fjelltoppene-web:latest
+    container_name: fjelltoppene-web
+    restart: unless-stopped
+    ports:
+      # vert:container — endre 8080 om porten er opptatt på TrueNAS
+      - "8080:80"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+    # Valgfritt: mount logger ut til datasett
+    # volumes:
+    #   - /mnt/<pool>/apps/fjelltoppene/logs:/var/log/nginx

@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fjelltoppene — Logo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-900: #102a1c;
+    --green-800: #1c3f2a;
+    --green-700: #25553a;
+    --green-100: #d9e9dc;
+    --mint:      #b8d4be;
+    --yellow:    #f4b740;
+    --paper:     #f6f5f1;
+    --paper-2:   #ecebe5;
+    --ink:       #141414;
+    --ink-2:     #3a3a3a;
+    --muted:     #6a6e69;
+    --line:      #dad8d1;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Manrope", system-ui, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    padding: 60px 28px 120px;
+  }
+  .wrap { max-width: 1200px; margin: 0 auto; }
+  .mono { font-family: "JetBrains Mono", monospace; }
+
+  header.page-head {
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 40px;
+    margin-bottom: 48px;
+  }
+  .eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--green-700);
+    margin-bottom: 18px;
+    display: inline-flex; align-items: center; gap: 12px;
+  }
+  .eyebrow::before {
+    content: ""; width: 28px; height: 1px; background: var(--green-700);
+  }
+  h1 {
+    font-size: clamp(36px, 5vw, 56px);
+    line-height: 1.05; letter-spacing: -0.02em;
+    margin: 0 0 14px;
+    font-weight: 700;
+  }
+  .lead {
+    font-size: 18px; color: var(--ink-2);
+    max-width: 580px; margin: 0;
+  }
+
+  h2 {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 18px;
+  }
+
+  /* Sections */
+  section { margin-bottom: 56px; }
+  .panel-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+  @media (max-width: 720px) { .panel-row { grid-template-columns: 1fr; } }
+
+  .panel {
+    border-radius: 22px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: #fff;
+  }
+  .panel .canvas {
+    aspect-ratio: 16 / 10;
+    display: grid; place-items: center;
+    position: relative;
+  }
+  .panel .meta {
+    border-top: 1px solid var(--line);
+    padding: 14px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .panel .meta a {
+    color: var(--green-700);
+    text-decoration: none;
+  }
+  .panel .meta a:hover { text-decoration: underline; }
+
+  /* Canvas backgrounds */
+  .bg-paper { background: var(--paper); }
+  .bg-paper2 { background: var(--paper-2); }
+  .bg-green { background: var(--green-800); }
+  .bg-green-deep { background: var(--green-900); }
+  .bg-mint { background: var(--mint); }
+  .bg-white { background: #ffffff; }
+
+  /* Lockup */
+  .lockup {
+    display: inline-flex; align-items: center; gap: 18px;
+  }
+  .lockup .wordmark {
+    font-size: 44px;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1;
+    color: var(--green-900);
+  }
+  .lockup.light .wordmark { color: #fff; }
+  .lockup.mint .wordmark { color: var(--green-900); }
+
+  /* The mark itself, drawn in SVG for any size */
+  .mark { display: block; }
+
+  /* Sizes grid */
+  .sizes {
+    display: flex; align-items: flex-end; gap: 32px; flex-wrap: wrap;
+    padding: 50px 40px;
+  }
+  .size-cell {
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+  }
+  .size-cell .lbl {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* Clear space */
+  .clear-canvas {
+    padding: 60px;
+    background:
+      linear-gradient(var(--mint), var(--mint)) no-repeat 50% 50% / calc(100% - 60px) calc(100% - 60px);
+    background-color: var(--paper-2);
+  }
+  .clear-frame {
+    width: max-content;
+    margin: 0 auto;
+    position: relative;
+    background: #fff;
+    padding: 32px;
+    border-radius: 12px;
+  }
+  .clear-guide {
+    position: absolute; inset: 0;
+    pointer-events: none;
+    border: 1px dashed var(--green-700);
+  }
+  .clear-label {
+    position: absolute;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px; color: var(--green-700);
+    background: var(--paper-2);
+    padding: 2px 6px;
+  }
+
+  /* Colors */
+  .swatches {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+  @media (max-width: 720px) { .swatches { grid-template-columns: repeat(2, 1fr); } }
+  .swatch {
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: #fff;
+  }
+  .swatch .chip { height: 110px; }
+  .swatch .info {
+    padding: 14px 16px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .swatch .info .nm {
+    font-weight: 600;
+    color: var(--ink);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+    font-size: 11px;
+  }
+  .swatch .info .hex { color: var(--ink-2); }
+
+  /* Don'ts */
+  .dos {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  @media (max-width: 820px) { .dos { grid-template-columns: 1fr; } }
+  .do {
+    border-radius: 16px;
+    border: 1px solid var(--line);
+    background: #fff;
+    padding: 28px;
+    min-height: 180px;
+    display: flex; flex-direction: column; gap: 14px;
+    position: relative;
+  }
+  .do .tag {
+    position: absolute; top: 14px; right: 14px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 4px 8px; border-radius: 999px;
+  }
+  .tag-ok { background: var(--green-100); color: var(--green-800); }
+  .tag-no { background: #fbe2e2; color: #973737; }
+  .do p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink-2);
+  }
+
+  .download-row {
+    display: flex; gap: 12px; flex-wrap: wrap;
+    margin-top: 20px;
+  }
+  .download-row a {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 16px;
+    background: var(--green-800);
+    color: #fff;
+    border-radius: 999px;
+    text-decoration: none;
+    font-size: 14px; font-weight: 500;
+  }
+  .download-row a:hover { background: var(--green-900); }
+  .download-row a svg { width: 14px; height: 14px; }
+
+  pre.code {
+    background: var(--green-900); color: #cfe1d4;
+    padding: 22px; border-radius: 14px;
+    overflow-x: auto;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header class="page-head">
+    <div class="eyebrow">Brand · Logo</div>
+    <h1>Fjelltoppene-merket</h1>
+    <p class="lead">Et fjell og en sol — like enkelt som en topptur. Et mark, en wordmark og to lockup-varianter for ulike flater.</p>
+  </header>
+
+  <!-- =============== PRIMARY LOCKUP =============== -->
+  <section>
+    <h2>Primært merke</h2>
+    <div class="panel-row">
+
+      <div class="panel">
+        <div class="canvas bg-paper">
+          <div class="lockup">
+            <!-- Mark -->
+            <svg class="mark" width="88" height="88" viewBox="0 0 64 64">
+              <path d="M6 52 L22 26 L31 38 L41 20 L58 52 Z" fill="#1c3f2a"/>
+              <circle cx="46" cy="17" r="4.5" fill="#f4b740"/>
+            </svg>
+            <span class="wordmark">Fjelltoppene</span>
+          </div>
+        </div>
+        <div class="meta">
+          <span>Lockup · Horisontal</span>
+          <span>Mørk på lys</span>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="canvas bg-green">
+          <div class="lockup light">
+            <svg class="mark" width="88" height="88" viewBox="0 0 64 64">
+              <path d="M6 52 L22 26 L31 38 L41 20 L58 52 Z" fill="#ffffff"/>
+              <circle cx="46" cy="17" r="4.5" fill="#f4b740"/>
+            </svg>
+            <span class="wordmark">Fjelltoppene</span>
+          </div>
+        </div>
+        <div class="meta">
+          <span>Lockup · Horisontal</span>
+          <span>Lys på mørk</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =============== APP ICON =============== -->
+  <section>
+    <h2>App-ikon</h2>
+    <div class="panel-row">
+
+      <div class="panel">
+        <div class="canvas bg-paper2" style="padding: 50px;">
+          <!-- iOS-style rounded square -->
+          <div style="width: 180px; height: 180px; border-radius: 42px; background: var(--green-800); display: grid; place-items: center; box-shadow: 0 20px 50px rgba(28,63,42,0.25);">
+            <svg width="100" height="100" viewBox="0 0 64 64">
+              <path d="M6 52 L22 26 L31 38 L41 20 L58 52 Z" fill="#ffffff"/>
+              <circle cx="46" cy="17" r="4.5" fill="#f4b740"/>
+            </svg>
+          </div>
+        </div>
+        <div class="meta">
+          <span>iOS / Android · 180×180</span>
+          <span>Avrundet firkant</span>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="canvas bg-paper2" style="padding: 50px;">
+          <!-- Circular -->
+          <div style="width: 180px; height: 180px; border-radius: 50%; background: var(--green-800); display: grid; place-items: center; box-shadow: 0 20px 50px rgba(28,63,42,0.25);">
+            <svg width="100" height="100" viewBox="0 0 64 64">
+              <path d="M6 52 L22 26 L31 38 L41 20 L58 52 Z" fill="#ffffff"/>
+              <circle cx="46" cy="17" r="4.5" fill="#f4b740"/>
+            </svg>
+          </div>
+        </div>
+        <div class="meta">
+          <span>Avatar / Favicon</span>
+          <span>Sirkel</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =============== SIZES =============== -->
+  <section>
+    <h2>Skala</h2>
+    <div class="panel">
+      <div class="canvas bg-paper" style="aspect-ratio: auto;">
+        <div class="sizes">
+          <div class="size-cell">
+            <svg width="16" height="16" viewBox="0 0 64 64">
+              <path d="M6 52 L22 26 L31 38 L41 20 L58 52 Z" fill="#1c3f2a"/>
+              <circle cx="46" cy="17" r="4.5" fill="#f4b740"/>
+            </svg>
+            <span class="lbl">16 px</span>
+          </div>
+          <div class="size-cell">
+            <svg width="24" height="24" viewBox="0 0 64 64">
+              <path d="M6 52 L22 26 L31 38 L41 20 L58 52 Z" fill="#1c3f2a"/>
+              <circle cx="46" cy="17" r="4.5" fill="#f4b740"/>
+            </svg>
+            <span class="lbl">24 px</span>
+          </div>
+          <div class="size-cell">
+            <svg width="40" height="40" viewBox="0 0 64 64">
+              <path d="M6 52 L22 26 L31 38 L41 20 L58 52 Z" fill="#1c3f2a"/>
+              <circle cx="46" cy="17" r="4.5" fill="#f4b740"/>
+            </svg>
+            <span class="lbl">40 px</span>
+          </div>
+          <div class="size-cell">
+            <svg width="72" height="72" viewBox="0 0 64 64">
+              <path d="M6 52 L22 26 L31 38 L41 20 L58 52 Z" fill="#1c3f2a"/>
+              <circle cx="46" cy="17" r="4.5" fill="#f4b740"/>
+            </svg>
+            <span class="lbl">72 px</span>
+          </div>
+          <div class="size-cell">
+            <svg width="120" height="120" viewBox="0 0 64 64">
+              <path d="M6 52 L22 26 L31 38 L41 20 L58 52 Z" fill="#1c3f2a"/>
+              <circle cx="46" cy="17" r="4.5" fill="#f4b740"/>
+            </svg>
+            <span class="lbl">120 px</span>
+          </div>
+        </div>
+      </div>
+      <div class="meta">
+        <span>Minimumsstørrelse</span>
+        <span>16 px</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============== COLORS =============== -->
+  <section>
+    <h2>Farger</h2>
+    <div class="swatches">
+      <div class="swatch">
+        <div class="chip" style="background: #1c3f2a;"></div>
+        <div class="info">
+          <div class="nm">Skog</div>
+          <div class="hex">#1C3F2A</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background: #f4b740;"></div>
+        <div class="info">
+          <div class="nm">Sol</div>
+          <div class="hex">#F4B740</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background: #d9e9dc;"></div>
+        <div class="info">
+          <div class="nm">Mose</div>
+          <div class="hex">#D9E9DC</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background: #f6f5f1; border-bottom: 1px solid var(--line);"></div>
+        <div class="info">
+          <div class="nm">Papir</div>
+          <div class="hex">#F6F5F1</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============== USAGE =============== -->
+  <section>
+    <h2>Bruk</h2>
+    <div class="dos">
+
+      <div class="do">
+        <span class="tag tag-ok">Gjør</span>
+        <svg width="60" height="60" viewBox="0 0 64 64">
+          <path d="M6 52 L22 26 L31 38 L41 20 L58 52 Z" fill="#1c3f2a"/>
+          <circle cx="46" cy="17" r="4.5" fill="#f4b740"/>
+        </svg>
+        <p>Bruk originalfargene. Skog-grønn mot lyse bakgrunner, hvit mot mørke.</p>
+      </div>
+
+      <div class="do">
+        <span class="tag tag-no">Ikke gjør</span>
+        <svg width="60" height="60" viewBox="0 0 64 64" style="transform: rotate(15deg)">
+          <path d="M6 52 L22 26 L31 38 L41 20 L58 52 Z" fill="#1c3f2a"/>
+          <circle cx="46" cy="17" r="4.5" fill="#f4b740"/>
+        </svg>
+        <p>Ikke roter, vri eller skjev merket. Det skal alltid stå rett.</p>
+      </div>
+
+      <div class="do">
+        <span class="tag tag-no">Ikke gjør</span>
+        <svg width="60" height="60" viewBox="0 0 64 64">
+          <path d="M6 52 L22 26 L31 38 L41 20 L58 52 Z" fill="#c43a3a"/>
+          <circle cx="46" cy="17" r="4.5" fill="#3a8ec4"/>
+        </svg>
+        <p>Ikke bytt farger på merket utenfor godkjente paletter.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =============== SVG CODE =============== -->
+  <section>
+    <h2>Eksporter</h2>
+    <div class="panel" style="background: var(--green-900);">
+      <div style="padding: 28px;">
+<pre class="code">&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64"&gt;
+  &lt;path d="M6 52 L22 26 L31 38 L41 20 L58 52 Z" fill="#1C3F2A"/&gt;
+  &lt;circle cx="46" cy="17" r="4.5" fill="#F4B740"/&gt;
+&lt;/svg&gt;</pre>
+        <div class="download-row">
+          <a href="assets/logo-mark.svg" download>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/></svg>
+            logo-mark.svg
+          </a>
+          <a href="assets/logo.svg" download>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/></svg>
+            logo.svg (i sirkel)
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>

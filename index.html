@@ -1,0 +1,1337 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fjelltoppene — Din turbok for norske topper</title>
+<meta name="description" content="Fjelltoppene er en app for å oppdage, registrere og holde oversikt over fjellturene dine. Kart, lister, statistikk og vær — alt på ett sted.">
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="assets/logo-mark.svg">
+<link rel="apple-touch-icon" href="assets/logo.svg">
+
+<!-- Open Graph / Social -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Fjelltoppene — Din turbok for norske topper">
+<meta property="og:description" content="Oppdag, registrer og hold oversikt over fjellturene dine. Kommer senvåren 2026.">
+<meta property="og:image" content="assets/og-image.png">
+<meta property="og:locale" content="nb_NO">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#1c3f2a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-900: #102a1c;
+    --green-800: #1c3f2a;
+    --green-700: #25553a;
+    --green-600: #2d6a47;
+    --green-500: #3a8056;
+    --green-100: #d9e9dc;
+    --green-50:  #eaf3ec;
+    --mint:      #b8d4be;
+    --yellow:    #f4b740;
+    --navy:      #1a3a5c;
+    --navy-soft: #cdd7e3;
+    --paper:     #f6f5f1;
+    --paper-2:   #ecebe5;
+    --ink:       #141414;
+    --ink-2:     #3a3a3a;
+    --muted:     #6a6e69;
+    --line:      #dad8d1;
+    --card:      #ffffff;
+
+    --radius-sm: 8px;
+    --radius:    14px;
+    --radius-lg: 22px;
+    --radius-xl: 32px;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: "Manrope", system-ui, -apple-system, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+    font-size: 17px;
+  }
+  .mono, .meta {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-feature-settings: "tnum" 1;
+  }
+  a { color: inherit; }
+  img { display: block; max-width: 100%; }
+
+  .wrap {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  /* ---------- NAV ---------- */
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(246,245,241,0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid transparent;
+    transition: border-color .2s ease;
+  }
+  .nav.scrolled { border-bottom-color: var(--line); }
+  .nav-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    height: 68px;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 12px;
+    text-decoration: none; color: var(--ink);
+    font-weight: 700; font-size: 19px; letter-spacing: -0.01em;
+  }
+  .brand-mark {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--green-700);
+    display: grid; place-items: center;
+    box-shadow: 0 0 0 1.5px #fff inset, 0 0 0 2.5px var(--green-700) inset;
+  }
+  .brand-mark svg { display: block; }
+  .nav-links {
+    display: flex; gap: 30px; align-items: center;
+    font-size: 15px;
+  }
+  .nav-links a {
+    text-decoration: none; color: var(--ink-2);
+    transition: color .15s ease;
+  }
+  .nav-links a:hover { color: var(--green-700); }
+  .nav-cta {
+    background: var(--green-700); color: #fff !important;
+    padding: 10px 18px; border-radius: 999px;
+    font-weight: 600; font-size: 14px;
+    text-decoration: none;
+    transition: background .15s ease, transform .15s ease;
+  }
+  .nav-cta:hover { background: var(--green-800); transform: translateY(-1px); }
+  .nav-toggle { display: none; background: none; border: 0; padding: 6px; cursor: pointer; }
+  @media (max-width: 760px) {
+    .nav-links a:not(.nav-cta) { display: none; }
+  }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    position: relative;
+    background: var(--green-800);
+    color: #fff;
+    overflow: hidden;
+    border-bottom-left-radius: var(--radius-xl);
+    border-bottom-right-radius: var(--radius-xl);
+  }
+  .hero::before {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(800px 400px at 90% -10%, rgba(255,255,255,0.06), transparent 60%),
+      linear-gradient(180deg, var(--green-800), var(--green-900));
+    pointer-events: none;
+  }
+  .hero-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 40px;
+    align-items: center;
+    padding: 80px 0 0;
+  }
+  @media (max-width: 920px) {
+    .hero-grid { grid-template-columns: 1fr; padding-top: 56px; gap: 24px; }
+  }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--mint);
+    background: rgba(184,212,190,0.1);
+    border: 1px solid rgba(184,212,190,0.25);
+    padding: 6px 12px;
+    border-radius: 999px;
+  }
+  .eyebrow .dot {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--yellow);
+    box-shadow: 0 0 0 4px rgba(244,183,64,0.18);
+  }
+  h1.hero-title {
+    font-size: clamp(40px, 6.2vw, 76px);
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+    font-weight: 800;
+    margin: 22px 0 18px;
+    text-wrap: balance;
+  }
+  h1.hero-title .accent {
+    color: var(--mint);
+    font-style: italic;
+    font-weight: 700;
+  }
+  .hero-lead {
+    font-size: clamp(17px, 1.6vw, 20px);
+    color: #d3decf;
+    max-width: 540px;
+    text-wrap: pretty;
+    margin-bottom: 34px;
+  }
+  .cta-row {
+    display: flex; gap: 12px; flex-wrap: wrap;
+    margin-bottom: 48px;
+  }
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 14px 22px;
+    border-radius: 999px;
+    font-weight: 600; font-size: 15px;
+    text-decoration: none;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: transform .15s ease, background .15s ease, border-color .15s ease;
+  }
+  .btn-primary {
+    background: #fff; color: var(--green-900);
+  }
+  .btn-primary:hover { transform: translateY(-1px); }
+  .btn-ghost {
+    background: transparent; color: #fff;
+    border-color: rgba(255,255,255,0.25);
+  }
+  .btn-ghost:hover { border-color: #fff; }
+  .btn svg { width: 18px; height: 18px; }
+
+  .hero-stats {
+    display: flex; gap: 28px;
+    padding-top: 26px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    max-width: 540px;
+  }
+  .hero-stat .num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 26px; font-weight: 600;
+    color: #fff;
+    letter-spacing: -0.02em;
+  }
+  .hero-stat .lbl {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #9bb19f;
+    margin-top: 4px;
+  }
+
+  /* phone showcase */
+  .phone-stage {
+    position: relative;
+    height: 620px;
+    display: grid; place-items: center;
+  }
+  @media (max-width: 920px) {
+    .phone-stage { height: 520px; margin-bottom: -20px; }
+  }
+  .phone {
+    position: relative;
+    width: 280px;
+    aspect-ratio: 9 / 19.5;
+    background: #0f1a13;
+    border-radius: 42px;
+    padding: 10px;
+    box-shadow:
+      0 30px 80px rgba(0,0,0,0.45),
+      0 0 0 1px rgba(255,255,255,0.06) inset;
+    transform: rotate(-4deg);
+  }
+  .phone .screen {
+    position: relative;
+    width: 100%; height: 100%;
+    border-radius: 32px;
+    overflow: hidden;
+    background: #fff;
+  }
+  .phone .screen img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: top;
+  }
+  .phone .notch {
+    position: absolute;
+    top: 16px; left: 50%; transform: translateX(-50%);
+    width: 72px; height: 22px;
+    background: #0f1a13;
+    border-radius: 999px;
+    z-index: 2;
+  }
+  .phone.behind {
+    position: absolute;
+    width: 240px;
+    transform: rotate(6deg) translate(60%, -10%);
+    opacity: 0.85;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.35);
+    z-index: -1;
+  }
+  /* mountain backdrop */
+  .hero-mountains {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 180px;
+    pointer-events: none;
+    opacity: 0.18;
+  }
+
+  /* ---------- SECTIONS ---------- */
+  section { padding: 110px 0; }
+  @media (max-width: 760px) { section { padding: 80px 0; } }
+
+  .sec-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--green-700);
+    margin-bottom: 18px;
+    display: inline-flex; align-items: center; gap: 12px;
+  }
+  .sec-eyebrow::before {
+    content: ""; width: 28px; height: 1px; background: var(--green-700);
+  }
+  h2 {
+    font-size: clamp(32px, 4vw, 50px);
+    line-height: 1.05; letter-spacing: -0.02em;
+    font-weight: 700;
+    margin: 0 0 16px;
+    text-wrap: balance;
+    max-width: 780px;
+  }
+  .sec-lead {
+    font-size: clamp(17px, 1.4vw, 20px);
+    color: var(--ink-2);
+    max-width: 640px;
+    text-wrap: pretty;
+  }
+
+  /* ---------- HOW IT WORKS ---------- */
+  .steps {
+    margin-top: 60px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  @media (max-width: 820px) { .steps { grid-template-columns: 1fr; } }
+  .step {
+    background: var(--card);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    border: 1px solid var(--line);
+    position: relative;
+    min-height: 260px;
+    display: flex; flex-direction: column;
+  }
+  .step-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    color: var(--green-700);
+    letter-spacing: 0.1em;
+    margin-bottom: 18px;
+  }
+  .step-icon {
+    width: 56px; height: 56px;
+    border-radius: 16px;
+    background: var(--green-100);
+    display: grid; place-items: center;
+    margin-bottom: 22px;
+    color: var(--green-800);
+  }
+  .step h3 {
+    font-size: 22px; font-weight: 700;
+    margin: 0 0 10px;
+    letter-spacing: -0.01em;
+  }
+  .step p {
+    color: var(--ink-2);
+    margin: 0;
+    font-size: 16px;
+  }
+
+  /* ---------- FEATURES ---------- */
+  .features-section {
+    background: #fff;
+    border-radius: var(--radius-xl);
+    margin: 0 14px;
+  }
+  .features {
+    margin-top: 60px;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 18px;
+  }
+  .feat {
+    background: var(--paper);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    border: 1px solid var(--line);
+    position: relative;
+    overflow: hidden;
+    min-height: 240px;
+    display: flex; flex-direction: column;
+  }
+  .feat.dark { background: var(--green-800); color: #fff; border-color: var(--green-800); }
+  .feat.dark p { color: #c0d2c5; }
+  .feat-big { grid-column: span 7; }
+  .feat-sm  { grid-column: span 5; }
+  .feat-third { grid-column: span 4; }
+  @media (max-width: 960px) {
+    .feat-big, .feat-sm, .feat-third { grid-column: span 12; }
+  }
+  .feat .feat-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: var(--green-100);
+    color: var(--green-800);
+    display: grid; place-items: center;
+    margin-bottom: 18px;
+  }
+  .feat.dark .feat-icon {
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+  }
+  .feat h3 {
+    font-size: 22px; font-weight: 700;
+    margin: 0 0 8px;
+    letter-spacing: -0.01em;
+  }
+  .feat p {
+    color: var(--ink-2);
+    margin: 0 0 18px;
+    font-size: 16px;
+  }
+  .feat-visual { margin-top: auto; }
+
+  /* mini map */
+  .mini-map {
+    border-radius: 14px;
+    overflow: hidden;
+    background: #e7ecdf;
+    aspect-ratio: 16 / 9;
+    position: relative;
+    border: 1px solid var(--line);
+  }
+  .mini-map svg { display: block; width: 100%; height: 100%; }
+  .pin {
+    position: absolute; transform: translate(-50%, -50%);
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--green-700); color: #fff;
+    border: 2.5px solid #fff;
+    display: grid; place-items: center;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px; font-weight: 600;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  }
+  .pin.yellow { background: var(--yellow); color: #2a2102; }
+
+  /* progress card */
+  .progress-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 14px;
+    padding: 18px;
+  }
+  .progress-head {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: #9bb19f;
+    margin-bottom: 10px;
+  }
+  .progress-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 14px;
+  }
+  .progress-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 28px; font-weight: 600;
+    color: #fff;
+  }
+  .progress-pct {
+    color: var(--mint);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 18px;
+  }
+  .progress-bar {
+    height: 8px; border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    overflow: hidden;
+  }
+  .progress-bar > div {
+    height: 100%; background: var(--mint);
+    border-radius: 999px;
+    width: 33%;
+  }
+
+  /* mini chart */
+  .chart {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 4px;
+    align-items: end;
+    height: 110px;
+  }
+  .chart .bar {
+    background: var(--green-100);
+    border-radius: 4px 4px 0 0;
+    position: relative;
+  }
+  .chart .bar.on { background: var(--green-700); }
+  .chart .bar .v {
+    position: absolute;
+    bottom: 100%;
+    left: 50%; transform: translateX(-50%);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: var(--green-800);
+    margin-bottom: 4px;
+  }
+  .chart-axis {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 4px;
+    margin-top: 8px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  /* weather chip */
+  .weather-card {
+    display: flex; gap: 24px;
+    background: #fff;
+    border-radius: 14px;
+    padding: 18px 22px;
+    border: 1px solid var(--line);
+  }
+  .weather-now .t {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 36px; font-weight: 600;
+    color: var(--ink);
+    line-height: 1;
+  }
+  .weather-now .l {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+  .weather-future { display: flex; gap: 16px; margin-left: auto; }
+  .weather-future > div {
+    text-align: center;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 14px; color: var(--ink-2);
+  }
+  .weather-future > div small {
+    display: block; font-size: 10px;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  /* ---------- SCREENSHOTS ---------- */
+  .screens-section {
+    background: var(--paper-2);
+    border-radius: var(--radius-xl);
+    margin: 0 14px;
+  }
+  .screens {
+    margin-top: 60px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 18px;
+    align-items: end;
+  }
+  @media (max-width: 920px) {
+    .screens { grid-template-columns: repeat(2, 1fr); }
+  }
+  .screen-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 14px;
+    border: 1px solid var(--line);
+    transition: transform .25s ease;
+  }
+  .screen-card:hover { transform: translateY(-6px); }
+  .screen-card img {
+    width: 100%;
+    aspect-ratio: 9 / 19.5;
+    object-fit: cover;
+    object-position: top;
+    border-radius: 10px;
+    background: #f2f1ec;
+  }
+  .screen-card .cap {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--green-700);
+    margin-top: 12px;
+  }
+  .screen-card .ttl {
+    font-size: 16px; font-weight: 600;
+    margin-top: 4px;
+  }
+
+  /* ---------- TURBOK / PROFILE BAND ---------- */
+  .band {
+    background: var(--green-800);
+    color: #fff;
+    border-radius: var(--radius-xl);
+    margin: 0 14px;
+    overflow: hidden;
+    position: relative;
+  }
+  .band::after {
+    content: "";
+    position: absolute; inset: 0;
+    background: radial-gradient(600px 300px at 80% 0%, rgba(255,255,255,0.08), transparent 60%);
+    pointer-events: none;
+  }
+  .band-inner {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 60px; align-items: center;
+    padding: 100px 60px;
+    position: relative;
+  }
+  @media (max-width: 920px) {
+    .band-inner { grid-template-columns: 1fr; padding: 70px 30px; gap: 40px; }
+  }
+  .band h2 {
+    color: #fff;
+    margin-bottom: 18px;
+  }
+  .band p { color: #c0d2c5; max-width: 520px; }
+  .band .sec-eyebrow {
+    color: var(--mint);
+  }
+  .band .sec-eyebrow::before { background: var(--mint); }
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .stat-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 14px;
+    padding: 22px;
+  }
+  .stat-card .n {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 32px; font-weight: 600;
+    color: #fff;
+    line-height: 1;
+  }
+  .stat-card .l {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: #9bb19f;
+    margin-top: 10px;
+  }
+
+  /* ---------- FAQ ---------- */
+  .faq-list {
+    margin-top: 50px;
+    border-top: 1px solid var(--line);
+  }
+  details.faq {
+    border-bottom: 1px solid var(--line);
+    padding: 22px 0;
+  }
+  details.faq summary {
+    list-style: none;
+    cursor: pointer;
+    font-size: 19px; font-weight: 600;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 24px;
+    letter-spacing: -0.005em;
+  }
+  details.faq summary::-webkit-details-marker { display: none; }
+  details.faq summary::after {
+    content: "+";
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 500;
+    font-size: 24px;
+    color: var(--green-700);
+    transition: transform .2s ease;
+  }
+  details.faq[open] summary::after { content: "−"; }
+  details.faq .answer {
+    margin-top: 14px;
+    color: var(--ink-2);
+    font-size: 16px;
+    max-width: 720px;
+  }
+
+  /* ---------- DOWNLOAD ---------- */
+  .download {
+    background: var(--green-800);
+    color: #fff;
+    text-align: center;
+    border-radius: var(--radius-xl);
+    margin: 0 14px;
+    padding: 100px 30px;
+    position: relative;
+    overflow: hidden;
+  }
+  .download h2 {
+    color: #fff; margin: 0 auto 18px;
+    max-width: 720px;
+  }
+  .download p {
+    color: #c0d2c5; max-width: 540px; margin: 0 auto 36px;
+    font-size: 18px;
+  }
+  .store-row {
+    display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
+  }
+  .store-btn {
+    display: inline-flex; align-items: center; gap: 12px;
+    background: #fff; color: var(--ink);
+    padding: 14px 22px;
+    border-radius: 14px;
+    text-decoration: none;
+    transition: transform .15s ease;
+  }
+  .store-btn:hover { transform: translateY(-2px); }
+  .store-btn svg { width: 26px; height: 26px; flex-shrink: 0; }
+  .store-btn .small {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1;
+  }
+  .store-btn .big {
+    font-size: 17px; font-weight: 600;
+    line-height: 1.2; margin-top: 3px;
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer {
+    padding: 60px 0 40px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .foot-inner {
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 20px;
+    border-top: 1px solid var(--line);
+    padding-top: 30px;
+  }
+  .foot-links {
+    display: flex; gap: 24px;
+  }
+  .foot-links a {
+    text-decoration: none; color: var(--muted);
+  }
+  .foot-links a:hover { color: var(--green-700); }
+
+  /* mountain svg silhouettes */
+  .mtn-bg {
+    width: 100%; height: 100%;
+    display: block;
+  }
+
+  /* reveal */
+  .reveal {
+    opacity: 0; transform: translateY(20px);
+    transition: opacity .8s ease, transform .8s ease;
+  }
+  .reveal.in {
+    opacity: 1; transform: none;
+  }
+
+  /* ---------- TOAST / MODAL ---------- */
+  .toast-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(16,42,28,0.55);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 200;
+    display: none;
+    align-items: center; justify-content: center;
+    padding: 24px;
+    opacity: 0;
+    transition: opacity .25s ease;
+  }
+  .toast-backdrop.show { display: flex; opacity: 1; }
+  .toast-card {
+    background: var(--paper);
+    border-radius: 24px;
+    max-width: 460px;
+    width: 100%;
+    padding: 36px 34px 30px;
+    position: relative;
+    border: 1px solid var(--line);
+    box-shadow: 0 40px 100px rgba(0,0,0,0.35);
+    transform: translateY(20px) scale(0.96);
+    transition: transform .3s cubic-bezier(.2,.7,.3,1);
+    text-align: left;
+  }
+  .toast-backdrop.show .toast-card { transform: none; }
+  .toast-icon {
+    width: 56px; height: 56px;
+    border-radius: 16px;
+    background: var(--green-100);
+    color: var(--green-800);
+    display: grid; place-items: center;
+    margin-bottom: 22px;
+  }
+  .toast-card h3 {
+    font-size: 24px; font-weight: 700;
+    letter-spacing: -0.015em;
+    margin: 0 0 10px;
+  }
+  .toast-card p {
+    color: var(--ink-2);
+    margin: 0 0 24px;
+    font-size: 16px;
+  }
+  .toast-card .eyebrow-line {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--green-700);
+    margin-bottom: 10px;
+  }
+  .toast-close {
+    position: absolute; top: 16px; right: 16px;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: transparent;
+    border: 0;
+    color: var(--muted);
+    cursor: pointer;
+    display: grid; place-items: center;
+    transition: background .15s ease, color .15s ease;
+  }
+  .toast-close:hover { background: var(--paper-2); color: var(--ink); }
+  .toast-actions {
+    display: flex; gap: 10px; flex-wrap: wrap;
+  }
+  .toast-actions .btn-primary {
+    background: var(--green-800); color: #fff;
+    flex: 1; justify-content: center;
+    min-width: 140px;
+  }
+  .toast-actions .btn-primary:hover { background: var(--green-900); }
+  .toast-actions .btn-ghost-dark {
+    background: transparent;
+    color: var(--green-800);
+    border-color: var(--line);
+  }
+  .toast-actions .btn-ghost-dark:hover {
+    border-color: var(--green-700);
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<nav class="nav" id="nav">
+  <div class="wrap nav-inner">
+    <a href="#" class="brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M3 19 L9 9 L13 14 L17 7 L21 19 Z" fill="#fff"/>
+          <circle cx="17.5" cy="6" r="1.6" fill="#f4b740"/>
+        </svg>
+      </span>
+      Fjelltoppene
+    </a>
+    <div class="nav-links">
+      <a href="#funksjoner">Funksjoner</a>
+      <a href="#slik">Slik fungerer det</a>
+      <a href="#skjermbilder">Skjermbilder</a>
+      <a href="#faq">FAQ</a>
+      <a href="#last-ned" class="nav-cta">Last ned</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <span class="eyebrow"><span class="dot"></span> Turbok 2026 · For norske fjell</span>
+      <h1 class="hero-title">
+        Hver topp <span class="accent">du har stått på</span>, på ett sted.
+      </h1>
+      <p class="hero-lead">
+        Fjelltoppene er en personlig turbok i lomma. Oppdag nye topper i nærheten,
+        kryss av de du har vært på, og se framgangen din vokse — fra Dalsnuten til Galdhøpiggen.
+      </p>
+      <div class="cta-row">
+        <a href="#last-ned" class="btn btn-primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/></svg>
+          Last ned appen
+        </a>
+        <a href="#funksjoner" class="btn btn-ghost">Utforsk funksjoner</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="num">3 800+</div>
+          <div class="lbl">Registrerte topper</div>
+        </div>
+        <div class="hero-stat">
+          <div class="num">357</div>
+          <div class="lbl">Kommuner dekket</div>
+        </div>
+        <div class="hero-stat">
+          <div class="num">100 %</div>
+          <div class="lbl">Norsk &amp; gratis</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phone-stage">
+      <div class="phone behind" aria-hidden="true">
+        <div class="screen">
+          <img src="assets/screen-profile.jpg" alt="">
+        </div>
+      </div>
+      <div class="phone">
+        <span class="notch"></span>
+        <div class="screen">
+          <img src="assets/screen-map.jpg" alt="Skjermbilde av kartet i Fjelltoppene-appen">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-mountains" aria-hidden="true">
+    <svg class="mtn-bg" viewBox="0 0 1200 180" preserveAspectRatio="none">
+      <path d="M0,180 L0,130 L120,80 L220,120 L340,60 L470,110 L600,40 L740,100 L880,55 L1010,110 L1130,70 L1200,100 L1200,180 Z" fill="#b8d4be" opacity="0.5"/>
+      <path d="M0,180 L0,150 L100,120 L240,140 L360,100 L500,135 L620,90 L760,130 L900,95 L1050,135 L1200,115 L1200,180 Z" fill="#b8d4be" opacity="0.7"/>
+    </svg>
+  </div>
+</header>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section id="slik">
+  <div class="wrap">
+    <div class="sec-eyebrow">Slik fungerer det</div>
+    <h2>Fra tur til turbok i tre enkle steg.</h2>
+    <p class="sec-lead">
+      Appen er bygget for å være ute av veien. Du finner topper, registrerer turen, og lar appen ta seg av resten.
+    </p>
+
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-num">STEG 01</div>
+        <div class="step-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>
+          </svg>
+        </div>
+        <h3>Finn en topp</h3>
+        <p>Bla i kartet, søk etter navn eller område, eller bruk plasseringen din for å se hvilke topper som ligger i nærheten.</p>
+      </div>
+
+      <div class="step reveal">
+        <div class="step-num">STEG 02</div>
+        <div class="step-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 20v-8"/><path d="m6 12 6-8 6 8"/><path d="M5 20h14"/>
+          </svg>
+        </div>
+        <h3>Registrer turen</h3>
+        <p>Trykk på pluss-knappen når du står på toppen. Tid, vær, høyde og koordinater fylles inn automatisk.</p>
+      </div>
+
+      <div class="step reveal">
+        <div class="step-num">STEG 03</div>
+        <div class="step-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 3v18h18"/><path d="m7 14 4-4 4 4 5-7"/>
+          </svg>
+        </div>
+        <h3>Se framgangen din</h3>
+        <p>Sett deg et egenmål for året, følg statistikken måned for måned, og se rekorder, høyder og kommuner du har besøkt.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FEATURES ============ -->
+<section id="funksjoner" class="features-section">
+  <div class="wrap">
+    <div class="sec-eyebrow">Funksjoner</div>
+    <h2>Alt du trenger for å holde oversikt.</h2>
+    <p class="sec-lead">Designet for norske forhold — fra dagstur i nærskogen til langhelger på vidda.</p>
+
+    <div class="features">
+      <!-- Map feature -->
+      <div class="feat feat-big reveal">
+        <div class="feat-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3Z"/><path d="M9 3v15"/><path d="M15 6v15"/>
+          </svg>
+        </div>
+        <h3>Interaktivt kart</h3>
+        <p>Alle norske topper i ett kart. Klynger viser hvor mange du har vært på i et område, og stjerner markerer ønskelistetopper.</p>
+        <div class="feat-visual">
+          <div class="mini-map">
+            <svg viewBox="0 0 400 220" preserveAspectRatio="none">
+              <rect width="400" height="220" fill="#e8efe1"/>
+              <path d="M0,140 L60,120 L100,160 L160,140 L220,170 L300,150 L360,180 L400,160 L400,220 L0,220 Z" fill="#cfdac0"/>
+              <path d="M0,180 L80,160 L160,190 L240,170 L320,200 L400,180 L400,220 L0,220 Z" fill="#b7c9a4"/>
+              <path d="M120,40 Q200,30 280,60 T380,70" stroke="#9eb0c6" stroke-width="1" fill="none" stroke-dasharray="3 4"/>
+              <path d="M40,60 Q120,50 200,80" stroke="#9eb0c6" stroke-width="1" fill="none" stroke-dasharray="3 4"/>
+              <text x="50" y="40" font-family="JetBrains Mono" font-size="9" fill="#7a8a6e">FJORD</text>
+              <text x="300" y="100" font-family="JetBrains Mono" font-size="9" fill="#7a8a6e">VIDDE</text>
+            </svg>
+            <div class="pin" style="left:32%; top:48%;">7</div>
+            <div class="pin" style="left:52%; top:62%;">3</div>
+            <div class="pin yellow" style="left:70%; top:38%;">★</div>
+            <div class="pin" style="left:80%; top:70%;">1</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Activity feature -->
+      <div class="feat feat-sm reveal">
+        <div class="feat-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 3v18h18"/><rect x="6" y="13" width="3" height="5"/><rect x="11" y="9" width="3" height="9"/><rect x="16" y="6" width="3" height="12"/>
+          </svg>
+        </div>
+        <h3>Statistikk &amp; rekorder</h3>
+        <p>Se hvilke måneder du var mest aktiv, høyeste topp, første tur i året og mest besøkte fjell.</p>
+        <div class="feat-visual">
+          <div class="chart" aria-hidden="true">
+            <div class="bar" style="height:8%"></div>
+            <div class="bar" style="height:14%"></div>
+            <div class="bar on" style="height:55%"><span class="v">8</span></div>
+            <div class="bar on" style="height:18%"><span class="v">2</span></div>
+            <div class="bar on" style="height:100%"><span class="v">18</span></div>
+            <div class="bar on" style="height:38%"><span class="v">5</span></div>
+            <div class="bar" style="height:12%"></div>
+            <div class="bar on" style="height:24%"><span class="v">3</span></div>
+            <div class="bar on" style="height:24%"><span class="v">3</span></div>
+            <div class="bar on" style="height:18%"><span class="v">2</span></div>
+            <div class="bar" style="height:8%"></div>
+            <div class="bar" style="height:8%"></div>
+          </div>
+          <div class="chart-axis">
+            <span>J</span><span>F</span><span>M</span><span>A</span><span>M</span><span>J</span><span>J</span><span>A</span><span>S</span><span>O</span><span>N</span><span>D</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lists -->
+      <div class="feat feat-third reveal">
+        <div class="feat-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/>
+          </svg>
+        </div>
+        <h3>Besøkte &amp; ønskeliste</h3>
+        <p>Hold rede på topper du har vært på, og lagre drømmetoppene dine til senere.</p>
+      </div>
+
+      <div class="feat feat-third reveal">
+        <div class="feat-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17.5 19a4.5 4.5 0 1 0 0-9 6 6 0 0 0-11.7-1 4 4 0 0 0 .7 8z"/>
+          </svg>
+        </div>
+        <h3>Vær på toppen</h3>
+        <p>Sjekk nåværende vær og prognose før du legger ut, direkte i toppvisningen.</p>
+        <div class="feat-visual">
+          <div class="weather-card" style="padding:14px 16px; margin-top:14px;">
+            <div class="weather-now">
+              <div class="t">14°</div>
+              <div class="l">Nå</div>
+            </div>
+            <div class="weather-future">
+              <div><small>+3t</small>13°</div>
+              <div><small>+6t</small>12°</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat feat-third reveal">
+        <div class="feat-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 3h7v7"/><path d="M21 3l-9 9"/><path d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"/>
+          </svg>
+        </div>
+        <h3>Eksporter dataene dine</h3>
+        <p>Last ned alt som CSV, GPX eller ZIP — turboka er din, alltid.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TURBOK BAND ============ -->
+<section id="turbok" style="padding: 60px 0;">
+  <div class="band">
+    <div class="band-inner">
+      <div>
+        <div class="sec-eyebrow">Turbok 2026</div>
+        <h2>Sett deg et mål. Følg det hele året.</h2>
+        <p style="margin-bottom:30px">
+          Egenmål gir deg et tall å sikte mot — 20, 30, 50 topper. Appen viser hvor mange du har igjen,
+          hvor stor andel som er fullført, og hvilke turer som teller mot målet.
+        </p>
+        <a href="#last-ned" class="btn btn-primary">Kom i gang gratis</a>
+      </div>
+      <div>
+        <div class="progress-card" style="padding: 28px;">
+          <div class="progress-head">Egenmål 2026 · 30 topper</div>
+          <div class="progress-row">
+            <div class="progress-num">10 / 30</div>
+            <div class="progress-pct">33 %</div>
+          </div>
+          <div class="progress-bar"><div></div></div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #9bb19f; margin-top: 14px; letter-spacing: 0.06em;">20 igjen av 30 i 2026</div>
+        </div>
+        <div class="stat-grid" style="margin-top:14px">
+          <div class="stat-card">
+            <div class="n">12</div>
+            <div class="l">Topper i år</div>
+          </div>
+          <div class="stat-card">
+            <div class="n">5 400</div>
+            <div class="l">Stigning i meter</div>
+          </div>
+          <div class="stat-card">
+            <div class="n">3</div>
+            <div class="l">Kommuner</div>
+          </div>
+          <div class="stat-card">
+            <div class="n">1 172</div>
+            <div class="l">Høyeste · moh</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SCREENSHOTS ============ -->
+<section id="skjermbilder" class="screens-section">
+  <div class="wrap">
+    <div class="sec-eyebrow">Skjermbilder</div>
+    <h2>Ren design, laget for å være ute.</h2>
+    <p class="sec-lead">Stort skriftsnitt, lyse flater og tydelige knapper — også med våte hender og solbriller på toppen.</p>
+
+    <div class="screens">
+      <div class="screen-card reveal">
+        <img src="assets/screen-map.jpg" alt="Kart med topper">
+        <div class="cap">01 · UTFORSK</div>
+        <div class="ttl">Kart med klynger</div>
+      </div>
+      <div class="screen-card reveal">
+        <img src="assets/screen-lists.jpg" alt="Liste over besøkte topper">
+        <div class="cap">02 · LISTER</div>
+        <div class="ttl">Besøkte topper</div>
+      </div>
+      <div class="screen-card reveal">
+        <img src="assets/screen-wishlist.jpg" alt="Ønskeliste over topper">
+        <div class="cap">03 · LISTER</div>
+        <div class="ttl">Ønskeliste</div>
+      </div>
+      <div class="screen-card reveal">
+        <img src="assets/screen-activity.jpg" alt="Statistikk over aktivitet">
+        <div class="cap">04 · AKTIVITET</div>
+        <div class="ttl">Statistikk</div>
+      </div>
+      <div class="screen-card reveal">
+        <img src="assets/screen-profile.jpg" alt="Profil og innstillinger">
+        <div class="cap">05 · PROFIL</div>
+        <div class="ttl">Mål &amp; eksport</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section id="faq">
+  <div class="wrap">
+    <div class="sec-eyebrow">Spørsmål &amp; svar</div>
+    <h2>Det vanligste folk lurer på.</h2>
+
+    <div class="faq-list">
+      <details class="faq" open>
+        <summary>Koster appen noe?</summary>
+        <div class="answer">
+          Fjelltoppene er gratis å laste ned og bruke. Du trenger ikke konto, abonnement eller innlogging for å komme i gang.
+        </div>
+      </details>
+      <details class="faq">
+        <summary>Hvor kommer toppene fra?</summary>
+        <div class="answer">
+          Topplisten bygger på åpne datakilder for norske fjell og høyder, og er kvalitetssikret mot kommune- og områdedata. Mangler en topp, kan du melde inn forslag fra appen.
+        </div>
+      </details>
+      <details class="faq">
+        <summary>Hva med personvern? Hvor lagres turene mine?</summary>
+        <div class="answer">
+          Turene dine lagres lokalt på enheten. Du kan eksportere alt som CSV, GPX eller ZIP når du vil — eller slette alt med ett trykk. Vi selger ikke data.
+        </div>
+      </details>
+      <details class="faq">
+        <summary>Kan jeg importere gamle turer fra kamerarullen?</summary>
+        <div class="answer">
+          Ja. Bruk «Skann bilder»-funksjonen i profilen for å lese GPS-koordinater fra bildene dine og automatisk koble dem til topper du har besøkt.
+        </div>
+      </details>
+      <details class="faq">
+        <summary>Fungerer appen uten dekning?</summary>
+        <div class="answer">
+          Du kan registrere turer uten dekning — posisjon og høyde fanges fra GPS-en i telefonen. Vær og kartbakgrunn lastes når du er online igjen.
+        </div>
+      </details>
+      <details class="faq">
+        <summary>Hvilke plattformer støttes?</summary>
+        <div class="answer">
+          Fjelltoppene finnes for iOS og Android. Begge versjoner får samme funksjoner og oppdateres jevnlig.
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DOWNLOAD ============ -->
+<section id="last-ned" style="padding: 30px 0 80px;">
+  <div class="download">
+    <div class="sec-eyebrow" style="color: var(--mint); justify-content: center; display: flex;">Last ned</div>
+    <h2>Klar for neste topp?</h2>
+    <p>Fjelltoppene blir tilgjengelig gratis for iOS og Android — sett deg på varslingslisten så får du beskjed når appen lanseres.</p>
+    <div style="display:inline-flex; align-items:center; gap:10px; padding:10px 18px; border-radius:999px; background:rgba(244,183,64,0.14); border:1px solid rgba(244,183,64,0.4); color:#f4b740; font-family:'JetBrains Mono', monospace; font-size:12px; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:32px;">
+      <span style="width:8px; height:8px; border-radius:50%; background:#f4b740; box-shadow:0 0 0 4px rgba(244,183,64,0.18);"></span>
+      Lanseres senvåren 2026
+    </div>
+    <div class="store-row">
+      <a class="store-btn" href="#">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 12.04c-.03-3.16 2.58-4.68 2.7-4.75-1.47-2.15-3.77-2.45-4.59-2.48-1.96-.2-3.81 1.15-4.81 1.15-1 0-2.52-1.12-4.14-1.09-2.13.03-4.09 1.24-5.19 3.14-2.21 3.83-.56 9.5 1.6 12.6 1.06 1.52 2.32 3.23 3.96 3.17 1.59-.07 2.19-1.03 4.12-1.03 1.93 0 2.46 1.03 4.14 1 1.71-.03 2.79-1.55 3.83-3.08 1.21-1.77 1.71-3.49 1.73-3.58-.04-.02-3.32-1.27-3.35-5.05zM13.84 3.5c.86-1.04 1.45-2.49 1.29-3.94-1.25.05-2.77.83-3.66 1.87-.8.93-1.5 2.4-1.31 3.83 1.4.11 2.83-.71 3.68-1.76z"/></svg>
+        <div style="text-align: left;">
+          <div class="small">Last ned på</div>
+          <div class="big">App Store</div>
+        </div>
+      </a>
+      <a class="store-btn" href="#">
+        <svg viewBox="0 0 24 24"><path fill="#34a853" d="m13.05 11.95-9.6 9.6c.32.18.69.28 1.07.28.4 0 .77-.1 1.1-.3l10.78-6.21z"/><path fill="#fbbc04" d="m20.16 10.62-3.31-1.91-3.8 3.24 3.8 3.24 3.31-1.91c.7-.4 1.04-1.07 1.04-1.83s-.34-1.43-1.04-1.83z"/><path fill="#ea4335" d="M3.45 2.45A2 2 0 0 0 3 3.74v16.52c0 .47.17.91.45 1.29l9.65-9.55z"/><path fill="#4285f4" d="m13.05 12 3.5-3.45L5.62 2.32a2.18 2.18 0 0 0-1.1-.3c-.4 0-.75.1-1.07.28z"/></svg>
+        <div style="text-align: left;">
+          <div class="small">Få den på</div>
+          <div class="big">Google Play</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TOAST / MODAL ============ -->
+<div class="toast-backdrop" id="downloadToast" role="dialog" aria-modal="true" aria-labelledby="toast-title">
+  <div class="toast-card">
+    <button class="toast-close" aria-label="Lukk" data-toast-close>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 6 6 18M6 6l12 12"/>
+      </svg>
+    </button>
+    <div class="toast-icon">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="9"/>
+        <path d="M12 7v5l3 2"/>
+      </svg>
+    </div>
+    <div class="eyebrow-line">Snart klar</div>
+    <h3 id="toast-title">Appen kommer senvåren 2026</h3>
+    <p>Vi legger siste hånd på Fjelltoppene før lansering i App Store og Google Play. Vil du få beskjed når den er ute?</p>
+    <div class="toast-actions">
+      <a href="mailto:hei@fjelltoppene.no?subject=Gi%20meg%20beskjed%20ved%20lansering" class="btn btn-primary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="m4 7 8 6 8-6"/></svg>
+        Varsle meg
+      </a>
+      <button type="button" class="btn btn-ghost-dark" data-toast-close>Greit, takk</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ FOOTER ============ -->
+<footer>  <div class="wrap foot-inner">
+    <div>
+      © 2026 Fjelltoppene · Laget i Norge
+    </div>
+    <div class="foot-links">
+      <a href="#">Personvern</a>
+      <a href="#">Vilkår</a>
+      <a href="#">Kontakt</a>
+      <a href="#">Endringslogg</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // sticky nav border
+  const nav = document.getElementById('nav');
+  const onScroll = () => {
+    nav.classList.toggle('scrolled', window.scrollY > 8);
+  };
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // reveal on scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // download toast
+  const toast = document.getElementById('downloadToast');
+  const openToast = () => {
+    toast.classList.add('show');
+    document.body.style.overflow = 'hidden';
+  };
+  const closeToast = () => {
+    toast.classList.remove('show');
+    document.body.style.overflow = '';
+  };
+
+  // Trigger toast on any link/button that should go to download
+  // Includes: nav CTA, hero CTA, turbok CTA, store buttons in #last-ned
+  const triggers = document.querySelectorAll(
+    'a.nav-cta, a.btn-primary, a.store-btn, a[href="#last-ned"]'
+  );
+  triggers.forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      openToast();
+    });
+  });
+
+  // Close handlers
+  document.querySelectorAll('[data-toast-close]').forEach(el => {
+    el.addEventListener('click', closeToast);
+  });
+  toast.addEventListener('click', (e) => {
+    if (e.target === toast) closeToast();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && toast.classList.contains('show')) closeToast();
+  });
+</script>
+
+</body>
+</html>
