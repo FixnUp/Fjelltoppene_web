@@ -742,18 +742,19 @@
 
   <!-- FORM -->
   <!--
-    NB: Vi sender med VANLIG form-submit (ikke fetch), fordi formsubmit.cloud ikke returnerer
-    CORS-headere som tillater AJAX fra andre origins. target="submit_target" peker på en skjult
-    iframe, slik at brukeren ikke navigeres bort — og vi viser suksess-kortet selv etterpå.
+    formsubmit.cloud krever at brukeren fullfører en captcha på deres verifikasjonsside
+    etter submit. Det betyr at skjemaet MÅ navigere brukeren dit — iframe eller fetch()
+    funker ikke (captcha blir aldri løst = ingen e-post). Vi bruker `_next` for å sende
+    brukeren tilbake hit etter at captchaen er løst, og leser ?sent=1 ved page load
+    for å vise suksess-kortet.
   -->
-  <iframe name="submit_target" id="submit_target" style="display:none" aria-hidden="true" title="submit target"></iframe>
-  <form class="form-card" id="feedback-form" action="https://formsubmit.cloud/f/0b5caeac-1948-4d14-81d4-d953b428b2f9/" method="POST" enctype="multipart/form-data" target="submit_target" novalidate>
+  <form class="form-card" id="feedback-form" action="https://formsubmit.cloud/f/0b5caeac-1948-4d14-81d4-d953b428b2f9/" method="POST" enctype="multipart/form-data" novalidate>
 
-    <!-- formsubmit.cloud (gratis, støtter vedlegg). Endepunkt-ID hentes fra dashbordet på https://formsubmit.cloud/ -->
-    <input type="hidden" name="_subject" value="[Fjelltoppene] Ny tilbakemelding">
-    <input type="hidden" name="_replyto" value="">
-    <!-- Honeypot mot spam -->
+    <!-- Honeypot mot bots (matcher feltnavnet i formsubmit.cloud-dashboardet) -->
     <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+    <!-- Hvor brukeren skal sendes etter captchaen — både _next og redirect_url for å dekke både navnekonvensjonene -->
+    <input type="hidden" name="_next" id="_next" value="">
+    <input type="hidden" name="redirect_url" id="redirect_url" value="">
 
     <!-- CATEGORY -->
     <div class="field-group">
@@ -911,7 +912,7 @@
 
     <div class="error-msg" id="error-msg">
       Noe gikk galt under sending. Prøv igjen om litt, eller send oss en e-post på
-      <a href="/cdn-cgi/l/email-protection#8bfbe4f8ffcbede1eee7e7ffe4fbfbeee5eea5e5e4"><span class="__cf_email__" data-cfemail="166679656256707c737a7a62796666737873387879">[email&#160;protected]</span></a>.
+      <a href="/cdn-cgi/l/email-protection#dbabb4a8af9bbdb1beb7b7afb4ababbeb5bef5b5b4"><span class="__cf_email__" data-cfemail="86f6e9f5f2c6e0ece3eaeaf2e9f6f6e3e8e3a8e8e9">[email&#160;protected]</span></a>.
       <div class="error-detail mono" style="margin-top:8px;font-size:12.5px;opacity:.8;"></div>
     </div>
   </form>
@@ -921,7 +922,7 @@
     <h2>Andre veier til oss</h2>
     <p>Foretrekker du en annen kanal? Her er de:</p>
     <div class="ways-grid">
-      <a href="/cdn-cgi/l/email-protection#64140b171024020e010808100b1414010a014a0a0b" class="way">
+      <a href="/cdn-cgi/l/email-protection#84f4ebf7f0c4e2eee1e8e8f0ebf4f4e1eae1aaeaeb" class="way">
         <span class="way-icon">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="5" width="18" height="14" rx="2"/>
@@ -930,7 +931,7 @@
         </span>
         <span class="way-text">
           <p class="way-title">E-post direkte</p>
-          <p class="way-sub"><span class="__cf_email__" data-cfemail="96e6f9e5e2d6f0fcf3fafae2f9e6e6f3f8f3b8f8f9">[email&#160;protected]</span></p>
+          <p class="way-sub"><span class="__cf_email__" data-cfemail="73031c0007331519161f1f071c0303161d165d1d1c">[email&#160;protected]</span></p>
         </span>
         <svg class="way-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
@@ -973,7 +974,7 @@
       <a href="feedback.html">Tilbakemelding</a>
       <a href="privacy.html">Personvern</a>
       <a href="https://github.com/FixnUp/Fjelltoppene_web" target="_blank" rel="noopener">Kildekode</a>
-      <a href="/cdn-cgi/l/email-protection#f888978b8cb89e929d94948c9788889d969dd69697">Kontakt</a>
+      <a href="/cdn-cgi/l/email-protection#12627d6166527478777e7e667d6262777c773c7c7d">Kontakt</a>
     </div>
   </div>
 </footer>
@@ -1030,55 +1031,46 @@
   const errorMsg = document.getElementById('error-msg');
   const sendAnother = document.getElementById('send-another');
 
+  function showError(detailText) {
+    const detail = errorMsg.querySelector('.error-detail');
+    if (detail) detail.textContent = detailText || '';
+    errorMsg.classList.add('visible');
+    errorMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  // Sett _next/redirect_url dynamisk til absolutt URL tilbake hit med ?sent=1
+  const returnUrl = new URL(location.pathname, location.origin);
+  returnUrl.searchParams.set('sent', '1');
+  const nextField = document.getElementById('_next');
+  const redirField = document.getElementById('redirect_url');
+  if (nextField) nextField.value = returnUrl.toString();
+  if (redirField) redirField.value = returnUrl.toString();
+
+  // Hvis vi kom tilbake hit etter en vellykket captcha-løsning, vis suksess-kortet i stedet for skjemaet.
+  if (new URLSearchParams(location.search).get('sent') === '1') {
+    form.style.display = 'none';
+    successCard.classList.add('visible');
+    history.replaceState({}, '', location.pathname); // rydd opp URL-en
+  }
+
   form.addEventListener('submit', (e) => {
     errorMsg.classList.remove('visible');
-
-    // Honeypot — stille "suksess" for bots
-    if (form._gotcha && form._gotcha.value) {
-      e.preventDefault();
-      return;
-    }
 
     // Validering: må ha kategori valgt
     if (!form.querySelector('input[name="kategori"]:checked')) {
       e.preventDefault();
       const firstCategory = form.querySelector('input[name="kategori"]');
       if (firstCategory) firstCategory.focus();
-      const detail = errorMsg.querySelector('.error-detail');
-      if (detail) detail.textContent = 'Velg en kategori før du sender.';
-      errorMsg.classList.add('visible');
+      showError('Velg en kategori før du sender.');
       return;
     }
 
-    // Sett reply_to slik at "Reply" går til brukeren hvis de oppga e-post.
-    // formsubmit.cloud krever en gyldig e-post-verdi — fallback til no-reply hvis tomt.
-    const emailField = form.querySelector('input[name="email"]');
-    const replyField = form.querySelector('input[name="_replyto"]');
-    const userEmail = (emailField && emailField.value || '').trim();
-    if (userEmail) {
-      if (replyField) replyField.value = userEmail;
-    } else if (emailField) {
-      emailField.value = 'noreply@fjelltoppene.no';
-    }
-
-    // Vis spinner. Vi har ingen pålitelig måte å bekrefte suksess gjennom iframe-en
-    // (cross-origin = ingen tilgang til innholdet), så vi venter litt og viser deretter
-    // suksess-kortet. Bruker vil også få bekreftelse på e-post via formsubmit.cloud.
+    // La native form-submit gå sin gang — brukeren navigeres til formsubmit.cloud sin
+    // captcha-side, løser captcha, og sendes deretter tilbake hit via _next.
     submitBtn.classList.add('loading');
     submitBtn.disabled = true;
     submitBtn.querySelector('.label').textContent = 'Sender...';
-
-    console.log('[feedback] sender til', form.action);
-
-    // La form-submit gå sin gang (ikke preventDefault). Vis suksess etter en kort pause.
-    setTimeout(() => {
-      form.style.display = 'none';
-      successCard.classList.add('visible');
-      window.scrollTo({ top: successCard.offsetTop - 80, behavior: 'smooth' });
-      submitBtn.classList.remove('loading');
-      submitBtn.disabled = false;
-      submitBtn.querySelector('.label').textContent = 'Send melding';
-    }, 1200);
+    console.log('[feedback] POST →', form.action, '→ captcha → retur til', returnUrl.toString());
   });
 
   sendAnother.addEventListener('click', () => {
