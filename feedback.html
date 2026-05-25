@@ -843,7 +843,7 @@
     <!-- MESSAGE -->
     <div class="field-group">
       <label class="field-label" for="melding">Fortell mer<span class="optional">— gjerne så mye du vil</span></label>
-      <textarea id="melding" name="melding" required minlength="10"
+      <textarea id="melding" name="message" required minlength="10"
         placeholder="Hva skjedde? Hva forventet du? Hvis det er et forslag — hvorfor ville det gjort appen bedre?"></textarea>
     </div>
 
@@ -852,7 +852,7 @@
       <div class="field-row">
         <div>
           <label class="field-label" for="navn">Navn <span class="optional">— valgfritt</span></label>
-          <input type="text" id="navn" name="navn" placeholder="Hva skal vi kalle deg?" autocomplete="name">
+          <input type="text" id="navn" name="name" placeholder="Hva skal vi kalle deg?" autocomplete="name">
         </div>
         <div>
           <label class="field-label" for="email">E-post <span class="optional">— for svar</span></label>
@@ -912,7 +912,7 @@
 
     <div class="error-msg" id="error-msg">
       Noe gikk galt under sending. Prøv igjen om litt, eller send oss en e-post på
-      <a href="/cdn-cgi/l/email-protection#dbabb4a8af9bbdb1beb7b7afb4ababbeb5bef5b5b4"><span class="__cf_email__" data-cfemail="86f6e9f5f2c6e0ece3eaeaf2e9f6f6e3e8e3a8e8e9">[email&#160;protected]</span></a>.
+      <a href="/cdn-cgi/l/email-protection#1969766a6d597f737c75756d7669697c777c377776"><span class="__cf_email__" data-cfemail="077768747347616d626b6b73687777626962296968">[email&#160;protected]</span></a>.
       <div class="error-detail mono" style="margin-top:8px;font-size:12.5px;opacity:.8;"></div>
     </div>
   </form>
@@ -922,7 +922,7 @@
     <h2>Andre veier til oss</h2>
     <p>Foretrekker du en annen kanal? Her er de:</p>
     <div class="ways-grid">
-      <a href="/cdn-cgi/l/email-protection#84f4ebf7f0c4e2eee1e8e8f0ebf4f4e1eae1aaeaeb" class="way">
+      <a href="/cdn-cgi/l/email-protection#d2a2bda1a692b4b8b7bebea6bda2a2b7bcb7fcbcbd" class="way">
         <span class="way-icon">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="5" width="18" height="14" rx="2"/>
@@ -931,7 +931,7 @@
         </span>
         <span class="way-text">
           <p class="way-title">E-post direkte</p>
-          <p class="way-sub"><span class="__cf_email__" data-cfemail="73031c0007331519161f1f071c0303161d165d1d1c">[email&#160;protected]</span></p>
+          <p class="way-sub"><span class="__cf_email__" data-cfemail="50203f232410363a353c3c243f2020353e357e3e3f">[email&#160;protected]</span></p>
         </span>
         <svg class="way-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
@@ -974,7 +974,7 @@
       <a href="feedback.html">Tilbakemelding</a>
       <a href="privacy.html">Personvern</a>
       <a href="https://github.com/FixnUp/Fjelltoppene_web" target="_blank" rel="noopener">Kildekode</a>
-      <a href="/cdn-cgi/l/email-protection#12627d6166527478777e7e667d6262777c773c7c7d">Kontakt</a>
+      <a href="/cdn-cgi/l/email-protection#30405f434470565a555c5c445f4040555e551e5e5f">Kontakt</a>
     </div>
   </div>
 </footer>
@@ -1063,6 +1063,13 @@
       if (firstCategory) firstCategory.focus();
       showError('Velg en kategori før du sender.');
       return;
+    }
+
+    // formsubmit.cloud krever at `name` har en verdi. Vi viser feltet som valgfritt i UI,
+    // men fyller inn "Anonym" hvis brukeren lar det stå tomt.
+    const navnField = form.querySelector('input[name="name"]');
+    if (navnField && !navnField.value.trim()) {
+      navnField.value = 'Anonym';
     }
 
     // La native form-submit gå sin gang — brukeren navigeres til formsubmit.cloud sin
