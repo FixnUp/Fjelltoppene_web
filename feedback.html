@@ -741,10 +741,17 @@
   </div>
 
   <!-- FORM -->
-  <form class="form-card" id="feedback-form" action="https://formsubmit.cloud/f/0b5caeac-1948-4d14-81d4-d953b428b2f9/" method="POST" enctype="multipart/form-data" novalidate>
+  <!--
+    NB: Vi sender med VANLIG form-submit (ikke fetch), fordi formsubmit.cloud ikke returnerer
+    CORS-headere som tillater AJAX fra andre origins. target="submit_target" peker på en skjult
+    iframe, slik at brukeren ikke navigeres bort — og vi viser suksess-kortet selv etterpå.
+  -->
+  <iframe name="submit_target" id="submit_target" style="display:none" aria-hidden="true" title="submit target"></iframe>
+  <form class="form-card" id="feedback-form" action="https://formsubmit.cloud/f/0b5caeac-1948-4d14-81d4-d953b428b2f9/" method="POST" enctype="multipart/form-data" target="submit_target" novalidate>
 
     <!-- formsubmit.cloud (gratis, støtter vedlegg). Endepunkt-ID hentes fra dashbordet på https://formsubmit.cloud/ -->
     <input type="hidden" name="_subject" value="[Fjelltoppene] Ny tilbakemelding">
+    <input type="hidden" name="_replyto" value="">
     <!-- Honeypot mot spam -->
     <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
 
@@ -904,7 +911,7 @@
 
     <div class="error-msg" id="error-msg">
       Noe gikk galt under sending. Prøv igjen om litt, eller send oss en e-post på
-      <a href="/cdn-cgi/l/email-protection#176778646357717d727b7b63786767727972397978"><span class="__cf_email__" data-cfemail="a2d2cdd1d6e2c4c8c7ceced6cdd2d2c7ccc78ccccd">[email&#160;protected]</span></a>.
+      <a href="/cdn-cgi/l/email-protection#8bfbe4f8ffcbede1eee7e7ffe4fbfbeee5eea5e5e4"><span class="__cf_email__" data-cfemail="166679656256707c737a7a62796666737873387879">[email&#160;protected]</span></a>.
       <div class="error-detail mono" style="margin-top:8px;font-size:12.5px;opacity:.8;"></div>
     </div>
   </form>
@@ -914,7 +921,7 @@
     <h2>Andre veier til oss</h2>
     <p>Foretrekker du en annen kanal? Her er de:</p>
     <div class="ways-grid">
-      <a href="/cdn-cgi/l/email-protection#51213e222511373b343d3d253e2121343f347f3f3e" class="way">
+      <a href="/cdn-cgi/l/email-protection#64140b171024020e010808100b1414010a014a0a0b" class="way">
         <span class="way-icon">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="5" width="18" height="14" rx="2"/>
@@ -923,7 +930,7 @@
         </span>
         <span class="way-text">
           <p class="way-title">E-post direkte</p>
-          <p class="way-sub"><span class="__cf_email__" data-cfemail="c7b7a8b4b387a1ada2ababb3a8b7b7a2a9a2e9a9a8">[email&#160;protected]</span></p>
+          <p class="way-sub"><span class="__cf_email__" data-cfemail="96e6f9e5e2d6f0fcf3fafae2f9e6e6f3f8f3b8f8f9">[email&#160;protected]</span></p>
         </span>
         <svg class="way-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
@@ -966,7 +973,7 @@
       <a href="feedback.html">Tilbakemelding</a>
       <a href="privacy.html">Personvern</a>
       <a href="https://github.com/FixnUp/Fjelltoppene_web" target="_blank" rel="noopener">Kildekode</a>
-      <a href="/cdn-cgi/l/email-protection#2959465a5d694f434c45455d4659594c474c074746">Kontakt</a>
+      <a href="/cdn-cgi/l/email-protection#f888978b8cb89e929d94948c9788889d969dd69697">Kontakt</a>
     </div>
   </div>
 </footer>
@@ -1023,73 +1030,55 @@
   const errorMsg = document.getElementById('error-msg');
   const sendAnother = document.getElementById('send-another');
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
+  form.addEventListener('submit', (e) => {
     errorMsg.classList.remove('visible');
 
-    // Honeypot
-    if (form._gotcha && form._gotcha.value) return;
-
-    // Verify a category is selected
-    if (!form.querySelector('input[name="kategori"]:checked')) {
-      const firstCategory = form.querySelector('input[name="kategori"]');
-      if (firstCategory) firstCategory.focus();
+    // Honeypot — stille "suksess" for bots
+    if (form._gotcha && form._gotcha.value) {
+      e.preventDefault();
       return;
     }
 
+    // Validering: må ha kategori valgt
+    if (!form.querySelector('input[name="kategori"]:checked')) {
+      e.preventDefault();
+      const firstCategory = form.querySelector('input[name="kategori"]');
+      if (firstCategory) firstCategory.focus();
+      const detail = errorMsg.querySelector('.error-detail');
+      if (detail) detail.textContent = 'Velg en kategori før du sender.';
+      errorMsg.classList.add('visible');
+      return;
+    }
+
+    // Sett reply_to slik at "Reply" går til brukeren hvis de oppga e-post.
+    // formsubmit.cloud krever en gyldig e-post-verdi — fallback til no-reply hvis tomt.
+    const emailField = form.querySelector('input[name="email"]');
+    const replyField = form.querySelector('input[name="_replyto"]');
+    const userEmail = (emailField && emailField.value || '').trim();
+    if (userEmail) {
+      if (replyField) replyField.value = userEmail;
+    } else if (emailField) {
+      emailField.value = 'noreply@fjelltoppene.no';
+    }
+
+    // Vis spinner. Vi har ingen pålitelig måte å bekrefte suksess gjennom iframe-en
+    // (cross-origin = ingen tilgang til innholdet), så vi venter litt og viser deretter
+    // suksess-kortet. Bruker vil også få bekreftelse på e-post via formsubmit.cloud.
     submitBtn.classList.add('loading');
     submitBtn.disabled = true;
     submitBtn.querySelector('.label').textContent = 'Sender...';
 
-    try {
-      const formData = new FormData(form);
+    console.log('[feedback] sender til', form.action);
 
-      // Sett reply_to slik at "Reply" går til brukeren hvis de oppga e-post.
-      // formsubmit.cloud krever en gyldig e-post-verdi — fallback til no-reply hvis tomt.
-      const userEmail = (formData.get('email') || '').toString().trim();
-      if (userEmail) {
-        formData.set('_replyto', userEmail);
-      } else {
-        formData.set('email', 'noreply@fjelltoppene.no');
-      }
-
-      // Logg ut alle felt vi sender — enklere debugging
-      const debugPayload = {};
-      for (const [k, v] of formData.entries()) {
-        debugPayload[k] = v instanceof File ? `<File ${v.name} ${v.size}b>` : v;
-      }
-      console.log('[feedback] sender →', debugPayload);
-
-      const res = await fetch(form.action, {
-        method: 'POST',
-        body: formData,
-        headers: { 'Accept': 'application/json' }
-      });
-      const rawText = await res.text();
-      let data = {};
-      try { data = JSON.parse(rawText); } catch { /* ikke JSON */ }
-      console.log('[feedback] svar ←', res.status, data, rawText);
-
-      // formsubmit.cloud returnerer 200 ved suksess (med eller uten JSON-body).
-      // Vi behandler enhver 2xx-respons som suksess, med mindre serveren eksplisitt sier success:false.
-      if (res.ok && data.success !== false) {
-        form.style.display = 'none';
-        successCard.classList.add('visible');
-        window.scrollTo({ top: successCard.offsetTop - 80, behavior: 'smooth' });
-      } else {
-        const reason = data.message || rawText.slice(0, 200) || ('HTTP ' + res.status);
-        throw new Error(reason);
-      }
-    } catch (err) {
-      const detail = errorMsg.querySelector('.error-detail');
-      if (detail) detail.textContent = (err && err.message) ? err.message : String(err);
-      errorMsg.classList.add('visible');
-      console.error('[feedback] sending feilet:', err);
-    } finally {
+    // La form-submit gå sin gang (ikke preventDefault). Vis suksess etter en kort pause.
+    setTimeout(() => {
+      form.style.display = 'none';
+      successCard.classList.add('visible');
+      window.scrollTo({ top: successCard.offsetTop - 80, behavior: 'smooth' });
       submitBtn.classList.remove('loading');
       submitBtn.disabled = false;
       submitBtn.querySelector('.label').textContent = 'Send melding';
-    }
+    }, 1200);
   });
 
   sendAnother.addEventListener('click', () => {
