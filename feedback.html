@@ -396,6 +396,7 @@
 
   /* File upload */
   .file-drop {
+    display: block; /* <label> er inline by default — gir rare bakgrunns-striper når den har padding + blokk-barn */
     border: 1.5px dashed var(--line);
     border-radius: var(--radius);
     background: var(--paper);
@@ -415,22 +416,10 @@
     background: var(--green-50);
   }
   .file-drop input[type="file"] {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    cursor: pointer;
-    /* Skjul native file-knapp i alle nettlesere */
-    font-size: 0;
-    color: transparent;
-  }
-  .file-drop input[type="file"]::-webkit-file-upload-button {
-    visibility: hidden;
-    display: none;
-  }
-  .file-drop input[type="file"]::file-selector-button {
-    visibility: hidden;
+    /* Wrapper er et <label>, så klikk på label trigger input uansett.
+       Skjul input helt med display:none for å unngå at native
+       file-control-elementer (knapp, "ingen fil valgt"-tekst) lekker ut
+       som rare striper på siden av boksen i enkelte nettlesere. */
     display: none;
   }
   .file-drop .file-icon {
@@ -915,7 +904,7 @@
 
     <div class="error-msg" id="error-msg">
       Noe gikk galt under sending. Prøv igjen om litt, eller send oss en e-post på
-      <a href="/cdn-cgi/l/email-protection#067669757246606c636a6a72697676636863286869"><span class="__cf_email__" data-cfemail="e4948b9790a4828e818888908b9494818a81ca8a8b">[email&#160;protected]</span></a>.
+      <a href="/cdn-cgi/l/email-protection#176778646357717d727b7b63786767727972397978"><span class="__cf_email__" data-cfemail="a2d2cdd1d6e2c4c8c7ceced6cdd2d2c7ccc78ccccd">[email&#160;protected]</span></a>.
       <div class="error-detail mono" style="margin-top:8px;font-size:12.5px;opacity:.8;"></div>
     </div>
   </form>
@@ -925,7 +914,7 @@
     <h2>Andre veier til oss</h2>
     <p>Foretrekker du en annen kanal? Her er de:</p>
     <div class="ways-grid">
-      <a href="/cdn-cgi/l/email-protection#fe8e918d8abe98949b92928a918e8e9b909bd09091" class="way">
+      <a href="/cdn-cgi/l/email-protection#51213e222511373b343d3d253e2121343f347f3f3e" class="way">
         <span class="way-icon">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="5" width="18" height="14" rx="2"/>
@@ -934,7 +923,7 @@
         </span>
         <span class="way-text">
           <p class="way-title">E-post direkte</p>
-          <p class="way-sub"><span class="__cf_email__" data-cfemail="34445b474074525e515858405b4444515a511a5a5b">[email&#160;protected]</span></p>
+          <p class="way-sub"><span class="__cf_email__" data-cfemail="c7b7a8b4b387a1ada2ababb3a8b7b7a2a9a2e9a9a8">[email&#160;protected]</span></p>
         </span>
         <svg class="way-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
@@ -977,7 +966,7 @@
       <a href="feedback.html">Tilbakemelding</a>
       <a href="privacy.html">Personvern</a>
       <a href="https://github.com/FixnUp/Fjelltoppene_web" target="_blank" rel="noopener">Kildekode</a>
-      <a href="/cdn-cgi/l/email-protection#f3839c8087b39599969f9f879c8383969d96dd9d9c">Kontakt</a>
+      <a href="/cdn-cgi/l/email-protection#2959465a5d694f434c45455d4659594c474c074746">Kontakt</a>
     </div>
   </div>
 </footer>
@@ -1055,9 +1044,14 @@
     try {
       const formData = new FormData(form);
 
-      // Sett reply_to slik at "Reply" går til brukeren hvis de oppga e-post
+      // Sett reply_to slik at "Reply" går til brukeren hvis de oppga e-post.
+      // formsubmit.cloud krever en gyldig e-post-verdi — fallback til no-reply hvis tomt.
       const userEmail = (formData.get('email') || '').toString().trim();
-      if (userEmail) formData.set('_replyto', userEmail);
+      if (userEmail) {
+        formData.set('_replyto', userEmail);
+      } else {
+        formData.set('email', 'noreply@fjelltoppene.no');
+      }
 
       // Logg ut alle felt vi sender — enklere debugging
       const debugPayload = {};
