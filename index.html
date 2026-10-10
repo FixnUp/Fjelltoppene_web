@@ -417,28 +417,14 @@
   }
   .feat-visual { margin-top: auto; }
 
-  /* mini map */
-  .mini-map {
+  /* kartutsnitt fra appen */
+  .map-shot {
     border-radius: 14px;
     overflow: hidden;
-    background: #e7ecdf;
-    aspect-ratio: 16 / 9;
-    position: relative;
     border: 1px solid var(--line);
+    background: #e7ecdf;
   }
-  .mini-map svg { display: block; width: 100%; height: 100%; }
-  .pin {
-    position: absolute; transform: translate(-50%, -50%);
-    width: 28px; height: 28px;
-    border-radius: 50%;
-    background: var(--green-700); color: #fff;
-    border: 2.5px solid #fff;
-    display: grid; place-items: center;
-    font-family: "JetBrains Mono", monospace;
-    font-size: 12px; font-weight: 600;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  }
-  .pin.yellow { background: var(--yellow); color: #2a2102; }
+  .map-shot img { display: block; width: 100%; height: auto; }
 
   /* progress card */
   .progress-card {
@@ -916,22 +902,10 @@
           </svg>
         </div>
         <h3 data-cms="index.funksjoner.h31">Interaktivt kart</h3>
-        <p data-cms="index.funksjoner.p2">Alle norske topper i ett kart. Klynger viser hvor mange du har vært på i et område, og stjerner markerer ønskelistetopper.</p>
+        <p data-cms="index.funksjoner.p2">Alle norske topper i ett kart. Klynger viser hvor mange du har vært på i et område, og stjerner markerer ønskelistetopper. Bytt til satellittbilder, eller vis rutene dine.</p>
         <div class="feat-visual">
-          <div class="mini-map">
-            <svg viewBox="0 0 400 220" preserveAspectRatio="none">
-              <rect width="400" height="220" fill="#e8efe1"/>
-              <path d="M0,140 L60,120 L100,160 L160,140 L220,170 L300,150 L360,180 L400,160 L400,220 L0,220 Z" fill="#cfdac0"/>
-              <path d="M0,180 L80,160 L160,190 L240,170 L320,200 L400,180 L400,220 L0,220 Z" fill="#b7c9a4"/>
-              <path d="M120,40 Q200,30 280,60 T380,70" stroke="#9eb0c6" stroke-width="1" fill="none" stroke-dasharray="3 4"/>
-              <path d="M40,60 Q120,50 200,80" stroke="#9eb0c6" stroke-width="1" fill="none" stroke-dasharray="3 4"/>
-              <text x="50" y="40" font-family="JetBrains Mono" font-size="9" fill="#7a8a6e">FJORD</text>
-              <text x="300" y="100" font-family="JetBrains Mono" font-size="9" fill="#7a8a6e">VIDDE</text>
-            </svg>
-            <div class="pin" style="left:32%; top:48%;">7</div>
-            <div class="pin" style="left:52%; top:62%;">3</div>
-            <div class="pin yellow" style="left:70%; top:38%;">★</div>
-            <div class="pin" style="left:80%; top:70%;">1</div>
+          <div class="map-shot">
+            <img data-cms-img="index.funksjoner.img1" src="assets/app-2-0-kart-utsnitt.jpg" width="900" height="642" loading="lazy" alt="Utsnitt av kartet i appen med klynger av besøkte topper i grønt og ønskelistetopper som gule stjerner">
           </div>
         </div>
       </div>
