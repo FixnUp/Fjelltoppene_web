@@ -37,15 +37,17 @@ Nøklene er faste. Gi nye elementer nye, unike nøkler for hånd. Ikke bruk nøk
 ## Innsendte bilder og Instagram
 
 Besøkende kan sende inn bilder på `/send-inn`. Et bilde går gjennom disse stegene:
-bildet renses for metadata og skaleres, Claude vurderer det, og reglene i `server/lib/moderation.js` avgjør
+bildet renses for metadata og skaleres, en AI (Gemini som standard) vurderer det, og reglene i `server/lib/moderation.js` avgjør
 om det **godkjennes** (legges i Instagram-køen), **holdes igjen** (venter i admin) eller **avvises**.
 Alt AI-en er usikker på, og alle bilder der barn kan være synlige, går til admin. Innsendinger vises på
 `/admin/innsendinger`, hvor du også finner nødbremsen.
 
 | Variabel | Beskrivelse |
 |---|---|
-| `ANTHROPIC_API_KEY` | Nøkkel til Claude. Uten den går alle bilder til manuell godkjenning. |
-| `MODERATION_MODEL` | Modell for vurderingen. Standard `claude-opus-5-5`. |
+| `GEMINI_API_KEY` | Nøkkel til Gemini API (Google AI Studio). Standard leverandør. Uten nøkkel går alle bilder til manuell godkjenning. |
+| `MODERATION_PROVIDER` | `gemini` eller `claude`. Hvis den ikke er satt, brukes den leverandøren som har nøkkel (Gemini først). |
+| `MODERATION_MODEL` | Modell for vurderingen. Standard `gemini-3.8-flash` (Gemini) eller `claude-opus-5-5` (Claude). |
+| `ANTHROPIC_API_KEY` | Bare hvis du velger `MODERATION_PROVIDER=claude`. |
 | `INSTAGRAM_MODE` | `off` (standard: godkjente bilder venter), `dry` (testkjøring, publiserer ikke), `live` (publiserer på ekte). |
 | `IG_USER_ID` | Instagram-bruker-ID for Business/Creator-kontoen. |
 | `IG_ACCESS_TOKEN` | Langlevd tilgangstoken. Serveren fornyer den selv og lagrer den nye på volumet. |

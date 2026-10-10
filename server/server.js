@@ -11,7 +11,7 @@ const { createSubmissionStore } = require('./lib/submissions');
 const { createSettings } = require('./lib/settings');
 const { createInstagram } = require('./lib/instagram');
 const { createPublisher } = require('./lib/publisher');
-const { createDefaultModerator } = require('./lib/moderation');
+const { createDefaultModerator, moderationConfigured } = require('./lib/moderation');
 const { mountSubmissionRoutes } = require('./lib/routes-submissions');
 
 function createApp(opts = {}) {
@@ -45,7 +45,7 @@ function createApp(opts = {}) {
   const maxPerDay = num(env.IG_MAX_PER_DAY, 3);
   const publisher = createPublisher({ submissions, instagram, settings, publicBaseUrl, maxPerDay, minHours: num(env.IG_MIN_HOURS, 4) });
   const moderatorPromise = opts.moderator !== undefined ? Promise.resolve(opts.moderator) : createDefaultModerator(env).catch(() => null);
-  let aiConfigured = Boolean(opts.moderator) || Boolean(env.ANTHROPIC_API_KEY);
+  const aiConfigured = Boolean(opts.moderator) || moderationConfigured(env);
 
   const app = express();
   app.disable('x-powered-by');

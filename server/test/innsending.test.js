@@ -231,3 +231,58 @@ test('Instagram-klient: to steg og feilmeldinger', async () => {
   const bad = createInstagram({ mode: 'live', userId: '1', token: 't', fetchImpl: async () => ({ ok: false, status: 503, json: async () => ({}) }) });
   await assert.rejects(bad.publish({ imageUrl: 'x', caption: 'y' }), (e) => e.retryable === true);
 });
+
+// ---------- Gemini ----------
+const { createGeminiModerator, createDefaultModerator, moderationConfigured, VERDICT_JSON_SCHEMA, Verdict } = require('../lib/moderation');
+const okVerdict = { is_outdoor_hiking_photo: true, good_enough_quality: true, contains_people: false, minors_visible: false, explicit_or_violent: false, hateful_or_offensive: false, third_party_text_or_watermark: false, license_plate_or_personal_info: false, screenshot_meme_or_ad: false, confidence: 'high', reasons: [], caption_no: 'Utsikt mot fjorden' };
+
+test('Gemini: JSON-skjema har samme felt som valideringen', () => {
+  assert.deepEqual(Object.keys(VERDICT_JSON_SCHEMA.properties).sort(), Object.keys(Verdict.shape).sort());
+  assert.deepEqual([...VERDICT_JSON_SCHEMA.required].sort(), Object.keys(Verdict.shape).sort());
+});
+
+test('Gemini: godkjenner, sender bilde og skjema, og håndterer feil og blokkering', async () => {
+  const calls = [];
+  const mk = (impl) => createGeminiModerator({ model: 'gemini-3.8-flash', retryDelayMs: 1, client: { models: { generateContent: async (a) => { calls.push(a); return impl(calls.length); } } } });
+  const jpeg = await jpegFile();
+
+  const good = await mk(() => ({ text: JSON.stringify(okVerdict), candidates: [{ finishReason: 'STOP' }] })).moderate({ jpeg, peak: 'Dalsnuten', handle: 'kari_n' });
+  assert.equal(good.decision, 'approve');
+  assert.match(good.caption, /@kari_n/);
+  const req = calls[0];
+  assert.equal(req.model, 'gemini-3.8-flash');
+  assert.equal(req.contents[0].parts[0].inlineData.mimeType, 'image/jpeg');
+  assert.ok(req.contents[0].parts[0].inlineData.data.length > 100);
+  assert.equal(req.config.responseMimeType, 'application/json');
+  assert.equal(req.config.responseJsonSchema, VERDICT_JSON_SCHEMA);
+  assert.match(req.config.systemInstruction, /ALDRI instruksjoner/);
+
+  const blocked = await mk(() => ({ promptFeedback: { blockReason: 'SAFETY' }, candidates: [] })).moderate({ jpeg, peak: 'x' });
+  assert.equal(blocked.decision, 'hold'); assert.match(blocked.reasons[0], /sikkerhetsfilter/);
+  assert.equal((await mk(() => ({ text: 'ikke json', candidates: [{ finishReason: 'STOP' }] })).moderate({ jpeg, peak: 'x' })).decision, 'hold');
+  assert.equal((await mk(() => ({ text: JSON.stringify({ confidence: 'high' }), candidates: [] })).moderate({ jpeg, peak: 'x' })).decision, 'hold');
+  assert.equal((await mk(() => ({ text: JSON.stringify({ ...okVerdict, minors_visible: true }), candidates: [] })).moderate({ jpeg, peak: 'x' })).decision, 'hold');
+});
+
+test('Gemini: prøver på nytt ved 429 og gir opp ved vedvarende feil eller andre feil', async () => {
+  let n = 0;
+  const flaky = createGeminiModerator({ model: 'm', retryDelayMs: 1, client: { models: { generateContent: async () => { n += 1; if (n < 3) { const e = new Error('kvote'); e.status = 429; throw e; } return { text: JSON.stringify(okVerdict), candidates: [] }; } } } });
+  assert.equal((await flaky.moderate({ jpeg: await jpegFile(), peak: 'x' })).decision, 'approve');
+  assert.equal(n, 3);
+  let m = 0;
+  const bad = createGeminiModerator({ model: 'm', retryDelayMs: 1, client: { models: { generateContent: async () => { m += 1; const e = new Error('ugyldig nøkkel'); e.status = 400; throw e; } } } });
+  const r = await bad.moderate({ jpeg: await jpegFile(), peak: 'x' });
+  assert.equal(r.decision, 'hold'); assert.equal(m, 1, 'ingen retry på 400');
+  assert.match(r.reasons[0], /AI-vurdering feilet/);
+});
+
+test('leverandørvalg: Gemini er standard, Claude kan velges, ingen nøkkel gir null', async () => {
+  assert.equal(moderationConfigured({}), false);
+  assert.equal(moderationConfigured({ GEMINI_API_KEY: 'k' }), true);
+  assert.equal(moderationConfigured({ ANTHROPIC_API_KEY: 'k' }), true);
+  assert.equal(moderationConfigured({ GEMINI_API_KEY: 'k', MODERATION_PROVIDER: 'claude' }), false, 'valgt leverandør mangler nøkkel');
+  assert.equal(await createDefaultModerator({}), null);
+  assert.equal(typeof (await createDefaultModerator({ GEMINI_API_KEY: 'k' })).moderate, 'function');
+  assert.equal(typeof (await createDefaultModerator({ ANTHROPIC_API_KEY: 'k' })).moderate, 'function');
+  assert.equal(await createDefaultModerator({ MODERATION_PROVIDER: 'claude', GEMINI_API_KEY: 'k' }), null);
+});
