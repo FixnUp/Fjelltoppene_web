@@ -254,10 +254,15 @@
     width: 100%; height: 100%;
     border-radius: 32px;
     overflow: hidden;
-    background: #fff;
+    background: #0f1a13;
   }
+  /* Skjermbildene er tatt uten statuslinje. Et fast felt øverst får kamerahullet til å
+     ligge i rammen i stedet for oppå appen, og gir bildet samme sideforhold som rammen. */
   .phone .screen img {
-    width: 100%; height: 100%;
+    display: block;
+    width: 100%;
+    height: calc(100% - 26px);
+    margin-top: 26px;
     object-fit: cover;
     object-position: top;
   }
