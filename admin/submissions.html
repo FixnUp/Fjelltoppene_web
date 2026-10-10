@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Innsendinger · Fjelltoppene</title>
+<link rel="icon" type="image/svg+xml" href="/assets/logo-mark.svg">
+<style>
+  :root { --g9:#102a1c; --g8:#1c3f2a; --g7:#25553a; --g6:#2d6a47; --yellow:#f4b740; --paper:#f6f5f1; --card:#fff; --line:#dad8d1; --muted:#6a6e69; --red:#a12020; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; background: var(--paper); color:#141414; }
+  header { position: sticky; top:0; z-index:5; display:flex; align-items:center; gap:10px; padding:0 18px; height:52px; background:var(--g9); color:#fff; overflow-x:auto; white-space:nowrap; }
+  header b { color: var(--yellow); }
+  header a, header button { color:#fff; background:rgba(255,255,255,.1); border:0; border-radius:999px; padding:9px 14px; font:600 14px system-ui; text-decoration:none; cursor:pointer; }
+  header a:hover, header button:hover { background:rgba(255,255,255,.2); }
+  header .sp { flex:1; }
+  main { max-width:980px; margin:0 auto; padding:24px 18px 80px; }
+  h1 { font-size:26px; margin:0 0 6px; }
+  .sub { color:var(--muted); margin:0 0 22px; }
+  .panel { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px 20px; margin-bottom:22px; display:grid; gap:14px; }
+  .stats { display:flex; flex-wrap:wrap; gap:10px; }
+  .pill { padding:6px 12px; border-radius:999px; background:#ecebe5; font-size:13px; font-weight:600; }
+  .pill.ok { background:#d9e9dc; color:var(--g7); } .pill.warn { background:#fdeccb; color:#7a5200; } .pill.bad { background:#f7d6d6; color:var(--red); }
+  .row { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+  button.act { font:700 14px system-ui; padding:10px 16px; border:0; border-radius:999px; cursor:pointer; background:#ecebe5; color:#141414; }
+  button.act:hover { filter:brightness(.95); }
+  button.primary { background:var(--g6); color:#fff; } button.danger { background:#f7d6d6; color:var(--red); }
+  button.big { padding:12px 20px; }
+  button:disabled { opacity:.5; cursor:default; }
+  .tabs { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:18px; }
+  .tab { padding:9px 15px; border-radius:999px; border:1px solid var(--line); background:#fff; font:600 14px system-ui; cursor:pointer; }
+  .tab.on { background:var(--g8); color:#fff; border-color:var(--g8); }
+  .tab .n { opacity:.7; margin-left:4px; }
+  .item { display:grid; grid-template-columns:200px 1fr; gap:20px; background:var(--card); border:1px solid var(--line); border-radius:16px; padding:16px; margin-bottom:16px; }
+  .item img { width:200px; height:auto; max-height:320px; object-fit:cover; border-radius:10px; background:#eee; display:block; }
+  .noimg { width:200px; height:140px; border-radius:10px; background:#ecebe5; display:grid; place-items:center; color:var(--muted); font-size:13px; text-align:center; }
+  .meta { display:flex; flex-wrap:wrap; gap:6px 12px; align-items:baseline; margin-bottom:8px; }
+  .meta h3 { margin:0; font-size:18px; }
+  .meta span { color:var(--muted); font-size:13px; }
+  .reasons { margin:8px 0; padding-left:18px; font-size:14px; color:#3a3a3a; }
+  textarea { width:100%; min-height:130px; font:14px/1.45 system-ui; padding:10px 12px; border:1px solid var(--line); border-radius:10px; resize:vertical; }
+  .notes { font-size:12px; color:var(--muted); margin-top:8px; }
+  .empty { padding:40px; text-align:center; color:var(--muted); }
+  .toast { position:fixed; left:50%; bottom:24px; transform:translateX(-50%); background:var(--g9); color:#fff; padding:12px 18px; border-radius:999px; font-weight:600; font-size:14px; z-index:20; }
+  .toast.err { background:var(--red); }
+  @media (max-width: 680px) { .item { grid-template-columns:1fr; } .item img, .noimg { width:100%; max-height:380px; } }
+</style>
+</head>
+<body>
+<header>
+  <b>✎ Admin</b>
+  <a href="/?edit">Rediger siden</a>
+  <a href="/admin/innsendinger" style="background:#fff;color:#102a1c">Innsendinger</a>
+  <span class="sp"></span>
+  <a href="/">Se siden ↗</a>
+</header>
+<main>
+  <h1>Innsendte bilder</h1>
+  <p class="sub">Bilder fra <a href="/send-inn">/send-inn</a>. AI-en vurderer hvert bilde. Tydelige bilder går videre til Instagram, resten venter her på deg.</p>
+
+  <section class="panel" id="status-panel" aria-live="polite">
+    <div class="stats" id="stats"></div>
+    <div class="row">
+      <button class="act big" id="pause-btn"></button>
+      <span id="pause-note" style="color:var(--muted);font-size:14px"></span>
+    </div>
+  </section>
+
+  <div class="tabs" id="tabs"></div>
+  <div id="list"></div>
+</main>
+
+<script>
+(() => {
+  'use strict';
+  const TABS = [
+    ['venter', 'Venter på deg', ['held', 'failed']],
+    ['klar', 'Godkjent, venter på Instagram', ['approved', 'posting']],
+    ['publisert', 'Publisert', ['posted']],
+    ['avvist', 'Avvist / trukket', ['rejected', 'withdrawn']],
+  ];
+  const STATUS_LABEL = { received: 'Mottatt', approved: 'Godkjent', held: 'Venter på deg', rejected: 'Avvist', posting: 'Publiseres', posted: 'Publisert', failed: 'Feilet', withdrawn: 'Trukket' };
+  let current = 'venter', all = [], info = null;
+  const $ = (id) => document.getElementById(id);
+
+  async function api(method, url, body) {
+    const res = await fetch(url, { method, credentials: 'same-origin', headers: { 'X-CMS': '1', ...(body ? { 'Content-Type': 'application/json' } : {}) }, body: body ? JSON.stringify(body) : undefined });
+    if (res.status === 401) { location.href = '/admin'; throw new Error('Ikke innlogget'); }
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || `Feil ${res.status}`);
+    return data;
+  }
+  function toast(msg, err) {
+    const t = document.createElement('div'); t.className = 'toast' + (err ? ' err' : ''); t.textContent = msg; document.body.appendChild(t);
+    setTimeout(() => t.remove(), err ? 5000 : 2200);
+  }
+  function el(tag, props = {}, ...kids) {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(props)) { if (k === 'class') n.className = v; else if (k === 'text') n.textContent = v; else if (k.startsWith('on')) n.addEventListener(k.slice(2), v); else n.setAttribute(k, v); }
+    for (const k of kids) if (k) n.append(k);
+    return n;
+  }
+  const pill = (text, cls = '') => el('span', { class: `pill ${cls}`, text });
+
+  function renderStatus() {
+    const s = $('stats'); s.replaceChildren();
+    const modeText = { off: 'Instagram: avslått', dry: 'Instagram: testmodus', live: 'Instagram: live' }[info.mode] || info.mode;
+    s.append(pill(modeText, info.mode === 'live' ? 'ok' : 'warn'));
+    s.append(pill(info.aiConfigured ? 'AI-vurdering: på' : 'AI-vurdering: av (alt går til deg)', info.aiConfigured ? 'ok' : 'warn'));
+    if (info.mode === 'live') {
+      s.append(pill(info.configured ? 'Instagram-tilgang: satt opp' : 'Instagram-tilgang mangler', info.configured ? 'ok' : 'bad'));
+      if (!info.publicBaseUrl) s.append(pill('PUBLIC_BASE_URL mangler', 'bad'));
+    }
+    s.append(pill(`Publisert siste døgn: ${info.postedLast24h} av ${info.maxPerDay}`));
+    if (info.lastError) s.append(pill(`Siste feil: ${info.lastError}`, 'bad'));
+    const b = $('pause-btn');
+    b.textContent = info.paused ? 'Slå publisering på igjen' : 'Pause publisering (nødbrems)';
+    b.className = 'act big ' + (info.paused ? 'primary' : 'danger');
+    $('pause-note').textContent = info.paused ? 'Pauset: ingenting legges ut på Instagram før du slår det på igjen.' : '';
+  }
+
+  function renderTabs() {
+    const t = $('tabs'); t.replaceChildren();
+    for (const [key, label, statuses] of TABS) {
+      const n = statuses.reduce((a, st) => a + (info.counts[st] || 0), 0);
+      t.append(el('button', { class: 'tab' + (key === current ? ' on' : ''), onclick: () => { current = key; render(); } }, label, el('span', { class: 'n', text: String(n) })));
+    }
+  }
+
+  function card(it) {
+    const reasons = (it.ai && it.ai.reasons) || [];
+    const ta = el('textarea', { 'aria-label': 'Bildetekst' }); ta.value = it.caption || '';
+    const editable = ['held', 'approved', 'failed'].includes(it.status);
+    ta.disabled = !editable;
+    const run = async (action) => { try { await api('POST', `/admin/api/innsendinger/${it.id}/${action}`); toast('Oppdatert'); await load(); } catch (e) { toast(e.message, true); } };
+    const saveCaption = async () => { try { await api('PUT', `/admin/api/innsendinger/${it.id}/caption`, { caption: ta.value }); toast('Bildetekst lagret'); } catch (e) { toast(e.message, true); } };
+    const actions = el('div', { class: 'row', style: 'margin-top:10px' });
+    if (['held', 'failed'].includes(it.status)) actions.append(el('button', { class: 'act primary', text: it.status === 'failed' ? 'Prøv igjen' : 'Godkjenn', onclick: async () => { if (ta.value !== it.caption) await saveCaption(); run('approve'); } }));
+    if (['held', 'approved', 'failed'].includes(it.status)) actions.append(el('button', { class: 'act danger', text: 'Avvis', onclick: () => run('reject') }));
+    if (editable) actions.append(el('button', { class: 'act', text: 'Lagre bildetekst', onclick: saveCaption }));
+    if (['posted', 'approved', 'held', 'failed', 'rejected'].includes(it.status)) actions.append(el('button', { class: 'act', text: 'Trekk tilbake', onclick: () => { if (confirm('Trekke bildet tilbake? Er det allerede på Instagram må du fjerne innlegget selv.')) run('withdraw'); } }));
+    if (it.instagram && it.instagram.permalink) actions.append(el('a', { class: 'act', href: it.instagram.permalink, target: '_blank', rel: 'noopener', text: 'Åpne på Instagram ↗', style: 'text-decoration:none' }));
+
+    const meta = el('div', { class: 'meta' }, el('h3', { text: it.peak }), pill(STATUS_LABEL[it.status] || it.status, it.status === 'held' || it.status === 'failed' ? 'warn' : it.status === 'posted' ? 'ok' : ''));
+    if (it.instagram && it.instagram.dryRun) meta.append(pill('Testkjøring', 'warn'));
+    const who = [it.name, it.handle ? '@' + it.handle : null, it.email].filter(Boolean).join(' · ') || 'Anonym';
+    meta.append(el('span', { text: `${who} · ${new Date(it.createdAt).toLocaleString('nb-NO')}` }));
+    const body = el('div', {}, meta);
+    if (it.ai) body.append(el('div', { class: 'meta' }, pill(`AI: ${{ approve: 'godkjent', hold: 'usikker', reject: 'avvist' }[it.ai.decision] || it.ai.decision}`, it.ai.decision === 'approve' ? 'ok' : it.ai.decision === 'reject' ? 'bad' : 'warn'), it.ai.contains_people ? pill('Personer i bildet') : null, it.ai.confidence ? pill(`Sikkerhet: ${it.ai.confidence}`) : null));
+    if (reasons.length) { const ul = el('ul', { class: 'reasons' }); for (const r of reasons) ul.append(el('li', { text: r })); body.append(ul); }
+    body.append(ta, actions);
+    if (it.instagram && it.instagram.error) body.append(el('div', { class: 'notes', text: `Instagram-feil: ${it.instagram.error}` }));
+    if (it.notes.length) body.append(el('div', { class: 'notes', text: it.notes.map((n) => `${new Date(n.at).toLocaleString('nb-NO')}: ${n.text}`).join(' · ') }));
+    const media = it.hasImage ? el('a', { href: it.imageUrl, target: '_blank', rel: 'noopener' }, el('img', { src: it.imageUrl, alt: `Innsendt bilde fra ${it.peak}`, loading: 'lazy' })) : el('div', { class: 'noimg', text: 'Bildet er slettet etter oppbevaringstiden' });
+    return el('article', { class: 'item' }, media, body);
+  }
+
+  function render() {
+    renderStatus(); renderTabs();
+    const statuses = TABS.find((t) => t[0] === current)[2];
+    const items = all.filter((i) => statuses.includes(i.status));
+    const list = $('list'); list.replaceChildren();
+    if (!items.length) list.append(el('div', { class: 'empty', text: 'Ingenting her akkurat nå.' }));
+    for (const it of items) list.append(card(it));
+  }
+
+  async function load() {
+    const [a, b] = await Promise.all([api('GET', '/admin/api/instagram'), api('GET', '/admin/api/innsendinger')]);
+    info = a; all = b.items; render();
+  }
+  $('pause-btn').addEventListener('click', async () => { try { await api('POST', '/admin/api/instagram/pause', { paused: !info.paused }); await load(); } catch (e) { toast(e.message, true); } });
+  load().catch((e) => toast(e.message, true));
+  setInterval(() => load().catch(() => {}), 30000);
+})();
+</script>
+</body>
+</html>

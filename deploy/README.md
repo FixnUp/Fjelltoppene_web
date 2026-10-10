@@ -33,3 +33,27 @@ Elementer i HTML-filene som skal kunne redigeres har attributter:
 - `data-cms-list="…"` for lister der elementer kan legges til, flyttes og slettes (FAQ, skjermbilder, nyheter)
 
 Nøklene er faste. Gi nye elementer nye, unike nøkler for hånd. Ikke bruk nøkler på nytt for annet innhold.
+
+## Innsendte bilder og Instagram
+
+Besøkende kan sende inn bilder på `/send-inn`. Et bilde går gjennom disse stegene:
+bildet renses for metadata og skaleres, Claude vurderer det, og reglene i `server/lib/moderation.js` avgjør
+om det **godkjennes** (legges i Instagram-køen), **holdes igjen** (venter i admin) eller **avvises**.
+Alt AI-en er usikker på, og alle bilder der barn kan være synlige, går til admin. Innsendinger vises på
+`/admin/innsendinger`, hvor du også finner nødbremsen.
+
+| Variabel | Beskrivelse |
+|---|---|
+| `ANTHROPIC_API_KEY` | Nøkkel til Claude. Uten den går alle bilder til manuell godkjenning. |
+| `MODERATION_MODEL` | Modell for vurderingen. Standard `claude-opus-5-5`. |
+| `INSTAGRAM_MODE` | `off` (standard: godkjente bilder venter), `dry` (testkjøring, publiserer ikke), `live` (publiserer på ekte). |
+| `IG_USER_ID` | Instagram-bruker-ID for Business/Creator-kontoen. |
+| `IG_ACCESS_TOKEN` | Langlevd tilgangstoken. Serveren fornyer den selv og lagrer den nye på volumet. |
+| `PUBLIC_BASE_URL` | Nettsidens offentlige adresse, f.eks. `https://fjelltoppene.no`. Instagram henter bildene derfra. |
+| `IG_MAX_PER_DAY` | Maks antall innlegg per døgn (standard 3). |
+| `IG_MIN_HOURS` | Minste antall timer mellom innlegg (standard 4). |
+| `IG_API_BASE`, `IG_API_VERSION` | Valgfritt. Standard er `https://graph.instagram.com` uten versjon. |
+
+Sikkerhet og personvern: bildets EXIF og GPS fjernes ved innsending, IP-adressen lagres bare som en uleselig kode,
+avviste og tilbaketrukne innsendinger slettes etter 30 dager, og bildefilen for publiserte slettes etter 30 dager
+(samtykkeposten beholdes). Instagram-API-et kan ikke slette innlegg, så fjerning gjøres manuelt i Instagram.

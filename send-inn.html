@@ -1,0 +1,887 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Send inn bilde — Fjelltoppene</title>
+<meta name="description" content="Send inn et bilde fra turen din, så kan det bli vist på Fjelltoppene sin Instagram-konto.">
+
+<link rel="icon" type="image/svg+xml" href="assets/logo-mark.svg">
+<link rel="apple-touch-icon" href="assets/logo.svg">
+<meta name="theme-color" content="#1c3f2a">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --green-900: #102a1c;
+    --green-800: #1c3f2a;
+    --green-700: #25553a;
+    --green-600: #2d6a47;
+    --green-500: #3a8056;
+    --green-100: #d9e9dc;
+    --green-50:  #eaf3ec;
+    --mint:      #b8d4be;
+    --yellow:    #f4b740;
+    --paper:     #f6f5f1;
+    --paper-2:   #ecebe5;
+    --ink:       #141414;
+    --ink-2:     #3a3a3a;
+    --muted:     #6a6e69;
+    --line:      #dad8d1;
+    --card:      #ffffff;
+    --danger:    #c54a2c;
+    --radius-sm: 8px;
+    --radius:    14px;
+    --radius-lg: 22px;
+    --radius-xl: 32px;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: "Manrope", system-ui, -apple-system, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+    font-size: 17px;
+  }
+  .mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
+  a { color: var(--green-700); }
+  a:hover { color: var(--green-800); }
+  img { display: block; max-width: 100%; }
+
+  .wrap {
+    width: 100%;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  /* NAV */
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(246,245,241,0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid transparent;
+    transition: border-color .2s ease;
+  }
+  .nav.scrolled { border-bottom-color: var(--line); }
+  .nav-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    height: 68px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 12px;
+    text-decoration: none; color: var(--ink);
+    font-weight: 700; font-size: 19px; letter-spacing: -0.01em;
+  }
+  .brand-mark {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--green-700);
+    display: grid; place-items: center;
+    box-shadow: 0 0 0 1.5px #fff inset, 0 0 0 2.5px var(--green-700) inset;
+  }
+  .nav-links {
+    display: flex; gap: 30px; align-items: center;
+    font-size: 15px;
+  }
+  .nav-links a {
+    text-decoration: none; color: var(--ink-2);
+    transition: color .15s ease;
+  }
+  .nav-links a:hover { color: var(--green-700); }
+  .nav-links a.current { color: var(--green-800); font-weight: 600; }
+  .nav-cta {
+    background: var(--green-700); color: #fff !important;
+    padding: 9px 18px;
+    border-radius: 999px;
+    font-weight: 600;
+    transition: background .15s ease, transform .15s ease;
+  }
+  .nav-cta:hover {
+    background: var(--green-800);
+    transform: translateY(-1px);
+    color: #fff !important;
+  }
+  .nav-toggle { display: none; background: none; border: 0; padding: 6px; cursor: pointer; }
+  @media (max-width: 760px) {
+    .nav-links a:not(.nav-cta) { display: none; }
+  }
+
+  /* HEADER */
+  header.page-head {
+    padding: 80px 0 50px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 48px;
+    position: relative;
+  }
+  .eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--green-700);
+    margin-bottom: 22px;
+    display: inline-flex; align-items: center; gap: 12px;
+  }
+  .eyebrow::before {
+    content: ""; width: 28px; height: 1px; background: var(--green-700);
+  }
+  h1 {
+    font-size: clamp(36px, 5.5vw, 58px);
+    line-height: 1.04;
+    letter-spacing: -0.025em;
+    font-weight: 700;
+    margin: 0 0 22px;
+    text-wrap: balance;
+  }
+  h1 em {
+    font-style: italic;
+    color: var(--green-700);
+    font-weight: 700;
+  }
+  .lead {
+    font-size: 19px;
+    color: var(--ink-2);
+    max-width: 620px;
+    text-wrap: pretty;
+    margin: 0 0 18px;
+  }
+
+  /* Smoke-signal / "what happens" card */
+  .promise {
+    background: var(--green-800);
+    color: #fff;
+    border-radius: var(--radius-lg);
+    padding: 30px 32px;
+    margin-bottom: 56px;
+    position: relative;
+    overflow: hidden;
+  }
+  .promise::before {
+    content: "";
+    position: absolute; inset: 0;
+    background: radial-gradient(500px 200px at 90% 0%, rgba(255,255,255,0.06), transparent 60%);
+    pointer-events: none;
+  }
+  .promise h2 {
+    color: #fff;
+    font-size: 20px;
+    margin: 0 0 6px;
+    letter-spacing: -0.01em;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .promise h2 svg { color: var(--mint); }
+  .promise p {
+    margin: 0;
+    color: #d3decf;
+    font-size: 15.5px;
+    line-height: 1.55;
+    max-width: 540px;
+  }
+  .promise .signature {
+    margin-top: 18px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--mint);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .promise .signature::before {
+    content: ""; width: 22px; height: 1px; background: var(--mint);
+  }
+
+  /* FORM CARD */
+  .form-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 36px;
+    margin-bottom: 40px;
+  }
+
+  /* Form blocks */
+  .field-group { margin-bottom: 28px; }
+  .field-group:last-of-type { margin-bottom: 0; }
+
+  .field-label {
+    display: block;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--ink);
+    margin-bottom: 8px;
+    letter-spacing: -0.005em;
+  }
+  .field-label .optional {
+    font-weight: 400;
+    color: var(--muted);
+    font-size: 13px;
+    margin-left: 6px;
+    letter-spacing: 0;
+  }
+  .field-help {
+    font-size: 13.5px;
+    color: var(--muted);
+    margin-bottom: 10px;
+    margin-top: -2px;
+  }
+
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  @media (max-width: 540px) {
+    .field-row { grid-template-columns: 1fr; }
+  }
+
+  input[type="text"],
+  input[type="email"],
+  textarea,
+  select {
+    width: 100%;
+    font-family: inherit;
+    font-size: 16px;
+    color: var(--ink);
+    background: var(--paper);
+    border: 1.5px solid var(--line);
+    border-radius: var(--radius);
+    padding: 13px 16px;
+    transition: border-color .15s ease, background .15s ease, box-shadow .15s ease;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  input[type="text"]:hover,
+  input[type="email"]:hover,
+  textarea:hover,
+  select:hover {
+    border-color: #c4c2bb;
+  }
+  input[type="text"]:focus,
+  input[type="email"]:focus,
+  textarea:focus,
+  select:focus {
+    outline: none;
+    border-color: var(--green-700);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(37, 85, 58, 0.10);
+  }
+  textarea {
+    resize: vertical;
+    min-height: 150px;
+    line-height: 1.55;
+  }
+  input::placeholder, textarea::placeholder { color: #a3a098; }
+
+  /* Category pills */
+  .category-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  @media (max-width: 480px) {
+    .category-grid { grid-template-columns: 1fr; }
+  }
+  .category-option {
+    position: relative;
+    cursor: pointer;
+  }
+  .category-option input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .category-option .pill {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 16px;
+    border: 1.5px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--paper);
+    font-weight: 500;
+    font-size: 15px;
+    color: var(--ink-2);
+    transition: all .15s ease;
+    user-select: none;
+  }
+  .category-option:hover .pill {
+    border-color: #c4c2bb;
+    background: #fff;
+  }
+  .category-option input:focus-visible + .pill {
+    box-shadow: 0 0 0 4px rgba(37, 85, 58, 0.18);
+  }
+  .category-option input:checked + .pill {
+    border-color: var(--green-700);
+    background: var(--green-50);
+    color: var(--green-800);
+  }
+  .category-option input:checked + .pill .cat-icon {
+    background: var(--green-700);
+    color: #fff;
+  }
+  .cat-icon {
+    width: 30px; height: 30px;
+    border-radius: 8px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    display: grid; place-items: center;
+    color: var(--green-700);
+    flex-shrink: 0;
+    transition: all .15s ease;
+  }
+  .category-option input:checked + .pill .cat-icon {
+    border-color: var(--green-700);
+  }
+
+  /* Collapsible technical section */
+  .tech-toggle {
+    background: none;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    font-family: inherit;
+    font-size: 14.5px;
+    font-weight: 500;
+    color: var(--ink-2);
+    cursor: pointer;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    transition: background .15s ease, border-color .15s ease;
+  }
+  .tech-toggle:hover {
+    background: var(--paper-2);
+    border-color: #c4c2bb;
+  }
+  .tech-toggle .chev {
+    transition: transform .2s ease;
+    color: var(--muted);
+  }
+  .tech-toggle[aria-expanded="true"] .chev { transform: rotate(180deg); }
+  .tech-toggle .badge {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    background: var(--green-100);
+    color: var(--green-800);
+    padding: 3px 8px;
+    border-radius: 999px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-left: auto;
+    margin-right: 8px;
+  }
+  .tech-panel {
+    margin-top: 14px;
+    padding: 22px;
+    background: var(--paper);
+    border: 1px dashed var(--line);
+    border-radius: var(--radius);
+    display: none;
+  }
+  .tech-panel.open { display: block; }
+  .tech-panel .field-group { margin-bottom: 18px; }
+  .tech-panel .field-group:last-child { margin-bottom: 0; }
+
+  /* File upload */
+  .file-drop {
+    display: block; /* <label> er inline by default — gir rare bakgrunns-striper når den har padding + blokk-barn */
+    border: 1.5px dashed var(--line);
+    border-radius: var(--radius);
+    background: var(--paper);
+    padding: 22px;
+    text-align: center;
+    cursor: pointer;
+    transition: all .15s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .file-drop:hover {
+    border-color: var(--green-700);
+    background: var(--green-50);
+  }
+  .file-drop.dragover {
+    border-color: var(--green-700);
+    background: var(--green-50);
+  }
+  .file-drop input[type="file"] {
+    /* Wrapper er et <label>, så klikk på label trigger input uansett.
+       Skjul input helt med display:none for å unngå at native
+       file-control-elementer (knapp, "ingen fil valgt"-tekst) lekker ut
+       som rare striper på siden av boksen i enkelte nettlesere. */
+    display: none;
+  }
+  .file-drop .file-icon {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--card);
+    border: 1px solid var(--line);
+    display: grid; place-items: center;
+    margin: 0 auto 10px;
+    color: var(--green-700);
+  }
+  .file-drop .file-main {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink-2);
+    margin-bottom: 4px;
+  }
+  .file-drop .file-sub {
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .file-drop .file-chosen {
+    display: none;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    color: var(--green-800);
+    background: var(--green-100);
+    padding: 6px 12px;
+    border-radius: 999px;
+    margin-top: 10px;
+    word-break: break-all;
+  }
+  .file-drop.has-file .file-chosen { display: inline-block; }
+
+  /* Submit row */
+  .submit-row {
+    margin-top: 36px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .btn-submit {
+    background: var(--green-800);
+    color: #fff;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    border-radius: 999px;
+    padding: 14px 26px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: background .15s ease, transform .15s ease;
+  }
+  .btn-submit:hover {
+    background: var(--green-900);
+    transform: translateY(-1px);
+  }
+  .btn-submit:active { transform: translateY(0); }
+  .btn-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+  .btn-submit .spinner {
+    display: none;
+    width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+  .btn-submit.loading .spinner { display: inline-block; }
+  .btn-submit.loading .arrow { display: none; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .submit-note {
+    font-size: 13px;
+    color: var(--muted);
+    max-width: 280px;
+    line-height: 1.4;
+  }
+
+  /* Success state */
+  .success-card {
+    display: none;
+    background: var(--green-800);
+    color: #fff;
+    border-radius: var(--radius-lg);
+    padding: 48px 36px;
+    text-align: center;
+    margin-bottom: 40px;
+    animation: fadeUp .4s ease;
+  }
+  .success-card.visible { display: block; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .success-card .check-big {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    background: var(--mint);
+    color: var(--green-900);
+    display: grid; place-items: center;
+    margin: 0 auto 22px;
+  }
+  .success-card h2 {
+    color: #fff;
+    margin: 0 0 12px;
+    font-size: 26px;
+    letter-spacing: -0.015em;
+  }
+  .success-card p {
+    color: #d3decf;
+    margin: 0 auto 24px;
+    max-width: 420px;
+    font-size: 16px;
+  }
+  .success-card .reset-btn {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 10px 20px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background .15s ease;
+  }
+  .success-card .reset-btn:hover { background: rgba(255,255,255,0.18); }
+
+  /* Error message */
+  .error-msg {
+    display: none;
+    background: #fdecea;
+    border: 1px solid #f5c2b8;
+    color: #8c2a14;
+    padding: 14px 18px;
+    border-radius: var(--radius);
+    margin-top: 18px;
+    font-size: 14.5px;
+    line-height: 1.5;
+  }
+  .error-msg.visible { display: block; }
+
+  /* OTHER WAYS card */
+  .other-ways {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    margin: 40px 0 60px;
+  }
+  .other-ways h2 {
+    margin: 0 0 6px;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .other-ways > p {
+    color: var(--muted);
+    font-size: 15px;
+    margin: 0 0 22px;
+  }
+  .ways-grid {
+    display: grid;
+    gap: 12px;
+  }
+  .way {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 18px;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    text-decoration: none;
+    color: var(--ink);
+    transition: all .15s ease;
+  }
+  .way:hover {
+    background: var(--green-50);
+    border-color: var(--green-100);
+    transform: translateX(2px);
+  }
+  .way-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    display: grid; place-items: center;
+    color: var(--green-700);
+    flex-shrink: 0;
+  }
+  .way-text { flex: 1; min-width: 0; }
+  .way-title {
+    font-weight: 600;
+    font-size: 15.5px;
+    color: var(--ink);
+    margin: 0 0 2px;
+    letter-spacing: -0.005em;
+  }
+  .way-sub {
+    font-size: 13.5px;
+    color: var(--muted);
+    margin: 0;
+  }
+  .way-arrow {
+    color: var(--muted);
+    flex-shrink: 0;
+    transition: transform .15s ease, color .15s ease;
+  }
+  .way:hover .way-arrow {
+    color: var(--green-700);
+    transform: translateX(3px);
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 60px 0 40px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .foot-inner {
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 28px 0;
+    border-top: 1px solid var(--line);
+  }
+  .foot-links { display: flex; gap: 24px; flex-wrap: wrap; }
+  .foot-links a { text-decoration: none; color: var(--muted); }
+  .foot-links a:hover { color: var(--green-700); }
+
+  @media (max-width: 600px) {
+    header.page-head { padding: 50px 0 40px; }
+    .promise, .other-ways { padding: 24px; }
+    .form-card { padding: 24px; }
+  }
+
+  .consent { display: flex; gap: 12px; align-items: flex-start; padding: 16px 18px; border: 1px solid var(--line); border-radius: 12px; background: #fff; cursor: pointer; font-size: 15px; line-height: 1.5; }
+  .consent input { width: 20px; height: 20px; margin-top: 2px; flex: none; accent-color: var(--green-700); }
+  .consent small { display: block; margin-top: 6px; color: var(--muted); font-size: 13px; }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .how { margin: 0 0 28px; padding: 22px 26px; background: var(--green-50); border: 1px solid var(--green-100); border-radius: 16px; }
+  .how h2 { margin: 0 0 10px; font-size: 18px; }
+  .how ol { margin: 0; padding-left: 20px; color: var(--ink-2); line-height: 1.65; }
+  .preview { display: none; margin-top: 14px; border-radius: 12px; overflow: hidden; border: 1px solid var(--line); max-height: 320px; }
+  .preview.visible { display: block; }
+  .preview img { display: block; width: 100%; max-height: 320px; object-fit: contain; background: #f2f1ec; }
+</style>
+</head>
+<!-- ============ NAV ============ -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M3 19 L9 9 L13 14 L17 7 L21 19 Z" fill="#fff"/>
+          <circle cx="17.5" cy="6" r="1.6" fill="#f4b740"/>
+        </svg>
+      </span>
+      Fjelltoppene
+    </a>
+    <div class="nav-links">
+      <a data-cms="send-inn.nav.a1" href="index.html#funksjoner">Funksjoner</a>
+      <a data-cms="send-inn.nav.a2" href="index.html#slik">Slik fungerer det</a>
+      <a data-cms="send-inn.nav.a3" href="index.html#skjermbilder">Skjermbilder</a>
+      <a data-cms="send-inn.nav.a4" href="index.html#faq">FAQ</a>
+      <a data-cms="send-inn.nav.a5" href="feedback.html">Tilbakemelding</a>
+      <a data-cms="send-inn.nav.a6" href="index.html#last-ned" class="nav-cta">Last ned</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <header class="page-head">
+    <div data-cms="send-inn.page-head.div1" class="eyebrow">Send inn bilde</div>
+    <h1 data-cms="send-inn.page-head.h11">Del <em>toppen</em> din med oss.</h1>
+    <p data-cms="send-inn.page-head.p1" class="lead">
+      Har du tatt et fint bilde på tur? Send det inn, så kan det bli vist på Fjelltoppene sin Instagram-konto.
+      Bildene vurderes automatisk av en AI før de legges ut.
+    </p>
+  </header>
+
+  <div class="how">
+    <h2 data-cms="send-inn.x.h21">Slik fungerer det</h2>
+    <ol>
+      <li data-cms="send-inn.x.li1">Du sender inn bildet og forteller hvilken topp det er fra.</li>
+      <li data-cms="send-inn.x.li2">En AI vurderer at det er et passende turfoto. Er den usikker, ser vi på bildet selv før noe legges ut.</li>
+      <li data-cms="send-inn.x.li3">Godkjente bilder legges ut med bildetekst og navnet eller Instagram-brukernavnet ditt, om du har oppgitt det.</li>
+    </ol>
+  </div>
+
+  <div class="success-card" id="success-card">
+    <div class="check-big">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+    </div>
+    <h2 data-cms="send-inn.success-card.h21">Takk! Bildet er mottatt.</h2>
+    <p data-cms="send-inn.success-card.p1">Det vurderes automatisk. Passer det, legges det ut på Instagram i løpet av noen dager. Vi sender ingen kvittering.</p>
+    <button type="button" class="reset-btn" id="send-another">Send et til</button>
+  </div>
+
+  <form class="form-card" id="submit-form" novalidate>
+    <div class="hp" aria-hidden="true"><label>Nettside <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+
+    <div class="field-group">
+      <span data-cms="send-inn.x.span1" class="field-label">Bilde</span>
+      <div data-cms="send-inn.x.div1" class="field-help">JPG, PNG eller WebP, minst 600 piksler på korteste side, maks 10 MB. Posisjonsdata fjernes automatisk.</div>
+      <label class="file-drop" id="file-drop">
+        <input type="file" name="bilde" id="bilde" accept="image/jpeg,image/png,image/webp">
+        <div class="file-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.81.01L6 21"/>
+          </svg>
+        </div>
+        <div data-cms="send-inn.x.div2" class="file-main">Slipp et bilde her eller klikk for å velge</div>
+        <div data-cms="send-inn.x.div3" class="file-sub">Fra toppen, på veien opp eller utsikten</div>
+        <div class="file-chosen" id="file-chosen"></div>
+      </label>
+      <div class="preview" id="preview"><img data-cms-img="send-inn.preview.img1" id="preview-img" alt="Forhåndsvisning av valgt bilde"></div>
+    </div>
+
+    <div class="field-group">
+      <label data-cms="send-inn.x.label1" class="field-label" for="topp">Hvilken topp?</label>
+      <input type="text" id="topp" name="topp" maxlength="80" placeholder="F.eks. «Dalsnuten»" autocomplete="off">
+    </div>
+
+    <div class="field-group">
+      <div class="field-row">
+        <div>
+          <label data-cms="send-inn.x.label2" class="field-label" for="navn">Navn <span class="optional">— valgfritt</span></label>
+          <input type="text" id="navn" name="navn" maxlength="60" placeholder="Vises i bildeteksten" autocomplete="name">
+        </div>
+        <div>
+          <label data-cms="send-inn.x.label3" class="field-label" for="insta">Instagram <span class="optional">— valgfritt</span></label>
+          <input type="text" id="insta" name="insta" maxlength="31" placeholder="@brukernavn" autocomplete="off">
+        </div>
+      </div>
+      <div data-cms="send-inn.x.div4" class="field-help" style="margin-top: 10px;">Oppgir du Instagram-brukernavn, krediterer vi deg med @brukernavn.</div>
+    </div>
+
+    <div class="field-group">
+      <label data-cms="send-inn.x.label4" class="field-label" for="epost">E-post <span class="optional">— valgfritt</span></label>
+      <input type="email" id="epost" name="epost" maxlength="120" placeholder="Bare hvis vi må kontakte deg om bildet" autocomplete="email">
+    </div>
+
+    <div class="field-group">
+      <label class="consent">
+        <input type="checkbox" id="samtykke" name="samtykke">
+        <span data-cms="send-inn.x.span2">
+          Jeg har tatt bildet selv, og Fjelltoppene kan bruke det på Instagram og i markedsføring av appen.
+          <small>Ikke send bilder der andre er tydelig med uten at de har sagt ok. Bildet vurderes av en AI (Claude fra Anthropic). Du kan når som helst be om at bildet fjernes ved å skrive til post@fjelltoppene.no. Les mer i <a href="privacy.html#innsendte-bilder">personvernerklæringen</a>.</small>
+        </span>
+      </label>
+    </div>
+
+    <div class="submit-row">
+      <div data-cms="send-inn.x.div5" class="submit-note">Vi lagrer bare det du fyller ut her, og sletter avviste bilder etter 30 dager.</div>
+      <button type="submit" class="btn-submit" id="submit-btn">
+        <span class="spinner"></span>
+        <span data-cms="send-inn.x.span3" class="label">Send inn bilde</span>
+        <svg class="arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+
+    <div class="error-msg" id="error-msg" role="alert"><span data-cms="send-inn.error-msg.span1" id="error-text">Noe gikk galt.</span></div>
+  </form>
+
+</div>
+
+<footer>
+  <div class="foot-inner">
+    <div data-cms="send-inn.footer.div1">© 2026 Fjelltoppene · Laget i Norge</div>
+    <div class="foot-links">
+      <a data-cms="send-inn.footer.a1" href="feedback.html">Tilbakemelding</a>
+      <a data-cms="send-inn.footer.a2" href="privacy.html">Personvern</a>
+      <a data-cms-href="send-inn.footer.link1" data-cms="send-inn.footer.a3" href="mailto:post@fjelltoppene.no">Kontakt</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const nav = document.getElementById('nav');
+  document.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 8), { passive: true });
+
+  const started = Date.now();
+  const form = document.getElementById('submit-form');
+  const input = document.getElementById('bilde');
+  const drop = document.getElementById('file-drop');
+  const chosen = document.getElementById('file-chosen');
+  const preview = document.getElementById('preview');
+  const previewImg = document.getElementById('preview-img');
+  const errBox = document.getElementById('error-msg');
+  const errText = document.getElementById('error-text');
+  const btn = document.getElementById('submit-btn');
+  const success = document.getElementById('success-card');
+  const MAX = 10 * 1024 * 1024;
+  let file = null;
+
+  function showError(msg) { errText.textContent = msg; errBox.classList.add('visible'); errBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+  function setFile(f) {
+    file = f || null;
+    if (!file) { drop.classList.remove('has-file'); preview.classList.remove('visible'); return; }
+    chosen.textContent = `${file.name} · ${(file.size / 1024).toFixed(0)} KB`;
+    drop.classList.add('has-file');
+    previewImg.src = URL.createObjectURL(file);
+    preview.classList.add('visible');
+  }
+  input.addEventListener('change', () => setFile(input.files && input.files[0]));
+  ['dragenter', 'dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('dragover'); }));
+  ['dragleave', 'drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('dragover'); }));
+  drop.addEventListener('drop', e => { const f = e.dataTransfer.files[0]; if (f) { input.files = e.dataTransfer.files; setFile(f); } });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errBox.classList.remove('visible');
+    if (!file) return showError('Velg et bilde først.');
+    if (!/^image\/(jpeg|png|webp)$/.test(file.type)) return showError('Bildet må være JPG, PNG eller WebP.');
+    if (file.size > MAX) return showError('Bildet er for stort. Maks 10 MB.');
+    const topp = form.topp.value.trim();
+    if (topp.length < 2) return showError('Skriv hvilken topp bildet er fra.');
+    if (!form.samtykke.checked) return showError('Du må godta at bildet kan brukes.');
+    btn.disabled = true; btn.classList.add('loading');
+    try {
+      const meta = {
+        peak: topp, name: form.navn.value.trim(), handle: form.insta.value.trim(), email: form.epost.value.trim(),
+        consent: true, website: form.website.value, t: Date.now() - started,
+      };
+      const res = await fetch('/api/innsending', {
+        method: 'POST',
+        headers: { 'Content-Type': file.type, 'X-Innsending': encodeURIComponent(JSON.stringify(meta)) },
+        body: file,
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Noe gikk galt. Prøv igjen om litt.');
+      form.style.display = 'none';
+      success.classList.add('visible');
+      success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } catch (err) {
+      showError(err.message);
+    } finally {
+      btn.disabled = false; btn.classList.remove('loading');
+    }
+  });
+
+  document.getElementById('send-another').addEventListener('click', () => {
+    form.reset(); setFile(null); form.style.display = ''; success.classList.remove('visible');
+  });
+</script>
+
+</body>
+</html>

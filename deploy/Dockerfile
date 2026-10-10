@@ -10,7 +10,7 @@ RUN cd server && npm ci --omit=dev
 
 COPY server/ server/
 COPY admin/ admin/
-COPY index.html privacy.html feedback.html logo.html site/
+COPY index.html privacy.html feedback.html logo.html send-inn.html site/
 COPY assets/ site/assets/
 
 ENV SITE_DIR=/app/site

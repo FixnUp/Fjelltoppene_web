@@ -7,6 +7,12 @@ const { createStore } = require('./lib/content');
 const { createAuth } = require('./lib/auth');
 const { createRenderer } = require('./lib/render');
 const { cleanInline, cleanBlock, safeHref, safeSrc } = require('./lib/sanitize');
+const { createSubmissionStore } = require('./lib/submissions');
+const { createSettings } = require('./lib/settings');
+const { createInstagram } = require('./lib/instagram');
+const { createPublisher } = require('./lib/publisher');
+const { createDefaultModerator } = require('./lib/moderation');
+const { mountSubmissionRoutes } = require('./lib/routes-submissions');
 
 function createApp(opts = {}) {
   const root = path.resolve(__dirname, '..');
@@ -21,6 +27,25 @@ function createApp(opts = {}) {
     secret,
   });
   const renderer = createRenderer({ siteDir, store });
+
+  // Innsendte bilder, AI-vurdering og Instagram
+  const env = opts.env || process.env;
+  const submissions = createSubmissionStore(dataDir);
+  const settings = createSettings(dataDir);
+  const instagram = opts.instagram || createInstagram({
+    mode: env.INSTAGRAM_MODE || 'off',
+    userId: env.IG_USER_ID,
+    token: env.IG_ACCESS_TOKEN,
+    apiBase: env.IG_API_BASE || undefined,
+    apiVersion: env.IG_API_VERSION || '',
+    dataDir,
+  });
+  const publicBaseUrl = env.PUBLIC_BASE_URL || '';
+  const num = (v, d) => (v !== undefined && v !== '' && Number.isFinite(Number(v)) ? Number(v) : d);
+  const maxPerDay = num(env.IG_MAX_PER_DAY, 3);
+  const publisher = createPublisher({ submissions, instagram, settings, publicBaseUrl, maxPerDay, minHours: num(env.IG_MIN_HOURS, 4) });
+  const moderatorPromise = opts.moderator !== undefined ? Promise.resolve(opts.moderator) : createDefaultModerator(env).catch(() => null);
+  let aiConfigured = Boolean(opts.moderator) || Boolean(env.ANTHROPIC_API_KEY);
 
   const app = express();
   app.disable('x-powered-by');
@@ -59,6 +84,7 @@ function createApp(opts = {}) {
   app.get(['/privacy', '/privacy.html'], sendPage('privacy'));
   app.get(['/feedback', '/feedback.html'], sendPage('feedback'));
   app.get(['/logo', '/logo.html'], sendPage('logo'));
+  app.get(['/send-inn', '/send-inn.html'], sendPage('send-inn'));
 
   // ---------- Admin ----------
   app.get('/admin', (req, res) => {
@@ -129,6 +155,11 @@ function createApp(opts = {}) {
     catch (e) { res.status(415).json({ error: e.message }); }
   });
 
+  const sub = mountSubmissionRoutes(app, {
+    submissions, moderatorPromise, publisher, instagram, settings, auth, guard, json, adminDir, secret, publicBaseUrl, maxPerDay,
+    perIpPerDay: opts.perIpPerDay, perHour: opts.perHour, aiConfigured: () => aiConfigured,
+  });
+
   app.use((err, _req, res, next) => {
     if (err && err.type === 'entity.too.large') return res.status(413).json({ error: 'For stor fil (maks 10 MB)' });
     return next(err);
@@ -137,15 +168,28 @@ function createApp(opts = {}) {
     res.status(404).type('html').send('<!doctype html><meta charset="utf-8"><title>Fant ikke siden</title><body style="font-family:system-ui;padding:12vh 8vw"><h1>Fant ikke siden</h1><p><a href="/">Til forsiden</a></p>');
   });
 
-  return { app, auth, store };
+  // Bakgrunnsjobber: publisering hvert 5. minutt, opprydding og token-fornyelse daglig
+  const timers = [];
+  function startJobs() {
+    publisher.recover();
+    timers.push(setInterval(() => publisher.tick().catch(() => {}), 5 * 60 * 1000));
+    timers.push(setInterval(() => { try { submissions.purge(); } catch { /* prøver igjen i morgen */ } instagram.refreshIfNeeded().catch(() => {}); }, 24 * 60 * 60 * 1000));
+    for (const t of timers) t.unref();
+    setTimeout(() => { try { submissions.purge(); } catch { /* ignorer */ } instagram.refreshIfNeeded().catch(() => {}); }, 30_000).unref();
+  }
+  const stopJobs = () => { for (const t of timers) clearInterval(t); timers.length = 0; };
+
+  return { app, auth, store, submissions, publisher, settings, instagram, sub, startJobs, stopJobs };
 }
 
 if (require.main === module) {
-  const { app, auth } = createApp();
+  const { app, auth, startJobs, instagram } = createApp();
+  startJobs();
   const port = Number(process.env.PORT) || 3000;
   app.listen(port, '0.0.0.0', () => {
     console.log(`Fjelltoppene-web lytter på port ${port}`);
     if (!auth.enabled) console.warn('ADMIN_PASSWORD mangler eller er kortere enn 8 tegn: admin er avslått.');
+    console.log(`Instagram-modus: ${instagram.mode}`);
   });
 }
 
