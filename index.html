@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Fjelltoppene — Din turbok for norske topper</title>
-<meta name="description" content="Fjelltoppene er en app for å oppdage, registrere og holde oversikt over fjellturene dine. Kart, lister, statistikk og vær — alt på ett sted.">
+<meta name="description" content="Fjelltoppene er en turbok for fjellfolk. Logg topper, importer turer fra Strava og GPX, se rutene på kartet og del turen som bilde. Ingen konto, ingen reklame.">
 
 <!-- Favicon -->
 <link rel="icon" type="image/svg+xml" href="assets/logo-mark.svg">
@@ -892,6 +892,15 @@
     color: var(--muted);
     flex-shrink: 0;
   }
+
+  /* ===== Nytt i appen ===== */
+  .releases { margin-top: 50px; display: grid; gap: 16px; }
+  .release { display: grid; grid-template-columns: 170px 1fr; gap: 28px; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 28px 32px; }
+  .release .ver b { display: block; font-family: "JetBrains Mono", monospace; font-size: 26px; font-weight: 600; color: var(--green-700); letter-spacing: -0.02em; }
+  .release .ver small { display: block; margin-top: 6px; font-size: 13px; color: var(--muted); }
+  .release .rel-body p { margin: 0; font-size: 16px; line-height: 1.7; color: var(--ink-2); }
+  @media (max-width: 720px) { .release { grid-template-columns: 1fr; gap: 12px; padding: 24px; } }
+  .beta-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #f4b740; box-shadow: 0 0 0 4px rgba(244,183,64,0.18); }
 </style>
 </head>
 <body>
@@ -909,12 +918,13 @@
       Fjelltoppene
     </a>
     <div class="nav-links">
-      <a href="#funksjoner">Funksjoner</a>
-      <a href="#slik">Slik fungerer det</a>
-      <a href="#skjermbilder">Skjermbilder</a>
-      <a href="#faq">FAQ</a>
-      <a href="feedback.html">Tilbakemelding</a>
-      <a href="#last-ned" class="nav-cta">Last ned</a>
+      <a data-cms="index.nav.a1" href="#funksjoner">Funksjoner</a>
+      <a data-cms="index.nav.a2" href="#slik">Slik fungerer det</a>
+      <a data-cms="index.nav.a3" href="#nytt">Nytt</a>
+      <a data-cms="index.nav.a4" href="#skjermbilder">Skjermbilder</a>
+      <a data-cms="index.nav.a5" href="#faq">FAQ</a>
+      <a data-cms="index.nav.a6" href="feedback.html">Tilbakemelding</a>
+      <a data-cms="index.nav.a7" href="#last-ned" class="nav-cta">Last ned</a>
     </div>
   </div>
 </nav>
@@ -923,33 +933,33 @@
 <header class="hero">
   <div class="wrap hero-grid">
     <div class="hero-copy">
-      <span class="eyebrow"><span class="dot"></span> Turbok 2026 · Beta tilgjengelig nå</span>
-      <h1 class="hero-title">
+      <span data-cms="index.hero.span1" class="eyebrow"><span class="dot"></span> Turbok 2026 · Versjon 2.0 · Beta tilgjengelig nå</span>
+      <h1 data-cms="index.hero.h11" class="hero-title">
         Hver topp <span class="accent">du har stått på</span>, på ett sted.
       </h1>
-      <p class="hero-lead">
-        Fjelltoppene er en personlig turbok i lomma. Oppdag nye topper i nærheten,
-        kryss av de du har vært på, og se framgangen din vokse — fra Dalsnuten til Galdhøpiggen.
+      <p data-cms="index.hero.p1" class="hero-lead">
+        Fjelltoppene er en personlig turbok i lomma. Logg toppene du har gått, importer turene fra
+        Strava eller Garmin, se rutene på kartet og del turen som bilde — fra Dalsnuten til Galdhøpiggen.
       </p>
       <div class="cta-row">
         <a href="#last-ned" class="btn btn-primary">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/></svg>
           Last ned appen
         </a>
-        <a href="#funksjoner" class="btn btn-ghost">Utforsk funksjoner</a>
+        <a data-cms="index.hero.a1" href="#funksjoner" class="btn btn-ghost">Utforsk funksjoner</a>
       </div>
       <div class="hero-stats">
         <div class="hero-stat">
-          <div class="num">3 800+</div>
-          <div class="lbl">Registrerte topper</div>
+          <div data-cms="index.hero.div1" class="num">3 800+</div>
+          <div data-cms="index.hero.div2" class="lbl">Registrerte topper</div>
         </div>
         <div class="hero-stat">
-          <div class="num">357</div>
-          <div class="lbl">Kommuner dekket</div>
+          <div data-cms="index.hero.div3" class="num">357</div>
+          <div data-cms="index.hero.div4" class="lbl">Kommuner dekket</div>
         </div>
         <div class="hero-stat">
-          <div class="num">100 %</div>
-          <div class="lbl">Norsk &amp; gratis</div>
+          <div class="num">0</div>
+          <div data-cms="index.hero.div5" class="lbl">Reklame eller sporing</div>
         </div>
       </div>
     </div>
@@ -957,13 +967,13 @@
     <div class="phone-stage">
       <div class="phone behind" aria-hidden="true">
         <div class="screen">
-          <img src="assets/screen-map-light.jpg" alt="">
+          <img data-cms-img="index.hero.img1" src="assets/screen-map-light.jpg" alt="">
         </div>
       </div>
       <div class="phone">
         <span class="notch"></span>
         <div class="screen">
-          <img src="assets/screen-profile.jpg" alt="Skjermbilde av Fjelltoppene-appen">
+          <img data-cms-img="index.hero.img2" src="assets/screen-profile.jpg" alt="Skjermbilde av Fjelltoppene-appen">
         </div>
       </div>
     </div>
@@ -980,44 +990,44 @@
 <!-- ============ HOW IT WORKS ============ -->
 <section id="slik">
   <div class="wrap">
-    <div class="sec-eyebrow">Slik fungerer det</div>
-    <h2>Fra tur til turbok i tre enkle steg.</h2>
-    <p class="sec-lead">
+    <div data-cms="index.slik.div1" class="sec-eyebrow">Slik fungerer det</div>
+    <h2 data-cms="index.slik.h21">Fra tur til turbok i tre enkle steg.</h2>
+    <p data-cms="index.slik.p1" class="sec-lead">
       Appen er bygget for å være ute av veien. Du finner topper, registrerer turen, og lar appen ta seg av resten.
     </p>
 
     <div class="steps">
       <div class="step reveal">
-        <div class="step-num">STEG 01</div>
+        <div data-cms="index.slik.div2" class="step-num">STEG 01</div>
         <div class="step-icon">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>
           </svg>
         </div>
-        <h3>Finn en topp</h3>
-        <p>Bla i kartet, søk etter navn eller område, eller bruk plasseringen din for å se hvilke topper som ligger i nærheten.</p>
+        <h3 data-cms="index.slik.h31">Finn en topp</h3>
+        <p data-cms="index.slik.p2">Bla i kartet, søk etter navn eller område, eller bruk plasseringen din for å se hvilke topper som ligger i nærheten.</p>
       </div>
 
       <div class="step reveal">
-        <div class="step-num">STEG 02</div>
+        <div data-cms="index.slik.div3" class="step-num">STEG 02</div>
         <div class="step-icon">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 20v-8"/><path d="m6 12 6-8 6 8"/><path d="M5 20h14"/>
           </svg>
         </div>
-        <h3>Registrer turen</h3>
-        <p>Trykk på pluss-knappen når du står på toppen. Tid, vær, høyde og koordinater fylles inn automatisk.</p>
+        <h3 data-cms="index.slik.h32">Registrer turen</h3>
+        <p data-cms="index.slik.p3">Trykk på pluss-knappen når du står på toppen, eller importer turen fra Strava eller en GPX-fil. Tid, vær, høyde og koordinater fylles inn automatisk.</p>
       </div>
 
       <div class="step reveal">
-        <div class="step-num">STEG 03</div>
+        <div data-cms="index.slik.div4" class="step-num">STEG 03</div>
         <div class="step-icon">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <path d="M3 3v18h18"/><path d="m7 14 4-4 4 4 5-7"/>
           </svg>
         </div>
-        <h3>Se framgangen din</h3>
-        <p>Sett deg et egenmål for året, følg statistikken måned for måned, og se rekorder, høyder og kommuner du har besøkt.</p>
+        <h3 data-cms="index.slik.h33">Se framgangen din</h3>
+        <p data-cms="index.slik.p4">Sett deg et egenmål for året, følg statistikken måned for måned, og se rekorder, høyder og kommuner du har besøkt.</p>
       </div>
     </div>
   </div>
@@ -1026,9 +1036,9 @@
 <!-- ============ FEATURES ============ -->
 <section id="funksjoner" class="features-section">
   <div class="wrap">
-    <div class="sec-eyebrow">Funksjoner</div>
-    <h2>Alt du trenger for å holde oversikt.</h2>
-    <p class="sec-lead">Designet for norske forhold — fra dagstur i nærskogen til langhelger på vidda.</p>
+    <div data-cms="index.funksjoner.div1" class="sec-eyebrow">Funksjoner</div>
+    <h2 data-cms="index.funksjoner.h21">Alt du trenger for å holde oversikt.</h2>
+    <p data-cms="index.funksjoner.p1" class="sec-lead">Designet for norske forhold — fra dagstur i nærskogen til langhelger på vidda.</p>
 
     <div class="features">
       <!-- Map feature -->
@@ -1038,8 +1048,8 @@
             <path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3Z"/><path d="M9 3v15"/><path d="M15 6v15"/>
           </svg>
         </div>
-        <h3>Interaktivt kart</h3>
-        <p>Alle norske topper i ett kart. Klynger viser hvor mange du har vært på i et område, og stjerner markerer ønskelistetopper.</p>
+        <h3 data-cms="index.funksjoner.h31">Interaktivt kart</h3>
+        <p data-cms="index.funksjoner.p2">Alle norske topper i ett kart. Klynger viser hvor mange du har vært på i et område, og stjerner markerer ønskelistetopper.</p>
         <div class="feat-visual">
           <div class="mini-map">
             <svg viewBox="0 0 400 220" preserveAspectRatio="none">
@@ -1066,15 +1076,15 @@
             <path d="M3 3v18h18"/><rect x="6" y="13" width="3" height="5"/><rect x="11" y="9" width="3" height="9"/><rect x="16" y="6" width="3" height="12"/>
           </svg>
         </div>
-        <h3>Statistikk &amp; rekorder</h3>
-        <p>Se hvilke måneder du var mest aktiv, høyeste topp, første tur i året og mest besøkte fjell.</p>
+        <h3 data-cms="index.funksjoner.h32">Statistikk &amp; rekorder</h3>
+        <p data-cms="index.funksjoner.p3">Se hvilke måneder du var mest aktiv, høyeste topp, første tur i året og mest besøkte fjell.</p>
         <div class="feat-visual">
           <div class="chart" aria-hidden="true">
             <div class="bar" style="height:8%"></div>
             <div class="bar" style="height:14%"></div>
             <div class="bar on" style="height:55%"><span class="v">8</span></div>
             <div class="bar on" style="height:18%"><span class="v">2</span></div>
-            <div class="bar on" style="height:100%"><span class="v">18</span></div>
+            <div class="bar on" style="height:100%"><span data-cms="index.funksjoner.span1" class="v">18</span></div>
             <div class="bar on" style="height:38%"><span class="v">5</span></div>
             <div class="bar" style="height:12%"></div>
             <div class="bar on" style="height:24%"><span class="v">3</span></div>
@@ -1096,8 +1106,8 @@
             <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/>
           </svg>
         </div>
-        <h3>Besøkte &amp; ønskeliste</h3>
-        <p>Hold rede på topper du har vært på, og lagre drømmetoppene dine til senere.</p>
+        <h3 data-cms="index.funksjoner.h33">Besøkte &amp; ønskeliste</h3>
+        <p data-cms="index.funksjoner.p4">Hold rede på topper du har vært på, og lagre drømmetoppene dine til senere.</p>
       </div>
 
       <div class="feat feat-third reveal">
@@ -1106,17 +1116,17 @@
             <path d="M17.5 19a4.5 4.5 0 1 0 0-9 6 6 0 0 0-11.7-1 4 4 0 0 0 .7 8z"/>
           </svg>
         </div>
-        <h3>Vær på toppen</h3>
-        <p>Sjekk nåværende vær og prognose før du legger ut, direkte i toppvisningen.</p>
+        <h3 data-cms="index.funksjoner.h34">Vær på toppen</h3>
+        <p data-cms="index.funksjoner.p5">Sjekk nåværende vær og prognose før du legger ut, direkte i toppvisningen.</p>
         <div class="feat-visual">
           <div class="weather-card" style="padding:14px 16px; margin-top:14px;">
             <div class="weather-now">
-              <div class="t">14°</div>
-              <div class="l">Nå</div>
+              <div data-cms="index.funksjoner.div2" class="t">14°</div>
+              <div data-cms="index.funksjoner.div3" class="l">Nå</div>
             </div>
             <div class="weather-future">
-              <div><small>+3t</small>13°</div>
-              <div><small>+6t</small>12°</div>
+              <div data-cms="index.funksjoner.div4"><small>+3t</small>13°</div>
+              <div data-cms="index.funksjoner.div5"><small>+6t</small>12°</div>
             </div>
           </div>
         </div>
@@ -1128,8 +1138,122 @@
             <path d="M14 3h7v7"/><path d="M21 3l-9 9"/><path d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"/>
           </svg>
         </div>
-        <h3>Eksporter dataene dine</h3>
-        <p>Last ned alt som CSV, GPX eller ZIP — turboka er din, alltid.</p>
+        <h3 data-cms="index.funksjoner.h35">Eksporter dataene dine</h3>
+        <p data-cms="index.funksjoner.p6">Last ned alt som CSV, GPX eller ZIP, eller ta sikkerhetskopi til Google Drive — turboka er din, alltid.</p>
+      </div>
+
+      <div class="feat feat-third reveal">
+        <div class="feat-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="6" cy="19" r="3"/><circle cx="18" cy="5" r="3"/><path d="M9 19h5a3.5 3.5 0 0 0 0-7H10a3.5 3.5 0 0 1 0-7h5"/>
+          </svg>
+        </div>
+        <h3 data-cms="index.funksjoner.h36">Turer &amp; ruter</h3>
+        <p data-cms="index.funksjoner.p7">Importer turer fra Strava eller GPX-filer fra Garmin. Ruten tegnes på kartet, og bildene dine ligger som miniatyrer langs veien.</p>
+      </div>
+
+      <div class="feat feat-third reveal">
+        <div class="feat-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m12 2 10 5-10 5L2 7z"/><path d="m2 12 10 5 10-5"/><path d="m2 17 10 5 10-5"/>
+          </svg>
+        </div>
+        <h3 data-cms="index.funksjoner.h37">Mine turer på kartet</h3>
+        <p data-cms="index.funksjoner.p8">Kartlaget «Mine turer» viser alle rutene dine samtidig. Trykk på en linje for å åpne turen. Bytt mellom topografisk kart og satellitt.</p>
+      </div>
+
+      <div class="feat feat-third reveal">
+        <div class="feat-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/>
+          </svg>
+        </div>
+        <h3 data-cms="index.funksjoner.h38">Smarte bilder</h3>
+        <p data-cms="index.funksjoner.p9">Appen foreslår bilder tatt i turens tidsrom, og henter med bildene fra Strava-aktiviteten. Velg hovedbilde for hver tur og hver topp.</p>
+      </div>
+
+      <div class="feat feat-third reveal">
+        <div class="feat-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/>
+          </svg>
+        </div>
+        <h3 data-cms="index.funksjoner.h39">Del turen som bilde</h3>
+        <p data-cms="index.funksjoner.p10">Velg hva som står på bildet — navn, høyde, kommune, dato og vær — og hvor teksten skal ligge. Fire bildeformater for story, feed og Facebook.</p>
+        <div class="feat-visual">
+          <div style="display:flex; gap:12px; align-items:flex-end; margin-top:16px;" aria-hidden="true">
+            <div style="width:34px; height:60px; border:2px solid var(--green-600); border-radius:6px;"></div>
+            <div style="width:48px; height:60px; border:2px solid var(--green-600); border-radius:6px;"></div>
+            <div style="width:60px; height:60px; border:2px solid var(--green-600); border-radius:6px;"></div>
+            <div style="width:80px; height:42px; border:2px solid var(--green-600); border-radius:6px;"></div>
+          </div>
+          <div data-cms="index.funksjoner.div6" style="font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--muted); margin-top:8px; letter-spacing:.06em;">9:16 · 4:5 · 1:1 · 1,91:1</div>
+        </div>
+      </div>
+
+      <div class="feat feat-third reveal">
+        <div class="feat-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="4" width="20" height="16" rx="2"/><path d="M12 4v16"/>
+          </svg>
+        </div>
+        <h3 data-cms="index.funksjoner.h310">Foldbar &amp; nettbrett</h3>
+        <p data-cms="index.funksjoner.p11">På bred skjerm ligger kartet fast til venstre og appen til høyre. Layouten følger med når du folder ut eller inn, og kartet kan vises i fullskjerm.</p>
+      </div>
+
+      <div class="feat feat-third dark reveal">
+        <div class="feat-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 3v4M21 5h-4"/>
+          </svg>
+        </div>
+        <h3 data-cms="index.funksjoner.h311">AI-assistent</h3>
+        <p data-cms="index.funksjoner.p12">Spør om topper, vær og turene dine med vanlig språk, og få forslag til turbeskrivelser. Valgfritt, og en del av Fjelltoppene Premium.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ NYTT ============ -->
+<section id="nytt">
+  <div class="wrap">
+    <div data-cms="index.nytt.div1" class="sec-eyebrow">Nytt i appen</div>
+    <h2 data-cms="index.nytt.h21">Dette har skjedd siden 1.0.</h2>
+    <p data-cms="index.nytt.p1" class="sec-lead">Fjelltoppene oppdateres jevnlig. Her er de siste versjonene.</p>
+    <div class="releases" data-cms-list="index.nytt">
+      <div class="release">
+        <div class="ver"><b>2.0.4</b><small>Foldbare skjermer</small></div>
+        <div class="rel-body"><p>• Støtte for foldbare telefoner og nettbrett: kartet ligger fast til venstre og appen til høyre<br>• Navigasjonen tilpasser seg skjermbredden, også når du folder ut eller inn<br>• Kartet kan vises i fullskjerm<br>• Rutenett og lister tilpasser antall kolonner til skjermen<br>• Fikset plasseringen av «Legg til»-knappen</p></div>
+      </div>
+      <div class="release">
+        <div class="ver"><b>2.0.3</b><small>Mine turer og deling</small></div>
+        <div class="rel-body"><p>• Nytt kartlag «Mine turer» — trykk på en tur for å åpne den<br>• Del bilde: velg info, vær, plassering og format (9:16, 4:5, 1:1)<br>• Bilder fra Strava importeres sammen med turen<br>• Ny bildevelger som foreslår bilder fra turens tidsrom<br>• Rullefelt med måned og år i listene<br>• Bildeminiatyrer på turkartet</p></div>
+      </div>
+      <div class="release">
+        <div class="ver"><b>2.0.2</b><small>Forbedringer</small></div>
+        <div class="rel-body"><p>• Bilder på turer vises i rutenett med galleri<br>• Valgt turbilde vises også på Besøkte-siden<br>• Fikset krasj ved søk og tilbakemelding, og «Vis på kart»</p></div>
+      </div>
+      <div class="release">
+        <div class="ver"><b>2.0</b><small>Turer og Premium</small></div>
+        <div class="rel-body"><p>• Import av turer fra Strava og GPX<br>• Ny Turer-fane med kart, rute og bilder langs veien<br>• Turer med flere fjelltopper (traverser)<br>• Satellittbilder på kartet<br>• Fjelltoppene Premium med AI-assistent<br>• Bilder i fullskjerm og nytt vær-overlegg</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PREMIUM ============ -->
+<section id="premium" style="padding-top: 0;">
+  <div class="wrap">
+    <div data-cms="index.premium.div1" class="sec-eyebrow">Gratis og Premium</div>
+    <h2 data-cms="index.premium.h21">Mye gratis. Litt ekstra hvis du vil.</h2>
+    <div class="features">
+      <div class="feat feat-sm reveal">
+        <h3 data-cms="index.premium.h31">Gratis</h3>
+        <p data-cms="index.premium.p1">Registrere topper og turer, kart, ønskeliste, statistikk, GPX-import, deling som bilde, eksport og sikkerhetskopi til Google Drive. Ingen konto, ingen reklame.</p>
+      </div>
+      <div class="feat feat-big dark reveal">
+        <h3 data-cms="index.premium.h32">Fjelltoppene Premium</h3>
+        <p data-cms="index.premium.p2">AI-assistent, import fra Strava og delingsbilder uten vannmerke. Abonnement via Google Play som du kan si opp når som helst.</p>
       </div>
     </div>
   </div>
@@ -1140,40 +1264,40 @@
   <div class="band">
     <div class="band-inner">
       <div>
-        <div class="sec-eyebrow">Turbok 2026</div>
-        <h2>Sett deg et mål. Følg det hele året.</h2>
-        <p style="margin-bottom:30px">
+        <div data-cms="index.turbok.div1" class="sec-eyebrow">Turbok 2026</div>
+        <h2 data-cms="index.turbok.h21">Sett deg et mål. Følg det hele året.</h2>
+        <p data-cms="index.turbok.p1" style="margin-bottom:30px">
           Egenmål gir deg et tall å sikte mot — 20, 30, 50 topper. Appen viser hvor mange du har igjen,
           hvor stor andel som er fullført, og hvilke turer som teller mot målet.
         </p>
-        <a href="#last-ned" class="btn btn-primary">Kom i gang gratis</a>
+        <a data-cms="index.turbok.a1" href="#last-ned" class="btn btn-primary">Kom i gang gratis</a>
       </div>
       <div>
         <div class="progress-card" style="padding: 28px;">
-          <div class="progress-head">Egenmål 2026 · 30 topper</div>
+          <div data-cms="index.turbok.div2" class="progress-head">Egenmål 2026 · 30 topper</div>
           <div class="progress-row">
-            <div class="progress-num">10 / 30</div>
-            <div class="progress-pct">33 %</div>
+            <div data-cms="index.turbok.div3" class="progress-num">10 / 30</div>
+            <div data-cms="index.turbok.div4" class="progress-pct">33 %</div>
           </div>
           <div class="progress-bar"><div></div></div>
-          <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #9bb19f; margin-top: 14px; letter-spacing: 0.06em;">20 igjen av 30 i 2026</div>
+          <div data-cms="index.turbok.div5" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #9bb19f; margin-top: 14px; letter-spacing: 0.06em;">20 igjen av 30 i 2026</div>
         </div>
         <div class="stat-grid" style="margin-top:14px">
           <div class="stat-card">
-            <div class="n">12</div>
-            <div class="l">Topper i år</div>
+            <div data-cms="index.turbok.div6" class="n">12</div>
+            <div data-cms="index.turbok.div7" class="l">Topper i år</div>
           </div>
           <div class="stat-card">
-            <div class="n">5 400</div>
-            <div class="l">Stigning i meter</div>
+            <div data-cms="index.turbok.div8" class="n">5 400</div>
+            <div data-cms="index.turbok.div9" class="l">Stigning i meter</div>
           </div>
           <div class="stat-card">
             <div class="n">3</div>
-            <div class="l">Kommuner</div>
+            <div data-cms="index.turbok.div10" class="l">Kommuner</div>
           </div>
           <div class="stat-card">
-            <div class="n">1 172</div>
-            <div class="l">Høyeste · moh</div>
+            <div data-cms="index.turbok.div11" class="n">1 172</div>
+            <div data-cms="index.turbok.div12" class="l">Høyeste · moh</div>
           </div>
         </div>
       </div>
@@ -1184,11 +1308,11 @@
 <!-- ============ SCREENSHOTS ============ -->
 <section id="skjermbilder" class="screens-section">
   <div class="wrap">
-    <div class="sec-eyebrow">Skjermbilder</div>
-    <h2>Ren design, laget for å være ute.</h2>
-    <p class="sec-lead">Stort skriftsnitt og tydelige knapper — også med våte hender og solbriller på toppen. Følger systemets lyse eller mørke tema.</p>
+    <div data-cms="index.skjermbilder.div1" class="sec-eyebrow">Skjermbilder</div>
+    <h2 data-cms="index.skjermbilder.h21">Ren design, laget for å være ute.</h2>
+    <p data-cms="index.skjermbilder.p1" class="sec-lead">Stort skriftsnitt og tydelige knapper — også med våte hender og solbriller på toppen. Følger systemets lyse eller mørke tema.</p>
 
-    <div class="screens">
+    <div class="screens" data-cms-list="index.screens">
       <div class="screen-card reveal">
         <img src="assets/screen-map.jpg" alt="Kart med topper i mørkt tema">
         <div class="cap">01 · UTFORSK</div>
@@ -1221,45 +1345,41 @@
 <!-- ============ FAQ ============ -->
 <section id="faq">
   <div class="wrap">
-    <div class="sec-eyebrow">Spørsmål &amp; svar</div>
-    <h2>Det vanligste folk lurer på.</h2>
+    <div data-cms="index.faq.div1" class="sec-eyebrow">Spørsmål &amp; svar</div>
+    <h2 data-cms="index.faq.h21">Det vanligste folk lurer på.</h2>
 
-    <div class="faq-list">
+    <div class="faq-list" data-cms-list="index.faq">
       <details class="faq" open>
         <summary>Koster appen noe?</summary>
-        <div class="answer">
-          Fjelltoppene er gratis å laste ned og bruke. Du trenger ikke konto, abonnement eller innlogging for å komme i gang.
-        </div>
+        <div class="answer">Appen er gratis å laste ned og bruke, og du trenger ingen konto. Fjelltoppene Premium er et valgfritt abonnement som gir AI-assistent, Strava-import og delingsbilder uten vannmerke. Det kan sies opp når som helst i Google Play.</div>
       </details>
       <details class="faq">
         <summary>Hvor kommer toppene fra?</summary>
-        <div class="answer">
-          Topplisten bygger på åpne datakilder for norske fjell og høyder, og er kvalitetssikret mot kommune- og områdedata. Mangler en topp, kan du melde inn forslag fra appen.
-        </div>
+        <div class="answer">Topplisten bygger på åpne datakilder for norske fjell og høyder, og er kvalitetssikret mot kommune- og områdedata. Mangler en topp, kan du melde inn forslag fra appen.</div>
       </details>
       <details class="faq">
         <summary>Hva med personvern? Hvor lagres turene mine?</summary>
-        <div class="answer">
-          Turene dine lagres lokalt på enheten. Du kan eksportere alt som CSV, GPX eller ZIP når du vil — eller slette alt med ett trykk. Vi selger ikke data.
-        </div>
+        <div class="answer">Turene dine lagres lokalt på enheten. Du kan eksportere alt som CSV, GPX eller ZIP når du vil, eller slette alt med ett trykk. Sikkerhetskopi til Google Drive er valgfritt. Vi selger ikke data og har ingen reklame eller sporing.</div>
       </details>
       <details class="faq">
-        <summary>Kan jeg importere gamle turer fra kamerarullen?</summary>
-        <div class="answer">
-          Ja. Bruk «Skann bilder»-funksjonen i profilen for å lese GPS-koordinater fra bildene dine og automatisk koble dem til topper du har besøkt.
-        </div>
+        <summary>Kan jeg importere turer fra Strava eller Garmin?</summary>
+        <div class="answer">Ja. Importer fra Strava direkte i appen (Premium), eller last inn en GPX-fil fra Garmin eller andre. Ruten vises på kartet, og bilder fra turens tidsrom plasseres langs veien.</div>
+      </details>
+      <details class="faq">
+        <summary>Hvordan fungerer AI-assistenten?</summary>
+        <div class="answer">Assistenten bruker Google Gemini og svarer på spørsmål om topper, vær og turene dine. Den er helt valgfri, krever eget samtykke og kan slås av i innstillingene.</div>
       </details>
       <details class="faq">
         <summary>Fungerer appen uten dekning?</summary>
-        <div class="answer">
-          Du kan registrere turer uten dekning — posisjon og høyde fanges fra GPS-en i telefonen. Vær og kartbakgrunn lastes når du er online igjen.
-        </div>
+        <div class="answer">Du kan registrere turer uten dekning — posisjon og høyde fanges fra GPS-en i telefonen. Vær og kartbakgrunn lastes når du er online igjen.</div>
+      </details>
+      <details class="faq">
+        <summary>Fungerer appen på foldbare telefoner og nettbrett?</summary>
+        <div class="answer">Ja. På bred skjerm deles skjermen i to: kartet ligger fast til venstre og appen til høyre. Layouten tilpasser seg når du folder ut eller inn.</div>
       </details>
       <details class="faq">
         <summary>Hvilke plattformer støttes?</summary>
-        <div class="answer">
-          Android-versjonen er i åpen beta på Google Play nå — alle kan bli med som testere. iOS-versjonen kommer i løpet av 2026.
-        </div>
+        <div class="answer">Android-versjonen er i åpen beta på Google Play nå — alle kan bli med som testere. iOS-versjonen kommer i løpet av 2026.</div>
       </details>
     </div>
   </div>
@@ -1268,26 +1388,26 @@
 <!-- ============ DOWNLOAD ============ -->
 <section id="last-ned" style="padding: 30px 0 80px;">
   <div class="download">
-    <div class="sec-eyebrow" style="color: var(--mint); justify-content: center; display: flex;">Last ned</div>
-    <h2>Klar for neste topp?</h2>
-    <p>Fjelltoppene er i beta på Google Play — bli med som tester og hjelp oss forme appen. iOS-versjon kommer i løpet av 2026.</p>
-    <div style="display:inline-flex; align-items:center; gap:10px; padding:10px 18px; border-radius:999px; background:rgba(244,183,64,0.14); border:1px solid rgba(244,183,64,0.4); color:#f4b740; font-family:'JetBrains Mono', monospace; font-size:12px; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:32px;">
-      <span style="width:8px; height:8px; border-radius:50%; background:#f4b740; box-shadow:0 0 0 4px rgba(244,183,64,0.18);"></span>
+    <div data-cms="index.last-ned.div1" class="sec-eyebrow" style="color: var(--mint); justify-content: center; display: flex;">Last ned</div>
+    <h2 data-cms="index.last-ned.h21">Klar for neste topp?</h2>
+    <p data-cms="index.last-ned.p1">Fjelltoppene er i beta på Google Play — bli med som tester og hjelp oss forme appen. iOS-versjon kommer i løpet av 2026.</p>
+    <div data-cms="index.last-ned.div2" style="display:inline-flex; align-items:center; gap:10px; padding:10px 18px; border-radius:999px; background:rgba(244,183,64,0.14); border:1px solid rgba(244,183,64,0.4); color:#f4b740; font-family:'JetBrains Mono', monospace; font-size:12px; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:32px;">
+      <span class="beta-dot"></span>
       Beta tilgjengelig nå · Android
     </div>
     <div class="store-row">
-      <a class="store-btn" href="#">
+      <a data-cms-href="index.last-ned.link1" class="store-btn" href="#">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 12.04c-.03-3.16 2.58-4.68 2.7-4.75-1.47-2.15-3.77-2.45-4.59-2.48-1.96-.2-3.81 1.15-4.81 1.15-1 0-2.52-1.12-4.14-1.09-2.13.03-4.09 1.24-5.19 3.14-2.21 3.83-.56 9.5 1.6 12.6 1.06 1.52 2.32 3.23 3.96 3.17 1.59-.07 2.19-1.03 4.12-1.03 1.93 0 2.46 1.03 4.14 1 1.71-.03 2.79-1.55 3.83-3.08 1.21-1.77 1.71-3.49 1.73-3.58-.04-.02-3.32-1.27-3.35-5.05zM13.84 3.5c.86-1.04 1.45-2.49 1.29-3.94-1.25.05-2.77.83-3.66 1.87-.8.93-1.5 2.4-1.31 3.83 1.4.11 2.83-.71 3.68-1.76z"/></svg>
         <div style="text-align: left;">
-          <div class="small">Last ned på</div>
-          <div class="big">App Store</div>
+          <div data-cms="index.last-ned.div3" class="small">Last ned på</div>
+          <div data-cms="index.last-ned.div4" class="big">App Store</div>
         </div>
       </a>
-      <a class="store-btn" href="#">
+      <a data-cms-href="index.last-ned.link2" class="store-btn" href="#">
         <svg viewBox="0 0 24 24"><path fill="#34a853" d="m13.05 11.95-9.6 9.6c.32.18.69.28 1.07.28.4 0 .77-.1 1.1-.3l10.78-6.21z"/><path fill="#fbbc04" d="m20.16 10.62-3.31-1.91-3.8 3.24 3.8 3.24 3.31-1.91c.7-.4 1.04-1.07 1.04-1.83s-.34-1.43-1.04-1.83z"/><path fill="#ea4335" d="M3.45 2.45A2 2 0 0 0 3 3.74v16.52c0 .47.17.91.45 1.29l9.65-9.55z"/><path fill="#4285f4" d="m13.05 12 3.5-3.45L5.62 2.32a2.18 2.18 0 0 0-1.1-.3c-.4 0-.75.1-1.07.28z"/></svg>
         <div style="text-align: left;">
-          <div class="small">Få den på</div>
-          <div class="big">Google Play</div>
+          <div data-cms="index.last-ned.div5" class="small">Få den på</div>
+          <div data-cms="index.last-ned.div6" class="big">Google Play</div>
         </div>
       </a>
     </div>
@@ -1356,14 +1476,14 @@
 
 <!-- ============ FOOTER ============ -->
 <footer>  <div class="wrap foot-inner">
-    <div>
+    <div data-cms="index.footer.div1">
       © 2026 Fjelltoppene · Laget i Norge
     </div>
     <div class="foot-links">
-      <a href="feedback.html">Tilbakemelding</a>
-      <a href="privacy.html">Personvern</a>
-      <a href="https://github.com/FixnUp/Fjelltoppene_web" target="_blank" rel="noopener">Kildekode</a>
-      <a href="mailto:post@fjelltoppene.no">Kontakt</a>
+      <a data-cms="index.footer.a1" href="feedback.html">Tilbakemelding</a>
+      <a data-cms="index.footer.a2" href="privacy.html">Personvern</a>
+      <a data-cms-href="index.footer.link1" data-cms="index.footer.a3" href="https://github.com/FixnUp/Fjelltoppene_web" target="_blank" rel="noopener">Kildekode</a>
+      <a data-cms-href="index.footer.link2" data-cms="index.footer.a4" href="mailto:post@fjelltoppene.no">Kontakt</a>
     </div>
   </div>
 </footer>
