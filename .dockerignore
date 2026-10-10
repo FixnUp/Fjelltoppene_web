@@ -1,0 +1,8 @@
+.git
+.github
+node_modules
+server/node_modules
+server/.data
+.data
+uploads
+.thumbnail

@@ -1,0 +1,53 @@
+/* Redigeringsmodus. Alle klasser starter med cms- for å unngå kollisjon med siden. */
+body.cms-on { padding-top: 52px !important; }
+body.cms-on .nav { top: 52px !important; }
+.cms-bar { position: fixed; z-index: 2147483000; top: 0; left: 0; right: 0; height: 52px; display: flex; align-items: center; gap: 8px;
+  padding: 0 14px; background: #102a1c; color: #fff; font: 600 14px/1 system-ui, -apple-system, "Segoe UI", sans-serif;
+  box-shadow: 0 2px 12px rgba(0,0,0,.3); overflow-x: auto; white-space: nowrap; }
+.cms-bar * { box-sizing: border-box; }
+.cms-bar .cms-title { color: #f4b740; margin-right: 6px; letter-spacing: .02em; }
+.cms-bar a, .cms-bar button { font: inherit; color: #fff; background: rgba(255,255,255,.1); border: 0; border-radius: 999px; padding: 9px 14px; cursor: pointer; text-decoration: none; }
+.cms-bar a:hover, .cms-bar button:hover { background: rgba(255,255,255,.2); }
+.cms-bar a.cms-cur { background: #fff; color: #102a1c; }
+.cms-bar .cms-sp { flex: 1; }
+.cms-bar .cms-save { background: #f4b740; color: #102a1c; font-weight: 800; }
+.cms-bar .cms-save:disabled { opacity: .45; cursor: default; }
+.cms-bar .cms-save:not(:disabled):hover { background: #ffc85c; }
+
+[data-cms], [data-cms-edit] { outline: 1px dashed rgba(45,106,71,.55); outline-offset: 3px; cursor: text; border-radius: 3px; }
+[data-cms]:hover, [data-cms-edit]:hover { outline-color: #2d6a47; background: rgba(244,183,64,.12); }
+[data-cms]:focus, [data-cms-edit]:focus { outline: 2px solid #2d6a47; background: rgba(244,183,64,.16); }
+img[data-cms-img], [data-cms-list] img { outline: 2px dashed rgba(45,106,71,.55); outline-offset: -2px; cursor: pointer; }
+.cms-changed { box-shadow: 0 0 0 2px #f4b740; }
+
+.cms-chip { position: absolute; z-index: 2147482000; display: none; gap: 4px; padding: 4px; background: #102a1c; border-radius: 10px; box-shadow: 0 6px 20px rgba(0,0,0,.3); }
+.cms-chip button { font: 600 13px/1 system-ui, sans-serif; color: #fff; background: rgba(255,255,255,.12); border: 0; border-radius: 7px; padding: 8px 10px; cursor: pointer; }
+.cms-chip button:hover { background: #2d6a47; }
+.cms-chip button.cms-danger:hover { background: #a12020; }
+
+.cms-fmt { position: absolute; z-index: 2147482500; display: none; gap: 2px; padding: 4px; background: #102a1c; border-radius: 10px; box-shadow: 0 6px 20px rgba(0,0,0,.35); }
+.cms-fmt button { width: 34px; height: 32px; font: 700 15px/1 system-ui, sans-serif; color: #fff; background: transparent; border: 0; border-radius: 7px; cursor: pointer; }
+.cms-fmt button:hover { background: #2d6a47; }
+
+.cms-item { position: relative; }
+.cms-item-bar { position: absolute; top: -14px; right: 8px; z-index: 50; display: none; gap: 3px; padding: 3px; background: #102a1c; border-radius: 9px; box-shadow: 0 4px 14px rgba(0,0,0,.3); }
+.cms-item:hover > .cms-item-bar, .cms-item:focus-within > .cms-item-bar { display: flex; }
+.cms-item-bar button { font: 700 13px/1 system-ui, sans-serif; color: #fff; background: rgba(255,255,255,.12); border: 0; border-radius: 6px; padding: 7px 9px; cursor: pointer; }
+.cms-item-bar button:hover { background: #2d6a47; }
+.cms-item-bar button.cms-danger:hover { background: #a12020; }
+.cms-add { display: block; margin: 18px auto 0; font: 700 14px/1 system-ui, sans-serif; padding: 11px 18px; color: #1c3f2a; background: #fff; border: 2px dashed #2d6a47; border-radius: 999px; cursor: pointer; }
+.cms-add:hover { background: #eaf3ec; }
+
+.cms-toast { position: fixed; z-index: 2147483100; left: 50%; bottom: 24px; transform: translateX(-50%); padding: 12px 18px; border-radius: 999px; background: #102a1c; color: #fff; font: 600 14px/1 system-ui, sans-serif; box-shadow: 0 8px 24px rgba(0,0,0,.3); }
+.cms-toast.cms-err { background: #a12020; }
+
+.cms-modal-bg { position: fixed; inset: 0; z-index: 2147483200; background: rgba(0,0,0,.5); display: grid; place-items: center; padding: 20px; }
+.cms-modal { width: 100%; max-width: 440px; max-height: 80vh; overflow: auto; background: #fff; color: #141414; border-radius: 16px; padding: 22px; font: 15px/1.45 system-ui, sans-serif; }
+.cms-modal h3 { margin: 0 0 12px; font-size: 18px; }
+.cms-modal input[type=text] { width: 100%; font: inherit; padding: 10px 12px; border: 1px solid #dad8d1; border-radius: 9px; }
+.cms-modal .cms-row { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
+.cms-modal button { font: 700 14px/1 system-ui, sans-serif; padding: 10px 16px; border: 0; border-radius: 999px; cursor: pointer; background: #ecebe5; }
+.cms-modal button.cms-primary { background: #2d6a47; color: #fff; }
+.cms-modal ul { list-style: none; margin: 0; padding: 0; }
+.cms-modal li { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid #ecebe5; }
+.cms-modal small { color: #6a6e69; display: block; margin-bottom: 6px; }

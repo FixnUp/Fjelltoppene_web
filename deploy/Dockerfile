@@ -1,16 +1,20 @@
-# --- Fjelltoppene.no static site ---
-# Tiny nginx image, ~7 MB. Serves index.html + assets.
+# Fjelltoppene.no: Node-server med innlogget admin for tekst og bilder.
+# Bygges med repoets rot som kontekst (Railway gjør det automatisk).
+FROM node:22-alpine
 
-FROM nginx:1.27-alpine
+ENV NODE_ENV=production
+WORKDIR /app
 
-# Replace default nginx config with our tuned one (gzip + caching)
-COPY deploy/nginx.conf /etc/nginx/conf.d/default.conf
+COPY server/package.json server/package-lock.json server/
+RUN cd server && npm ci --omit=dev
 
-# Copy the site into the web root
-COPY index.html /usr/share/nginx/html/index.html
-COPY logo.html  /usr/share/nginx/html/logo.html
-COPY privacy.html /usr/share/nginx/html/privacy.html
-COPY feedback.html /usr/share/nginx/html/feedback.html
-COPY assets/    /usr/share/nginx/html/assets/
+COPY server/ server/
+COPY admin/ admin/
+COPY index.html privacy.html feedback.html logo.html site/
+COPY assets/ site/assets/
 
-EXPOSE 80
+ENV SITE_DIR=/app/site
+EXPOSE 8080
+
+# Kjører som root fordi Railway-volumer monteres med root som eier.
+CMD ["node", "server/server.js"]
