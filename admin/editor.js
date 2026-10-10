@@ -76,13 +76,14 @@
   // ---------- verktøylinje ----------
   const bar = document.createElement('div');
   bar.className = 'cms-bar';
-  const pages = [['Forside', '/?edit', 'index'], ['Personvern', '/privacy?edit', 'privacy'], ['Tilbakemelding', '/feedback?edit', 'feedback']];
+  const pages = [['Forside', '/?edit', 'index'], ['Personvern', '/privacy?edit', 'privacy'], ['Tilbakemelding', '/feedback?edit', 'feedback'], ['Send inn', '/send-inn?edit', 'send-inn']];
   bar.innerHTML = '<span class="cms-title">✎ Redigerer</span>';
   for (const [label, href, id] of pages) {
     const a = document.createElement('a'); a.textContent = label; a.href = href;
     if (id === CFG.page) a.className = 'cms-cur';
     bar.appendChild(a);
   }
+  const inbox = document.createElement('a'); inbox.textContent = 'Innsendinger'; inbox.href = '/admin/innsendinger'; bar.appendChild(inbox);
   const sp = document.createElement('span'); sp.className = 'cms-sp'; bar.appendChild(sp);
   const mk = (label, fn, cls) => { const b = document.createElement('button'); b.textContent = label; if (cls) b.className = cls; b.onclick = fn; bar.appendChild(b); return b; };
   mk('Historikk', showHistory);

@@ -5,7 +5,7 @@ const path = require('node:path');
 const cheerio = require('cheerio');
 const { cleanInline, cleanBlock, safeHref, safeSrc } = require('./sanitize');
 
-const PAGES = { index: 'index.html', privacy: 'privacy.html', feedback: 'feedback.html', logo: 'logo.html' };
+const PAGES = { index: 'index.html', privacy: 'privacy.html', feedback: 'feedback.html', logo: 'logo.html', 'send-inn': 'send-inn.html' };
 
 function createRenderer({ siteDir, store }) {
   const raw = {};
