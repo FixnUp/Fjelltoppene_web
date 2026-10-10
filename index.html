@@ -13,7 +13,7 @@
 <!-- Open Graph / Social -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="Fjelltoppene — Din turbok for norske topper">
-<meta property="og:description" content="Oppdag, registrer og hold oversikt over fjellturene dine. Åpen beta på Google Play nå.">
+<meta property="og:description" content="Oppdag, registrer og hold oversikt over fjellturene dine. Last ned gratis på Google Play.">
 <meta property="og:image" content="assets/og-image.png">
 <meta property="og:locale" content="nb_NO">
 <meta name="twitter:card" content="summary_large_image">
@@ -900,7 +900,7 @@
   .release .ver small { display: block; margin-top: 6px; font-size: 13px; color: var(--muted); }
   .release .rel-body p { margin: 0; font-size: 16px; line-height: 1.7; color: var(--ink-2); }
   @media (max-width: 720px) { .release { grid-template-columns: 1fr; gap: 12px; padding: 24px; } }
-  .beta-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #f4b740; box-shadow: 0 0 0 4px rgba(244,183,64,0.18); }
+  .live-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #f4b740; box-shadow: 0 0 0 4px rgba(244,183,64,0.18); }
 </style>
 </head>
 <body>
@@ -933,7 +933,7 @@
 <header class="hero">
   <div class="wrap hero-grid">
     <div class="hero-copy">
-      <span data-cms="index.hero.span1" class="eyebrow"><span class="dot"></span> Turbok 2026 · Versjon 2.0 · Beta tilgjengelig nå</span>
+      <span data-cms="index.hero.span1" class="eyebrow"><span class="dot"></span> Turbok 2026 · Versjon 2.0 · Nå på Google Play</span>
       <h1 data-cms="index.hero.h11" class="hero-title">
         Hver topp <span class="accent">du har stått på</span>, på ett sted.
       </h1>
@@ -1379,7 +1379,7 @@
       </details>
       <details class="faq">
         <summary>Hvilke plattformer støttes?</summary>
-        <div class="answer">Android-versjonen er i åpen beta på Google Play nå — alle kan bli med som testere. iOS-versjonen kommer i løpet av 2026.</div>
+        <div class="answer">Android-versjonen ligger på Google Play, og alle kan laste den ned. iOS-versjonen kommer i løpet av 2026.</div>
       </details>
     </div>
   </div>
@@ -1390,10 +1390,10 @@
   <div class="download">
     <div data-cms="index.last-ned.div1" class="sec-eyebrow" style="color: var(--mint); justify-content: center; display: flex;">Last ned</div>
     <h2 data-cms="index.last-ned.h21">Klar for neste topp?</h2>
-    <p data-cms="index.last-ned.p1">Fjelltoppene er i beta på Google Play — bli med som tester og hjelp oss forme appen. iOS-versjon kommer i løpet av 2026.</p>
+    <p data-cms="index.last-ned.p1">Fjelltoppene er tilgjengelig på Google Play for Android. iOS-versjon kommer i løpet av 2026.</p>
     <div data-cms="index.last-ned.div2" style="display:inline-flex; align-items:center; gap:10px; padding:10px 18px; border-radius:999px; background:rgba(244,183,64,0.14); border:1px solid rgba(244,183,64,0.4); color:#f4b740; font-family:'JetBrains Mono', monospace; font-size:12px; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:32px;">
-      <span class="beta-dot"></span>
-      Beta tilgjengelig nå · Android
+      <span class="live-dot"></span>
+      Nå på Google Play · Android
     </div>
     <div class="store-row">
       <a data-cms-href="index.last-ned.link1" class="store-btn" href="#">
@@ -1403,7 +1403,7 @@
           <div data-cms="index.last-ned.div4" class="big">App Store</div>
         </div>
       </a>
-      <a data-cms-href="index.last-ned.link2" class="store-btn" href="#">
+      <a data-cms-href="index.last-ned.link2" class="store-btn store-play" href="https://play.google.com/store/apps/details?id=no.fjelltoppene.app" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24"><path fill="#34a853" d="m13.05 11.95-9.6 9.6c.32.18.69.28 1.07.28.4 0 .77-.1 1.1-.3l10.78-6.21z"/><path fill="#fbbc04" d="m20.16 10.62-3.31-1.91-3.8 3.24 3.8 3.24 3.31-1.91c.7-.4 1.04-1.07 1.04-1.83s-.34-1.43-1.04-1.83z"/><path fill="#ea4335" d="M3.45 2.45A2 2 0 0 0 3 3.74v16.52c0 .47.17.91.45 1.29l9.65-9.55z"/><path fill="#4285f4" d="m13.05 12 3.5-3.45L5.62 2.32a2.18 2.18 0 0 0-1.1-.3c-.4 0-.75.1-1.07.28z"/></svg>
         <div style="text-align: left;">
           <div data-cms="index.last-ned.div5" class="small">Få den på</div>
@@ -1428,12 +1428,12 @@
         <circle cx="17" cy="6" r="1.6" fill="#f4b740" stroke="none"/>
       </svg>
     </div>
-    <div class="eyebrow-line">Beta tilgjengelig nå</div>
-    <h3 id="toast-title">Bli tester på Android</h3>
-    <p>Fjelltoppene er i beta på Google Play. Bli med som tester og få tilgang før alle andre — din tilbakemelding former appen.</p>
+    <div class="eyebrow-line">Nå på Google Play</div>
+    <h3 id="toast-title">Last ned Fjelltoppene</h3>
+    <p>Fjelltoppene er tilgjengelig på Google Play for Android. Åpne lenken på telefonen din for å installere appen.</p>
 
     <div class="toast-options">
-      <a href="https://play.google.com/apps/testing/no.fjelltoppene.app" target="_blank" rel="noopener" class="toast-option">
+      <a href="https://play.google.com/store/apps/details?id=no.fjelltoppene.app" target="_blank" rel="noopener" class="toast-option">
         <div class="toast-option-icon">
           <svg width="22" height="22" viewBox="0 0 24 24">
             <path fill="#34a853" d="m13.05 11.95-9.6 9.6c.32.18.69.28 1.07.28.4 0 .77-.1 1.1-.3l10.78-6.21z"/>
@@ -1443,22 +1443,8 @@
           </svg>
         </div>
         <div class="toast-option-body">
-          <div class="toast-option-title">Bli tester via nettside</div>
-          <div class="toast-option-sub">Meld deg på testprogrammet</div>
-        </div>
-        <svg class="toast-option-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-      </a>
-
-      <a href="https://play.google.com/store/apps/details?id=no.fjelltoppene.app" target="_blank" rel="noopener" class="toast-option">
-        <div class="toast-option-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="5" y="2" width="14" height="20" rx="3"/>
-            <line x1="12" y1="18" x2="12.01" y2="18"/>
-          </svg>
-        </div>
-        <div class="toast-option-body">
-          <div class="toast-option-title">Åpne i Play Store-appen</div>
-          <div class="toast-option-sub">På mobilen din</div>
+          <div class="toast-option-title">Åpne i Google Play</div>
+          <div class="toast-option-sub">Last ned appen</div>
         </div>
         <svg class="toast-option-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
       </a>
@@ -1522,7 +1508,7 @@
   // Trigger toast on any link/button that should go to download
   // Includes: nav CTA, hero CTA, turbok CTA, store buttons in #last-ned
   const triggers = document.querySelectorAll(
-    'a.nav-cta, a.btn-primary, a.store-btn, a[href="#last-ned"]'
+    'a.nav-cta, a.btn-primary, a.store-btn:not(.store-play), a[href="#last-ned"]'
   );
   triggers.forEach(el => {
     el.addEventListener('click', (e) => {
