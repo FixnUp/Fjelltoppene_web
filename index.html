@@ -755,144 +755,6 @@
     opacity: 1; transform: none;
   }
 
-  /* ---------- TOAST / MODAL ---------- */
-  .toast-backdrop {
-    position: fixed; inset: 0;
-    background: rgba(16,42,28,0.55);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    z-index: 200;
-    display: none;
-    align-items: center; justify-content: center;
-    padding: 24px;
-    opacity: 0;
-    transition: opacity .25s ease;
-  }
-  .toast-backdrop.show { display: flex; opacity: 1; }
-  .toast-card {
-    background: var(--paper);
-    border-radius: 24px;
-    max-width: 460px;
-    width: 100%;
-    padding: 36px 34px 30px;
-    position: relative;
-    border: 1px solid var(--line);
-    box-shadow: 0 40px 100px rgba(0,0,0,0.35);
-    transform: translateY(20px) scale(0.96);
-    transition: transform .3s cubic-bezier(.2,.7,.3,1);
-    text-align: left;
-  }
-  .toast-backdrop.show .toast-card { transform: none; }
-  .toast-icon {
-    width: 56px; height: 56px;
-    border-radius: 16px;
-    background: var(--green-100);
-    color: var(--green-800);
-    display: grid; place-items: center;
-    margin-bottom: 22px;
-  }
-  .toast-card h3 {
-    font-size: 24px; font-weight: 700;
-    letter-spacing: -0.015em;
-    margin: 0 0 10px;
-  }
-  .toast-card p {
-    color: var(--ink-2);
-    margin: 0 0 24px;
-    font-size: 16px;
-  }
-  .toast-card .eyebrow-line {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--green-700);
-    margin-bottom: 10px;
-  }
-  .toast-close {
-    position: absolute; top: 16px; right: 16px;
-    width: 36px; height: 36px;
-    border-radius: 50%;
-    background: transparent;
-    border: 0;
-    color: var(--muted);
-    cursor: pointer;
-    display: grid; place-items: center;
-    transition: background .15s ease, color .15s ease;
-  }
-  .toast-close:hover { background: var(--paper-2); color: var(--ink); }
-  .toast-actions {
-    display: flex; gap: 10px; flex-wrap: wrap;
-  }
-  .toast-actions .btn-primary {
-    background: var(--green-800); color: #fff;
-    flex: 1; justify-content: center;
-    min-width: 140px;
-  }
-  .toast-actions .btn-primary:hover { background: var(--green-900); }
-  .toast-actions .btn-ghost-dark {
-    background: transparent;
-    color: var(--green-800);
-    border-color: var(--line);
-  }
-  .toast-actions .btn-ghost-dark:hover {
-    border-color: var(--green-700);
-  }
-
-  .toast-options {
-    display: flex; flex-direction: column; gap: 10px;
-    margin-bottom: 22px;
-  }
-  .toast-option {
-    display: flex; align-items: center; gap: 14px;
-    padding: 14px 16px;
-    background: #fff;
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    text-decoration: none;
-    color: var(--ink);
-    transition: border-color .15s ease, transform .15s ease;
-  }
-  .toast-option:hover {
-    border-color: var(--green-700);
-    transform: translateY(-1px);
-  }
-  .toast-option-icon {
-    width: 40px; height: 40px;
-    border-radius: 10px;
-    background: var(--green-100);
-    color: var(--green-800);
-    display: grid; place-items: center;
-    flex-shrink: 0;
-  }
-  .toast-option-body { flex: 1; min-width: 0; }
-  .toast-option-title {
-    font-weight: 600;
-    font-size: 15px;
-    letter-spacing: -0.005em;
-  }
-  .toast-option-sub {
-    font-size: 13px;
-    color: var(--muted);
-    margin-top: 2px;
-  }
-  .toast-option-arrow {
-    color: var(--muted);
-    flex-shrink: 0;
-  }
-  .toast-option:hover .toast-option-arrow { color: var(--green-700); }
-
-  .toast-note {
-    display: flex; align-items: center; gap: 10px;
-    padding: 12px 14px;
-    background: var(--paper-2);
-    border-radius: 10px;
-    font-size: 13px;
-    color: var(--ink-2);
-  }
-  .toast-note svg {
-    color: var(--muted);
-    flex-shrink: 0;
-  }
-
   /* ===== Nytt i appen ===== */
   .releases { margin-top: 50px; display: grid; gap: 16px; }
   .release { display: grid; grid-template-columns: 170px 1fr; gap: 28px; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 28px 32px; }
@@ -924,7 +786,7 @@
       <a data-cms="index.nav.a4" href="#skjermbilder">Skjermbilder</a>
       <a data-cms="index.nav.a5" href="#faq">FAQ</a>
       <a data-cms="index.nav.a6" href="feedback.html">Tilbakemelding</a>
-      <a data-cms="index.nav.a7" href="#last-ned" class="nav-cta">Last ned</a>
+      <a data-cms="index.nav.a7" data-cms-href="index.nav.link1" href="https://play.google.com/store/apps/details?id=no.fjelltoppene.app" target="_blank" rel="noopener" class="nav-cta">Last ned</a>
     </div>
   </div>
 </nav>
@@ -942,7 +804,7 @@
         Strava eller Garmin, se rutene på kartet og del turen som bilde — fra Dalsnuten til Galdhøpiggen.
       </p>
       <div class="cta-row">
-        <a href="#last-ned" class="btn btn-primary">
+        <a data-cms-href="index.hero.link1" href="https://play.google.com/store/apps/details?id=no.fjelltoppene.app" target="_blank" rel="noopener" class="btn btn-primary">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/></svg>
           Last ned appen
         </a>
@@ -1270,7 +1132,7 @@
           Egenmål gir deg et tall å sikte mot — 20, 30, 50 topper. Appen viser hvor mange du har igjen,
           hvor stor andel som er fullført, og hvilke turer som teller mot målet.
         </p>
-        <a data-cms="index.turbok.a1" href="#last-ned" class="btn btn-primary">Kom i gang gratis</a>
+        <a data-cms="index.turbok.a1" data-cms-href="index.turbok.link1" href="https://play.google.com/store/apps/details?id=no.fjelltoppene.app" target="_blank" rel="noopener" class="btn btn-primary">Kom i gang gratis</a>
       </div>
       <div>
         <div class="progress-card" style="padding: 28px;">
@@ -1379,7 +1241,7 @@
       </details>
       <details class="faq">
         <summary>Hvilke plattformer støttes?</summary>
-        <div class="answer">Android-versjonen ligger på Google Play, og alle kan laste den ned. iOS-versjonen kommer i løpet av 2026.</div>
+        <div class="answer">Fjelltoppene er laget for Android og ligger på Google Play, der alle kan laste den ned.</div>
       </details>
     </div>
   </div>
@@ -1390,19 +1252,12 @@
   <div class="download">
     <div data-cms="index.last-ned.div1" class="sec-eyebrow" style="color: var(--mint); justify-content: center; display: flex;">Last ned</div>
     <h2 data-cms="index.last-ned.h21">Klar for neste topp?</h2>
-    <p data-cms="index.last-ned.p1">Fjelltoppene er tilgjengelig på Google Play for Android. iOS-versjon kommer i løpet av 2026.</p>
+    <p data-cms="index.last-ned.p1">Fjelltoppene er tilgjengelig på Google Play for Android.</p>
     <div data-cms="index.last-ned.div2" style="display:inline-flex; align-items:center; gap:10px; padding:10px 18px; border-radius:999px; background:rgba(244,183,64,0.14); border:1px solid rgba(244,183,64,0.4); color:#f4b740; font-family:'JetBrains Mono', monospace; font-size:12px; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:32px;">
       <span class="live-dot"></span>
       Nå på Google Play · Android
     </div>
     <div class="store-row">
-      <a data-cms-href="index.last-ned.link1" class="store-btn" href="#">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 12.04c-.03-3.16 2.58-4.68 2.7-4.75-1.47-2.15-3.77-2.45-4.59-2.48-1.96-.2-3.81 1.15-4.81 1.15-1 0-2.52-1.12-4.14-1.09-2.13.03-4.09 1.24-5.19 3.14-2.21 3.83-.56 9.5 1.6 12.6 1.06 1.52 2.32 3.23 3.96 3.17 1.59-.07 2.19-1.03 4.12-1.03 1.93 0 2.46 1.03 4.14 1 1.71-.03 2.79-1.55 3.83-3.08 1.21-1.77 1.71-3.49 1.73-3.58-.04-.02-3.32-1.27-3.35-5.05zM13.84 3.5c.86-1.04 1.45-2.49 1.29-3.94-1.25.05-2.77.83-3.66 1.87-.8.93-1.5 2.4-1.31 3.83 1.4.11 2.83-.71 3.68-1.76z"/></svg>
-        <div style="text-align: left;">
-          <div data-cms="index.last-ned.div3" class="small">Last ned på</div>
-          <div data-cms="index.last-ned.div4" class="big">App Store</div>
-        </div>
-      </a>
       <a data-cms-href="index.last-ned.link2" class="store-btn store-play" href="https://play.google.com/store/apps/details?id=no.fjelltoppene.app" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24"><path fill="#34a853" d="m13.05 11.95-9.6 9.6c.32.18.69.28 1.07.28.4 0 .77-.1 1.1-.3l10.78-6.21z"/><path fill="#fbbc04" d="m20.16 10.62-3.31-1.91-3.8 3.24 3.8 3.24 3.31-1.91c.7-.4 1.04-1.07 1.04-1.83s-.34-1.43-1.04-1.83z"/><path fill="#ea4335" d="M3.45 2.45A2 2 0 0 0 3 3.74v16.52c0 .47.17.91.45 1.29l9.65-9.55z"/><path fill="#4285f4" d="m13.05 12 3.5-3.45L5.62 2.32a2.18 2.18 0 0 0-1.1-.3c-.4 0-.75.1-1.07.28z"/></svg>
         <div style="text-align: left;">
@@ -1414,52 +1269,6 @@
   </div>
 </section>
 
-<!-- ============ TOAST / MODAL ============ -->
-<div class="toast-backdrop" id="downloadToast" role="dialog" aria-modal="true" aria-labelledby="toast-title">
-  <div class="toast-card">
-    <button class="toast-close" aria-label="Lukk" data-toast-close>
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M18 6 6 18M6 6l12 12"/>
-      </svg>
-    </button>
-    <div class="toast-icon">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M3 19 L9 9 L13 14 L17 7 L21 19 Z"/>
-        <circle cx="17" cy="6" r="1.6" fill="#f4b740" stroke="none"/>
-      </svg>
-    </div>
-    <div class="eyebrow-line">Nå på Google Play</div>
-    <h3 id="toast-title">Last ned Fjelltoppene</h3>
-    <p>Fjelltoppene er tilgjengelig på Google Play for Android. Åpne lenken på telefonen din for å installere appen.</p>
-
-    <div class="toast-options">
-      <a href="https://play.google.com/store/apps/details?id=no.fjelltoppene.app" target="_blank" rel="noopener" class="toast-option">
-        <div class="toast-option-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24">
-            <path fill="#34a853" d="m13.05 11.95-9.6 9.6c.32.18.69.28 1.07.28.4 0 .77-.1 1.1-.3l10.78-6.21z"/>
-            <path fill="#fbbc04" d="m20.16 10.62-3.31-1.91-3.8 3.24 3.8 3.24 3.31-1.91c.7-.4 1.04-1.07 1.04-1.83s-.34-1.43-1.04-1.83z"/>
-            <path fill="#ea4335" d="M3.45 2.45A2 2 0 0 0 3 3.74v16.52c0 .47.17.91.45 1.29l9.65-9.55z"/>
-            <path fill="#4285f4" d="m13.05 12 3.5-3.45L5.62 2.32a2.18 2.18 0 0 0-1.1-.3c-.4 0-.75.1-1.07.28z"/>
-          </svg>
-        </div>
-        <div class="toast-option-body">
-          <div class="toast-option-title">Åpne i Google Play</div>
-          <div class="toast-option-sub">Last ned appen</div>
-        </div>
-        <svg class="toast-option-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-
-    <div class="toast-note">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M17.05 12.04c-.03-3.16 2.58-4.68 2.7-4.75-1.47-2.15-3.77-2.45-4.59-2.48-1.96-.2-3.81 1.15-4.81 1.15-1 0-2.52-1.12-4.14-1.09"/>
-        <path d="M13.84 3.5c.86-1.04 1.45-2.49 1.29-3.94"/>
-      </svg>
-      <span>iOS-versjon kommer i løpet av 2026.</span>
-    </div>
-  </div>
-</div>
-
 <!-- ============ FOOTER ============ -->
 <footer>  <div class="wrap foot-inner">
     <div data-cms="index.footer.div1">
@@ -1470,6 +1279,7 @@
       <a data-cms="index.footer.a2" href="privacy.html">Personvern</a>
       <a data-cms-href="index.footer.link1" data-cms="index.footer.a3" href="https://github.com/FixnUp/Fjelltoppene_web" target="_blank" rel="noopener">Kildekode</a>
       <a data-cms-href="index.footer.link2" data-cms="index.footer.a4" href="mailto:post@fjelltoppene.no">Kontakt</a>
+      <a href="/admin">Admin</a>
     </div>
   </div>
 </footer>
@@ -1493,40 +1303,6 @@
     });
   }, { threshold: 0.12 });
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-
-  // download toast
-  const toast = document.getElementById('downloadToast');
-  const openToast = () => {
-    toast.classList.add('show');
-    document.body.style.overflow = 'hidden';
-  };
-  const closeToast = () => {
-    toast.classList.remove('show');
-    document.body.style.overflow = '';
-  };
-
-  // Trigger toast on any link/button that should go to download
-  // Includes: nav CTA, hero CTA, turbok CTA, store buttons in #last-ned
-  const triggers = document.querySelectorAll(
-    'a.nav-cta, a.btn-primary, a.store-btn:not(.store-play), a[href="#last-ned"]'
-  );
-  triggers.forEach(el => {
-    el.addEventListener('click', (e) => {
-      e.preventDefault();
-      openToast();
-    });
-  });
-
-  // Close handlers
-  document.querySelectorAll('[data-toast-close]').forEach(el => {
-    el.addEventListener('click', closeToast);
-  });
-  toast.addEventListener('click', (e) => {
-    if (e.target === toast) closeToast();
-  });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && toast.classList.contains('show')) closeToast();
-  });
 </script>
 
 </body>
